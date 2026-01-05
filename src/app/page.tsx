@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 
 // Animated Counter Component
 function AnimatedCounter({ end, duration = 2000, suffix = '' }: { end: number; duration?: number; suffix?: string }) {
@@ -161,21 +160,141 @@ function WorldMap() {
   );
 }
 
+// World Map Background Component
+function WorldMapBackground() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* World map SVG background */}
+      <svg 
+        viewBox="0 0 1200 600" 
+        className="absolute inset-0 w-full h-full opacity-30"
+        preserveAspectRatio="xMidYMid slice"
+      >
+        {/* Simplified world map continents */}
+        {/* North America */}
+        <path
+          d="M150,150 Q200,120 280,140 Q320,130 350,160 Q380,180 360,220 Q340,260 300,280 Q260,290 220,270 Q180,250 160,210 Q140,180 150,150"
+          fill="none"
+          stroke="#12F6C8"
+          strokeWidth="1"
+          opacity="0.4"
+        />
+        {/* South America */}
+        <path
+          d="M280,320 Q300,300 320,320 Q340,360 330,400 Q320,440 290,460 Q260,450 250,410 Q250,370 280,320"
+          fill="none"
+          stroke="#12F6C8"
+          strokeWidth="1"
+          opacity="0.4"
+        />
+        {/* Europe */}
+        <path
+          d="M520,140 Q560,120 600,130 Q640,140 660,160 Q650,180 620,190 Q580,195 540,180 Q510,165 520,140"
+          fill="none"
+          stroke="#12F6C8"
+          strokeWidth="1"
+          opacity="0.4"
+        />
+        {/* Africa */}
+        <path
+          d="M540,220 Q580,200 620,220 Q660,260 650,320 Q630,380 580,400 Q530,390 510,340 Q500,280 540,220"
+          fill="none"
+          stroke="#12F6C8"
+          strokeWidth="1"
+          opacity="0.4"
+        />
+        {/* Asia */}
+        <path
+          d="M700,120 Q780,100 860,120 Q940,140 980,180 Q1000,220 980,260 Q940,290 880,280 Q820,270 760,240 Q700,210 680,170 Q680,140 700,120"
+          fill="none"
+          stroke="#12F6C8"
+          strokeWidth="1"
+          opacity="0.4"
+        />
+        {/* Australia */}
+        <path
+          d="M900,380 Q950,360 1000,380 Q1030,410 1020,450 Q990,480 940,470 Q890,450 900,380"
+          fill="none"
+          stroke="#12F6C8"
+          strokeWidth="1"
+          opacity="0.4"
+        />
+        
+        {/* Data points with glow effect */}
+        {[
+          { x: 250, y: 180, label: '14.213' },
+          { x: 580, y: 160, label: '22.218' },
+          { x: 850, y: 200, label: '7.891' },
+          { x: 580, y: 300, label: '31.456' },
+          { x: 950, y: 420, label: '18.742' },
+          { x: 300, y: 380, label: '9.234' },
+        ].map((point, i) => (
+          <g key={i}>
+            <circle
+              cx={point.x}
+              cy={point.y}
+              r="6"
+              fill="#12F6C8"
+              className="animate-pulse"
+            />
+            <circle
+              cx={point.x}
+              cy={point.y}
+              r="12"
+              fill="none"
+              stroke="#12F6C8"
+              strokeWidth="1"
+              opacity="0.5"
+            />
+            <text
+              x={point.x + 25}
+              y={point.y + 5}
+              fill="#12F6C8"
+              fontSize="14"
+              opacity="0.6"
+              fontFamily="monospace"
+            >
+              {point.label}
+            </text>
+          </g>
+        ))}
+        
+        {/* Connection lines between points */}
+        <path
+          d="M250,180 Q400,120 580,160"
+          fill="none"
+          stroke="#12F6C8"
+          strokeWidth="0.5"
+          opacity="0.3"
+          strokeDasharray="5,5"
+        />
+        <path
+          d="M580,160 Q700,140 850,200"
+          fill="none"
+          stroke="#12F6C8"
+          strokeWidth="0.5"
+          opacity="0.3"
+          strokeDasharray="5,5"
+        />
+      </svg>
+      
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#050505] via-transparent to-[#050505]" />
+    </div>
+  );
+}
+
 export default function Home() {
-  const [showContent, setShowContent] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setShowContent(true), 500);
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
     <div className="neural-grid min-h-screen">
-      {/* Hero Section */}
-      <section className="relative pt-24 pb-16 px-4 sm:px-6 lg:px-8 min-h-screen">
-        <div className="max-w-7xl mx-auto">
-          {/* Main Hero Content */}
-          <div className={`text-center mb-12 transition-all duration-1000 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+      {/* Hero Section with World Map Background */}
+      <section className="relative min-h-screen flex flex-col justify-center pt-20 pb-16 px-4 sm:px-6 lg:px-8">
+        {/* World Map Background */}
+        <WorldMapBackground />
+        
+        <div className="relative z-10 max-w-7xl mx-auto w-full">
+          {/* Main Hero Content - Title, Tagline, Buttons */}
+          <div className="text-center mb-16">
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold font-[family-name:var(--font-rajdhani)] text-white mb-6">
               Global 3 Technology &<br />Intelligence™
             </h1>
@@ -198,41 +317,35 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Live Stats */}
-          <LiveStats />
+          {/* Live Stats - Below Hero */}
+          <div className="mb-16">
+            <LiveStats />
+          </div>
 
-          {/* World Map and Threat Cards Section */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-16">
-            {/* World Map */}
-            <div className="order-2 lg:order-1">
-              <WorldMap />
-            </div>
-
-            {/* Threat Briefing Cards */}
-            <div className="order-1 lg:order-2 space-y-4">
-              <ThreatCard
-                lines={[
-                  'Deception is now automated.',
-                  'Identity is now weaponized.',
-                  'Crime moves at machine speed.',
-                ]}
-              />
-              <ThreatCard
-                lines={[
-                  'Every 11 seconds: digital extortion.',
-                  '3000% rise: deepfake voice attacks.',
-                  '72% of abuse escalation begins online.',
-                  'AI-enabled trafficking networks multiplying.',
-                ]}
-              />
-              <ThreatCard
-                lines={[
-                  'Legacy security cannot see these threats.',
-                  'Legacy intelligence cannot predict them.',
-                  'Human-speed response cannot stop them.',
-                ]}
-              />
-            </div>
+          {/* Threat Briefing Cards - Below Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <ThreatCard
+              lines={[
+                'Deception is now automated.',
+                'Identity is now weaponized.',
+                'Crime moves at machine speed.',
+              ]}
+            />
+            <ThreatCard
+              lines={[
+                'Every 11 seconds: digital extortion.',
+                '3000% rise: deepfake voice attacks.',
+                '72% of abuse escalation begins online.',
+                'AI-enabled trafficking networks multiplying.',
+              ]}
+            />
+            <ThreatCard
+              lines={[
+                'Legacy security cannot see these threats.',
+                'Legacy intelligence cannot predict them.',
+                'Human-speed response cannot stop them.',
+              ]}
+            />
           </div>
         </div>
 
