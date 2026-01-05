@@ -322,30 +322,102 @@ export default function Home() {
             <LiveStats />
           </div>
 
-          {/* Threat Briefing Cards - Below Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <ThreatCard
-              lines={[
-                'Deception is now automated.',
-                'Identity is now weaponized.',
-                'Crime moves at machine speed.',
-              ]}
-            />
-            <ThreatCard
-              lines={[
-                'Every 11 seconds: digital extortion.',
-                '3000% rise: deepfake voice attacks.',
-                '72% of abuse escalation begins online.',
-                'AI-enabled trafficking networks multiplying.',
-              ]}
-            />
-            <ThreatCard
-              lines={[
-                'Legacy security cannot see these threats.',
-                'Legacy intelligence cannot predict them.',
-                'Human-speed response cannot stop them.',
-              ]}
-            />
+          {/* Threat Briefing Section - 2-column layout: Image left, Cards stacked right */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Left side - Hacker/World Map Image */}
+            <div className="relative rounded-xl overflow-hidden min-h-[400px] bg-gradient-to-br from-[#0D0D0F] to-[#050505]">
+              {/* World map visualization with hacker silhouette */}
+              <div className="absolute inset-0">
+                <svg viewBox="0 0 600 400" className="w-full h-full" preserveAspectRatio="xMidYMid slice">
+                  {/* Dark background */}
+                  <rect width="600" height="400" fill="#050505" />
+                  
+                  {/* World map continents */}
+                  <g opacity="0.6">
+                    {/* North America */}
+                    <path d="M80,100 Q120,80 180,90 Q220,85 250,110 Q280,130 260,170 Q240,210 200,230 Q160,240 120,220 Q80,200 60,160 Q40,130 80,100" fill="none" stroke="#12F6C8" strokeWidth="1.5" />
+                    {/* South America */}
+                    <path d="M180,260 Q200,240 220,260 Q240,300 230,340 Q220,380 190,400 Q160,390 150,350 Q150,310 180,260" fill="none" stroke="#12F6C8" strokeWidth="1.5" />
+                    {/* Europe */}
+                    <path d="M320,90 Q360,70 400,80 Q440,90 460,110 Q450,130 420,140 Q380,145 340,130 Q310,115 320,90" fill="none" stroke="#12F6C8" strokeWidth="1.5" />
+                    {/* Africa */}
+                    <path d="M340,170 Q380,150 420,170 Q460,210 450,270 Q430,330 380,350 Q330,340 310,290 Q300,230 340,170" fill="none" stroke="#12F6C8" strokeWidth="1.5" />
+                    {/* Asia */}
+                    <path d="M450,80 Q530,60 600,80 Q650,100 680,140 Q700,180 680,220 Q640,250 580,240 Q520,230 460,200 Q420,170 400,130 Q400,100 450,80" fill="none" stroke="#12F6C8" strokeWidth="1.5" />
+                    {/* Australia */}
+                    <path d="M540,300 Q580,280 620,300 Q650,330 640,370 Q610,400 560,390 Q510,370 540,300" fill="none" stroke="#12F6C8" strokeWidth="1.5" />
+                  </g>
+                  
+                  {/* Data points with glow */}
+                  {[
+                    { x: 150, y: 140 },
+                    { x: 380, y: 110 },
+                    { x: 550, y: 160 },
+                    { x: 380, y: 250 },
+                    { x: 580, y: 340 },
+                    { x: 190, y: 320 },
+                  ].map((point, i) => (
+                    <g key={i}>
+                      <circle cx={point.x} cy={point.y} r="4" fill="#12F6C8" opacity="0.8" />
+                      <circle cx={point.x} cy={point.y} r="8" fill="none" stroke="#12F6C8" strokeWidth="1" opacity="0.4" />
+                      <circle cx={point.x} cy={point.y} r="12" fill="none" stroke="#12F6C8" strokeWidth="0.5" opacity="0.2" />
+                    </g>
+                  ))}
+                  
+                  {/* Connection lines */}
+                  <path d="M150,140 Q260,100 380,110" fill="none" stroke="#12F6C8" strokeWidth="0.5" opacity="0.3" strokeDasharray="4,4" />
+                  <path d="M380,110 Q460,100 550,160" fill="none" stroke="#12F6C8" strokeWidth="0.5" opacity="0.3" strokeDasharray="4,4" />
+                  <path d="M380,110 Q380,180 380,250" fill="none" stroke="#12F6C8" strokeWidth="0.5" opacity="0.3" strokeDasharray="4,4" />
+                  
+                  {/* Hacker silhouette */}
+                  <g transform="translate(200, 120)">
+                    {/* Hood outline */}
+                    <path d="M100,50 Q60,60 50,100 Q45,140 50,180 L150,180 Q155,140 150,100 Q140,60 100,50" fill="#0a0a0a" stroke="#12F6C8" strokeWidth="0.5" opacity="0.8" />
+                    {/* Face shadow */}
+                    <ellipse cx="100" cy="110" rx="30" ry="35" fill="#050505" />
+                    {/* Shoulders */}
+                    <path d="M50,180 Q30,190 20,220 L180,220 Q170,190 150,180" fill="#0a0a0a" stroke="#12F6C8" strokeWidth="0.5" opacity="0.6" />
+                  </g>
+                  
+                  {/* Scan lines effect */}
+                  <defs>
+                    <pattern id="scanlines" patternUnits="userSpaceOnUse" width="4" height="4">
+                      <line x1="0" y1="0" x2="4" y2="0" stroke="#12F6C8" strokeWidth="0.5" opacity="0.1" />
+                    </pattern>
+                  </defs>
+                  <rect width="600" height="400" fill="url(#scanlines)" />
+                </svg>
+              </div>
+              
+              {/* Overlay gradient */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent" />
+            </div>
+            
+            {/* Right side - Threat Cards stacked vertically */}
+            <div className="flex flex-col gap-4">
+              <ThreatCard
+                lines={[
+                  'Deception is now automated.',
+                  'Identity is now weaponized.',
+                  'Crime moves at machine speed.',
+                ]}
+              />
+              <ThreatCard
+                lines={[
+                  'Every 11 seconds: digital extortion.',
+                  '3000% rise: deepfake voice attacks.',
+                  '72% of abuse escalation begins online.',
+                  'AI-enabled trafficking networks multiplying.',
+                ]}
+              />
+              <ThreatCard
+                lines={[
+                  'Legacy security cannot see these threats.',
+                  'Legacy intelligence cannot predict them.',
+                  'Human-speed response cannot stop them.',
+                ]}
+              />
+            </div>
           </div>
         </div>
 
