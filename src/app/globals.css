@@ -1,0 +1,199 @@
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 5, 5, 5;
+  --background-end-rgb: 5, 5, 5;
+  --cyber-teal: #12F6C8;
+  --cyber-blue: #0B85E5;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+/* Neural Grid Background */
+.neural-grid {
+  background-image: 
+    linear-gradient(rgba(18, 246, 200, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(18, 246, 200, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* Scanline Effect */
+.scanline {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanline::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(18, 246, 200, 0.1),
+    transparent
+  );
+  animation: scan 8s linear infinite;
+}
+
+@keyframes scan {
+  0% { transform: translateY(-100vh); }
+  100% { transform: translateY(100vh); }
+}
+
+/* Cyber Pulse Divider */
+.cyber-divider {
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--cyber-teal),
+    transparent
+  );
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Glass Card Effect */
+.glass-card {
+  background: rgba(13, 13, 15, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(18, 246, 200, 0.1);
+}
+
+/* Glow Text */
+.glow-text {
+  text-shadow: 0 0 10px rgba(18, 246, 200, 0.5),
+               0 0 20px rgba(18, 246, 200, 0.3),
+               0 0 30px rgba(18, 246, 200, 0.2);
+}
+
+/* Encrypted Text Animation */
+@keyframes decrypt {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.decrypt-text {
+  animation: decrypt 0.5s ease-out forwards;
+}
+
+/* Stats Counter Animation */
+@keyframes countUp {
+  from { opacity: 0; transform: scale(0.5); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.stat-counter {
+  animation: countUp 0.8s ease-out forwards;
+}
+
+/* Floating Animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* World Map Glow Points */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.map-point {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Threat Card Hover */
+.threat-card {
+  transition: all 0.3s ease;
+}
+
+.threat-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(18, 246, 200, 0.3);
+  box-shadow: 0 10px 40px rgba(18, 246, 200, 0.1);
+}
+
+/* Navigation Styles */
+.nav-link {
+  position: relative;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--cyber-teal);
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Button Glow Effect */
+.btn-glow {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-glow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.btn-glow:hover::before {
+  left: 100%;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #12F6C8;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0B85E5;
+}
