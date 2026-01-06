@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --cyber-teal: #12F6C8;
+  --cyber-blue: #0B85E5;
+  --neural-grid: #050505;
+  --dark-card: #0D0D0F;
+}
+
+body {
+  font-family: 'Rajdhani', sans-serif;
+  background-color: var(--neural-grid);
+  color: white;
+}
+
+.dark {
+  background-color: var(--neural-grid);
+}
+
+/* Scanline overlay effect */
+.scanline-overlay {
+  position: relative;
+}
+
+.scanline-overlay::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.1) 2px,
+    rgba(0, 0, 0, 0.1) 4px
+  );
+  pointer-events: none;
+}
+
+/* Cyber pulse animation */
+@keyframes cyber-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.cyber-pulse {
+  animation: cyber-pulse 2s ease-in-out infinite;
+}
+
+/* Intro animation */
+@keyframes intro-line {
+  0% { height: 0; }
+  100% { height: 100px; }
+}
+
+.intro-line {
+  animation: intro-line 1s ease-out forwards;
+}
+
+/* Fade in animation */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fade-in 0.8s ease-out forwards;
+}
+
+/* Stats counter animation */
+@keyframes count-up {
+  from { opacity: 0; transform: scale(0.5); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.count-up {
+  animation: count-up 0.5s ease-out forwards;
+}
