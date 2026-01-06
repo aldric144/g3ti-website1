@@ -75,7 +75,56 @@ function ThreatNodeCard({ node, index }: { node: ThreatNode; index: number }) {
   )
 }
 
-function CapabilityCard({ title, description, icon, features }: { title: string; description: string; icon: string; features: string[] }) {
+function CapabilityGlyph({ type, color = '#12F6C8' }: { type: string; color?: string }) {
+  const glyphs: Record<string, JSX.Element> = {
+    target: (
+      <svg viewBox="0 0 48 48" className="w-full h-full" fill="none" stroke={color} strokeWidth="1.5">
+        <circle cx="24" cy="24" r="18" strokeDasharray="4 2" />
+        <circle cx="24" cy="24" r="12" />
+        <circle cx="24" cy="24" r="6" />
+        <circle cx="24" cy="24" r="2" fill={color} />
+      </svg>
+    ),
+    forensics: (
+      <svg viewBox="0 0 48 48" className="w-full h-full" fill="none" stroke={color} strokeWidth="1.5">
+        <circle cx="20" cy="20" r="12" />
+        <path d="M30 30l10 10" strokeLinecap="round" />
+        <circle cx="20" cy="20" r="4" fill={color} fillOpacity="0.2" />
+      </svg>
+    ),
+    shield: (
+      <svg viewBox="0 0 48 48" className="w-full h-full" fill="none" stroke={color} strokeWidth="1.5">
+        <path d="M24 4L6 12v12c0 10 8 16 18 20 10-4 18-10 18-20V12L24 4z" />
+        <circle cx="24" cy="24" r="6" fill={color} fillOpacity="0.2" />
+      </svg>
+    ),
+    osint: (
+      <svg viewBox="0 0 48 48" className="w-full h-full" fill="none" stroke={color} strokeWidth="1.5">
+        <circle cx="24" cy="24" r="16" />
+        <ellipse cx="24" cy="24" rx="8" ry="16" />
+        <path d="M8 24h32M10 16h28M10 32h28" strokeOpacity="0.5" />
+      </svg>
+    ),
+    response: (
+      <svg viewBox="0 0 48 48" className="w-full h-full" fill="none" stroke={color} strokeWidth="1.5">
+        <path d="M24 4v40M4 24h40" strokeLinecap="round" />
+        <circle cx="24" cy="24" r="8" fill={color} fillOpacity="0.2" />
+        <circle cx="24" cy="24" r="16" strokeDasharray="4 2" />
+      </svg>
+    ),
+    analytics: (
+      <svg viewBox="0 0 48 48" className="w-full h-full" fill="none" stroke={color} strokeWidth="1.5">
+        <rect x="6" y="28" width="8" height="14" />
+        <rect x="20" y="18" width="8" height="24" />
+        <rect x="34" y="8" width="8" height="34" />
+        <path d="M6 14l14-6 14 8 8-8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+  }
+  return <div className="w-10 h-10">{glyphs[type] || glyphs.target}</div>
+}
+
+function CapabilityCard({ title, description, glyphType, features, classification }: { title: string; description: string; glyphType: string; features: string[]; classification: string }) {
   const [isHovered, setIsHovered] = useState(false)
   
   return (
@@ -85,10 +134,17 @@ function CapabilityCard({ title, description, icon, features }: { title: string;
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className={`absolute inset-0 bg-gradient-to-br from-[#12F6C8]/5 to-transparent transition-opacity duration-500 ${isHovered ? 'opacity-100' : 'opacity-0'}`} />
+      <div className="absolute top-2 left-2 w-2 h-2 border-l border-t border-[#12F6C8]/30 group-hover:border-[#12F6C8]/60 transition-colors" />
+      <div className="absolute top-2 right-2 w-2 h-2 border-r border-t border-[#12F6C8]/30 group-hover:border-[#12F6C8]/60 transition-colors" />
+      <div className="absolute bottom-2 left-2 w-2 h-2 border-l border-b border-[#12F6C8]/30 group-hover:border-[#12F6C8]/60 transition-colors" />
+      <div className="absolute bottom-2 right-2 w-2 h-2 border-r border-b border-[#12F6C8]/30 group-hover:border-[#12F6C8]/60 transition-colors" />
+      <div className="absolute top-3 right-4 text-[8px] font-mono text-[#12F6C8]/50 tracking-wider">{classification}</div>
       
       <div className="relative z-10">
-        <div className="text-4xl mb-4">{icon}</div>
-        <h3 className="text-xl font-bold text-[#12F6C8] mb-2">{title}</h3>
+        <div className="mb-4">
+          <CapabilityGlyph type={glyphType} />
+        </div>
+        <h3 className="text-xl font-bold text-[#12F6C8] mb-2 tracking-wide">{title}</h3>
         <p className="text-gray-400 text-sm mb-4">{description}</p>
         
         <div className={`space-y-2 transition-all duration-500 ${isHovered ? 'opacity-100 max-h-40' : 'opacity-0 max-h-0'} overflow-hidden`}>
@@ -203,39 +259,45 @@ export default function GovernmentPage() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <CapabilityCard
-              icon="🎯"
+              glyphType="target"
+              classification="TS//SCI"
               title="Threat Detection"
-              description="AI-powered identification of emerging threats before they materialize"
+              description="Autonomous threat identification utilizing behavioral AI and pattern recognition to detect emerging attack vectors before materialization"
               features={['Deepfake detection', 'Synthetic identity analysis', 'Behavioral anomaly detection']}
             />
             <CapabilityCard
-              icon="🔍"
+              glyphType="forensics"
+              classification="SECRET"
               title="Digital Forensics"
-              description="Advanced investigation tools for cyber incidents and fraud"
+              description="Advanced cyber forensics platform providing evidence preservation, chain of custody, and court-ready intelligence reporting"
               features={['Evidence preservation', 'Chain of custody', 'Court-ready reporting']}
             />
             <CapabilityCard
-              icon="🛡️"
+              glyphType="shield"
+              classification="SECRET"
               title="Identity Protection"
-              description="Comprehensive identity verification and protection systems"
+              description="Multi-factor identity verification and continuous monitoring system for credential integrity across federal networks"
               features={['Biometric verification', 'Document authentication', 'Identity monitoring']}
             />
             <CapabilityCard
-              icon="📡"
+              glyphType="osint"
+              classification="FOUO"
               title="OSINT Integration"
-              description="Open-source intelligence gathering and analysis"
+              description="Global open-source intelligence aggregation and analysis platform with dark web surveillance and threat actor tracking"
               features={['Social media monitoring', 'Dark web surveillance', 'Threat actor tracking']}
             />
             <CapabilityCard
-              icon="⚡"
+              glyphType="response"
+              classification="TS//SCI"
               title="Real-Time Response"
-              description="Automated threat response and mitigation systems"
+              description="Automated threat response and containment system with instant alerting and coordinated incident management"
               features={['Instant alerting', 'Automated containment', 'Incident coordination']}
             />
             <CapabilityCard
-              icon="📊"
+              glyphType="analytics"
+              classification="SECRET"
               title="Predictive Analytics"
-              description="Machine learning models for threat prediction"
+              description="Machine learning threat prediction models utilizing pattern recognition, risk scoring, and trend analysis for proactive defense"
               features={['Pattern recognition', 'Risk scoring', 'Trend analysis']}
             />
           </div>
@@ -270,11 +332,21 @@ export default function GovernmentPage() {
             </div>
             
             <div className="relative">
-              <div className="aspect-video rounded-xl bg-gradient-to-br from-[#12F6C8]/10 to-[#0B85E5]/10 border border-[#12F6C8]/20 p-8 flex items-center justify-center">
+              <div className="aspect-video rounded-xl bg-gradient-to-br from-[#12F6C8]/10 to-[#0B85E5]/10 border border-[#12F6C8]/20 p-8 flex items-center justify-center relative overflow-hidden">
+                <div className="absolute top-3 left-3 w-4 h-4 border-l-2 border-t-2 border-[#12F6C8]/40" />
+                <div className="absolute top-3 right-3 w-4 h-4 border-r-2 border-t-2 border-[#12F6C8]/40" />
+                <div className="absolute bottom-3 left-3 w-4 h-4 border-l-2 border-b-2 border-[#12F6C8]/40" />
+                <div className="absolute bottom-3 right-3 w-4 h-4 border-r-2 border-b-2 border-[#12F6C8]/40" />
                 <div className="text-center">
-                  <div className="text-6xl mb-4">🏛️</div>
-                  <h3 className="text-2xl font-bold text-white mb-2">Government-Grade Security</h3>
-                  <p className="text-gray-400">Built for the most demanding security environments</p>
+                  <div className="w-16 h-16 mx-auto mb-4">
+                    <svg viewBox="0 0 64 64" className="w-full h-full" fill="none" stroke="#12F6C8" strokeWidth="1.5">
+                      <path d="M32 8L8 20v24l24 12 24-12V20L32 8z" />
+                      <rect x="20" y="28" width="24" height="16" rx="2" />
+                      <circle cx="32" cy="36" r="4" fill="#12F6C8" fillOpacity="0.3" />
+                    </svg>
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-2 tracking-wide">Government-Grade Security</h3>
+                  <p className="text-gray-400 text-sm">Built for the most demanding security environments</p>
                 </div>
               </div>
             </div>

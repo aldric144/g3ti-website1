@@ -41,11 +41,68 @@ function AnimatedStat({ value, label, suffix = '' }: { value: string; label: str
   )
 }
 
-function ThreatCard({ title, description, icon }: { title: string; description: string; icon: string }) {
+function ThreatGlyph({ type, color = '#12F6C8' }: { type: string; color?: string }) {
+  const glyphs: Record<string, JSX.Element> = {
+    identity: (
+      <svg viewBox="0 0 48 48" className="w-full h-full" fill="none" stroke={color} strokeWidth="1.5">
+        <circle cx="24" cy="16" r="8" />
+        <path d="M12 40c0-8 5-12 12-12s12 4 12 12" />
+        <path d="M32 16l8-8M32 8l8 8" strokeOpacity="0.5" />
+      </svg>
+    ),
+    voice: (
+      <svg viewBox="0 0 48 48" className="w-full h-full" fill="none" stroke={color} strokeWidth="1.5">
+        <path d="M24 8v32M16 14v20M8 20v8M32 14v20M40 20v8" strokeLinecap="round" />
+        <circle cx="24" cy="24" r="4" fill={color} fillOpacity="0.2" />
+      </svg>
+    ),
+    automation: (
+      <svg viewBox="0 0 48 48" className="w-full h-full" fill="none" stroke={color} strokeWidth="1.5">
+        <rect x="8" y="8" width="32" height="32" rx="4" />
+        <circle cx="24" cy="24" r="6" />
+        <path d="M24 18v-6M24 36v-6M18 24h-6M36 24h-6" strokeLinecap="round" />
+      </svg>
+    ),
+    network: (
+      <svg viewBox="0 0 48 48" className="w-full h-full" fill="none" stroke={color} strokeWidth="1.5">
+        <circle cx="24" cy="24" r="16" strokeDasharray="4 2" />
+        <circle cx="24" cy="8" r="4" fill={color} fillOpacity="0.3" />
+        <circle cx="40" cy="24" r="4" fill={color} fillOpacity="0.3" />
+        <circle cx="24" cy="40" r="4" fill={color} fillOpacity="0.3" />
+        <circle cx="8" cy="24" r="4" fill={color} fillOpacity="0.3" />
+      </svg>
+    ),
+    surveillance: (
+      <svg viewBox="0 0 48 48" className="w-full h-full" fill="none" stroke={color} strokeWidth="1.5">
+        <circle cx="24" cy="24" r="8" />
+        <circle cx="24" cy="24" r="3" fill={color} />
+        <path d="M8 24c0-8 7-16 16-16s16 8 16 16" />
+        <path d="M4 24c0-10 9-20 20-20s20 10 20 20" strokeOpacity="0.3" />
+      </svg>
+    ),
+    threat: (
+      <svg viewBox="0 0 48 48" className="w-full h-full" fill="none" stroke={color} strokeWidth="1.5">
+        <path d="M24 8L8 40h32L24 8z" />
+        <path d="M24 20v10" strokeLinecap="round" />
+        <circle cx="24" cy="34" r="2" fill={color} />
+      </svg>
+    ),
+  }
+  return <div className="w-8 h-8">{glyphs[type] || glyphs.threat}</div>
+}
+
+function ThreatCard({ title, description, glyphType, classification }: { title: string; description: string; glyphType: string; classification: string }) {
   return (
-    <div className="p-6 bg-[#0D0D0F]/80 rounded-xl border border-[#12F6C8]/10 hover:border-[#12F6C8]/30 transition-all duration-300 group cursor-pointer">
-      <div className="text-3xl mb-4">{icon}</div>
-      <h3 className="text-[#12F6C8] font-semibold text-lg mb-2 group-hover:glow-text transition-all">{title}</h3>
+    <div className="p-6 bg-[#0D0D0F]/80 rounded-xl border border-[#12F6C8]/10 hover:border-[#12F6C8]/30 transition-all duration-300 group cursor-pointer relative overflow-hidden">
+      <div className="absolute top-2 left-2 w-2 h-2 border-l border-t border-[#12F6C8]/30 group-hover:border-[#12F6C8]/60 transition-colors" />
+      <div className="absolute top-2 right-2 w-2 h-2 border-r border-t border-[#12F6C8]/30 group-hover:border-[#12F6C8]/60 transition-colors" />
+      <div className="absolute bottom-2 left-2 w-2 h-2 border-l border-b border-[#12F6C8]/30 group-hover:border-[#12F6C8]/60 transition-colors" />
+      <div className="absolute bottom-2 right-2 w-2 h-2 border-r border-b border-[#12F6C8]/30 group-hover:border-[#12F6C8]/60 transition-colors" />
+      <div className="absolute top-3 right-4 text-[8px] font-mono text-red-400/60 tracking-wider">{classification}</div>
+      <div className="mb-4">
+        <ThreatGlyph type={glyphType} color="#EF4444" />
+      </div>
+      <h3 className="text-[#12F6C8] font-semibold text-lg mb-2 group-hover:glow-text transition-all tracking-wide">{title}</h3>
       <p className="text-gray-400 text-sm leading-relaxed">{description}</p>
     </div>
   )
@@ -131,12 +188,12 @@ export default function Home() {
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <ThreatCard icon="🎭" title="Synthetic Identity Fraud" description="AI-generated identities combining real and fabricated data to bypass traditional verification systems." />
-            <ThreatCard icon="🔊" title="Deepfake Voice Attacks" description="Voice cloning technology enabling real-time impersonation for financial fraud and social engineering." />
-            <ThreatCard icon="🤖" title="Automated Social Engineering" description="AI-powered manipulation campaigns targeting individuals at scale with personalized deception." />
-            <ThreatCard icon="🌐" title="Cross-Platform Fraud Networks" description="Coordinated criminal operations spanning multiple platforms and jurisdictions." />
-            <ThreatCard icon="👁️" title="AI-Enabled Trafficking" description="Criminal networks leveraging AI to evade detection and recruit victims." />
-            <ThreatCard icon="💔" title="Digital Domestic Violence" description="Technology-facilitated abuse including stalking, harassment, and financial control." />
+            <ThreatCard glyphType="identity" classification="CRITICAL" title="Synthetic Identity Fraud" description="AI-generated identities combining real and fabricated data to bypass traditional verification systems." />
+            <ThreatCard glyphType="voice" classification="HIGH" title="Deepfake Voice Attacks" description="Voice cloning technology enabling real-time impersonation for financial fraud and social engineering." />
+            <ThreatCard glyphType="automation" classification="CRITICAL" title="Automated Social Engineering" description="AI-powered manipulation campaigns targeting individuals at scale with personalized deception." />
+            <ThreatCard glyphType="network" classification="HIGH" title="Cross-Platform Fraud Networks" description="Coordinated criminal operations spanning multiple platforms and jurisdictions." />
+            <ThreatCard glyphType="surveillance" classification="CRITICAL" title="AI-Enabled Trafficking" description="Criminal networks leveraging AI to evade detection and recruit victims." />
+            <ThreatCard glyphType="threat" classification="HIGH" title="Digital Domestic Violence" description="Technology-facilitated abuse including stalking, harassment, and financial control." />
           </div>
         </div>
       </section>
@@ -163,11 +220,21 @@ export default function Home() {
               </div>
             </div>
             <div className="relative">
-              <div className="aspect-square rounded-2xl bg-gradient-to-br from-[#12F6C8]/10 to-[#0B85E5]/10 border border-[#12F6C8]/20 p-8 flex items-center justify-center">
+              <div className="aspect-square rounded-2xl bg-gradient-to-br from-[#12F6C8]/10 to-[#0B85E5]/10 border border-[#12F6C8]/20 p-8 flex items-center justify-center relative overflow-hidden">
+                <div className="absolute top-3 left-3 w-4 h-4 border-l-2 border-t-2 border-[#12F6C8]/40" />
+                <div className="absolute top-3 right-3 w-4 h-4 border-r-2 border-t-2 border-[#12F6C8]/40" />
+                <div className="absolute bottom-3 left-3 w-4 h-4 border-l-2 border-b-2 border-[#12F6C8]/40" />
+                <div className="absolute bottom-3 right-3 w-4 h-4 border-r-2 border-b-2 border-[#12F6C8]/40" />
                 <div className="text-center">
-                  <div className="text-6xl mb-4">🛡️</div>
-                  <h3 className="text-2xl font-bold text-[#12F6C8] mb-2">VETERAN-LED</h3>
-                  <h4 className="text-xl text-white mb-4">MISSION-DRIVEN</h4>
+                  <div className="w-20 h-20 mx-auto mb-4">
+                    <svg viewBox="0 0 64 64" className="w-full h-full" fill="none" stroke="#12F6C8" strokeWidth="1.5">
+                      <path d="M32 6L8 16v16c0 14 10 22 24 28 14-6 24-14 24-28V16L32 6z" />
+                      <circle cx="32" cy="32" r="8" fill="#12F6C8" fillOpacity="0.2" />
+                      <path d="M28 32l3 3 6-6" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </div>
+                  <h3 className="text-2xl font-bold text-[#12F6C8] mb-2 tracking-wide">VETERAN-LED</h3>
+                  <h4 className="text-xl text-white mb-4 font-mono tracking-wider">MISSION-DRIVEN</h4>
                   <p className="text-gray-400 text-sm">Founded by Dr. Aldric Marshall — U.S. veteran, national security expert, and global advocate for human protection.</p>
                 </div>
               </div>
