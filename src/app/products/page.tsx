@@ -94,7 +94,7 @@ function ProductCategory({ title, description, products }: {
 
 function ProductStats() {
   const stats = [
-    { value: '5', label: 'AI Products' },
+    { value: '14', label: 'AI Products' },
     { value: '847+', label: 'Threats Blocked' },
     { value: '99.97%', label: 'Uptime' },
     { value: '24/7', label: 'Monitoring' },
@@ -124,10 +124,11 @@ export default function ProductsPage() {
     }
   }, [])
 
+  // SECURITY & ENCRYPTION (3 products)
   const securityProducts = [
     {
       name: 'GhostQuant AI',
-      tagline: 'Quantum-Resistant Encryption',
+      tagline: 'Quantum-Resistant Encryption Engine',
       icon: '👻',
       description: 'Next-generation encryption platform using post-quantum cryptographic algorithms to protect against future quantum computing threats.',
       features: ['Post-Quantum', 'Zero-Knowledge', 'Military-Grade'],
@@ -154,6 +155,7 @@ export default function ProductsPage() {
     },
   ]
 
+  // PROTECTION & INTELLIGENCE (2 products)
   const protectionProducts = [
     {
       name: 'HeartGuard AI',
@@ -175,6 +177,99 @@ export default function ProductsPage() {
     },
   ]
 
+  // GOVERNMENT / NATIONAL SECURITY EXPANSION (4 products)
+  const governmentProducts = [
+    {
+      name: 'CounterAI Sentinel',
+      tagline: 'Autonomous Threat Counterintelligence',
+      icon: '🎯',
+      description: 'Advanced counterintelligence platform that autonomously detects, tracks, and neutralizes AI-powered threats targeting government operations.',
+      features: ['Autonomous Response', 'Threat Hunting', 'Zero-Day Defense'],
+      href: '#',
+      color: '#DC2626',
+    },
+    {
+      name: 'OSINT Recon360',
+      tagline: 'Open-Source Intelligence Fusion Grid',
+      icon: '🌐',
+      description: 'Comprehensive open-source intelligence platform that aggregates, analyzes, and correlates data from thousands of public sources in real-time.',
+      features: ['Multi-Source Fusion', 'Pattern Analysis', 'Geospatial Intel'],
+      href: '#',
+      color: '#2563EB',
+    },
+    {
+      name: 'InfraGuard Nexus',
+      tagline: 'Critical Infrastructure Protection AI',
+      icon: '⚡',
+      description: 'AI-driven protection system designed to safeguard critical infrastructure including power grids, water systems, and transportation networks.',
+      features: ['SCADA Protection', 'ICS Security', 'Resilience Monitoring'],
+      href: '#',
+      color: '#7C3AED',
+    },
+    {
+      name: 'BlueShield Patrol AI',
+      tagline: 'Law-Enforcement Tactical Intelligence',
+      icon: '🚔',
+      description: 'Tactical intelligence platform providing real-time situational awareness and threat assessment for law enforcement operations.',
+      features: ['Real-Time Alerts', 'Officer Safety', 'Predictive Analytics'],
+      href: '#',
+      color: '#1D4ED8',
+    },
+  ]
+
+  // ENTERPRISE SECURITY EXPANSION (3 products)
+  const enterpriseProducts = [
+    {
+      name: 'CyberTrace Monitor',
+      tagline: 'Enterprise Intrusion & Anomaly Engine',
+      icon: '📡',
+      description: 'Enterprise-grade intrusion detection system that monitors network traffic and identifies anomalous behavior patterns before breaches occur.',
+      features: ['Network Monitoring', 'Anomaly Detection', 'Incident Response'],
+      href: '#',
+      color: '#059669',
+    },
+    {
+      name: 'VaultLock Quantum',
+      tagline: 'Post-Quantum Data Protection Vault',
+      icon: '🔐',
+      description: 'Quantum-resistant data vault that provides military-grade encryption for enterprise data storage and transmission in the post-quantum era.',
+      features: ['Quantum-Safe', 'Data Vault', 'Key Management'],
+      href: '#',
+      color: '#4F46E5',
+    },
+    {
+      name: 'FraudMatrix Enterprise',
+      tagline: 'Behavioral Fraud Intelligence',
+      icon: '🔍',
+      description: 'Enterprise fraud detection platform using behavioral analytics and machine learning to identify and prevent sophisticated fraud schemes.',
+      features: ['Behavioral AI', 'Transaction Monitoring', 'Risk Scoring'],
+      href: '#',
+      color: '#CA8A04',
+    },
+  ]
+
+  // CONSUMER / FAMILY PROTECTION EXPANSION (2 products)
+  const consumerProducts = [
+    {
+      name: 'ElderGuard AI',
+      tagline: 'Senior Fraud Prevention & Safety Intelligence',
+      icon: '👴',
+      description: 'Specialized protection platform designed to safeguard seniors from scams, fraud, and exploitation with easy-to-use monitoring and alerts.',
+      features: ['Scam Prevention', 'Financial Monitoring', 'Family Alerts'],
+      href: '#',
+      color: '#9333EA',
+    },
+    {
+      name: 'ChildShield Vision',
+      tagline: 'Child Safety & Behavioral Threat Detection',
+      icon: '👶',
+      description: 'Advanced child safety platform that detects online predators, cyberbullying, and harmful content while monitoring behavioral threat indicators.',
+      features: ['Predator Detection', 'Content Safety', 'Behavioral Analysis'],
+      href: '#',
+      color: '#EC4899',
+    },
+  ]
+
   return (
     <div className="min-h-screen bg-[#050505]">
       {/* Hero */}
@@ -191,7 +286,7 @@ export default function ProductsPage() {
             <span className="text-[#12F6C8] glow-text">INTELLIGENCE</span>
           </h1>
           <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-            Five AI-powered products designed to protect, predict, and prevail. 
+            Fourteen AI-powered products designed to protect, predict, and prevail. 
             Each product operates as an interactive console, giving you complete 
             control over your security posture.
           </p>
@@ -226,6 +321,39 @@ export default function ProductsPage() {
             title="Protection & Intelligence"
             description="Comprehensive protection for families and national security"
             products={protectionProducts}
+          />
+        </div>
+      </section>
+
+      {/* Government / National Security Products */}
+      <section className="py-16 px-4">
+        <div className="max-w-7xl mx-auto">
+          <ProductCategory
+            title="Government / National Security Expansion"
+            description="Mission-critical intelligence systems for federal, state, and law enforcement operations"
+            products={governmentProducts}
+          />
+        </div>
+      </section>
+
+      {/* Enterprise Security Products */}
+      <section className="py-16 px-4 bg-[#0D0D0F]">
+        <div className="max-w-7xl mx-auto">
+          <ProductCategory
+            title="Enterprise Security Expansion"
+            description="Enterprise-grade security solutions for organizations of all sizes"
+            products={enterpriseProducts}
+          />
+        </div>
+      </section>
+
+      {/* Consumer / Family Protection Products */}
+      <section className="py-16 px-4">
+        <div className="max-w-7xl mx-auto">
+          <ProductCategory
+            title="Consumer / Family Protection Expansion"
+            description="Specialized protection for families, seniors, and children"
+            products={consumerProducts}
           />
         </div>
       </section>
