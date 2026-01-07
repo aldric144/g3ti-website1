@@ -354,6 +354,181 @@ export default function GovernmentPage() {
         </div>
       </section>
 
+      {/* THREAT OPERATIONS COMMAND ROOM Section */}
+      <section className="py-20 px-4 bg-[#050505] relative overflow-hidden">
+        {/* Background grid pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="w-full h-full" style={{ 
+            backgroundImage: 'linear-gradient(#12F6C8 1px, transparent 1px), linear-gradient(90deg, #12F6C8 1px, transparent 1px)',
+            backgroundSize: '50px 50px'
+          }} />
+        </div>
+        
+        <div className="max-w-7xl mx-auto relative z-10">
+          {/* Header */}
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-[#12F6C8]/10 border border-[#12F6C8]/30 mb-6">
+              <div className="relative">
+                <div className="w-2 h-2 rounded-full bg-[#12F6C8] animate-pulse" />
+                <div className="absolute inset-0 w-2 h-2 rounded-full bg-[#12F6C8] animate-ping opacity-75" />
+              </div>
+              <span className="text-[#12F6C8] text-sm tracking-wider font-mono">CLASSIFIED // ACTIVE MONITORING</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              <span className="text-white">THREAT OPERATIONS</span><br />
+              <span className="text-[#12F6C8] glow-text">COMMAND ROOM</span>
+            </h2>
+            <p className="text-gray-400 text-lg">FOR GOVERNMENT & LAW ENFORCEMENT PARTNERS</p>
+          </div>
+
+          {/* National Threat Grid */}
+          <div className="mb-20">
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-1 h-8 bg-[#12F6C8]" />
+              <h3 className="text-2xl font-bold text-white">NATIONAL THREAT GRID</h3>
+              <span className="text-xs text-gray-500 font-mono">(Live Monitoring Panels)</span>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {[
+                'Domestic Violence Escalation Vectors',
+                'Human Trafficking Digital Corridors',
+                'Synthetic Identity Clusters',
+                'Deepfake Threat Patterns',
+                'Scam Network Nodes',
+                'AI-Enabled Exploitation Graphs',
+                'Dark-Web Exploitation Heatmaps',
+                'Machine-Speed Deception Mapping',
+              ].map((threat, i) => (
+                <div 
+                  key={i}
+                  className="relative p-5 bg-[#0A0A0C] border border-[#12F6C8]/20 rounded-lg overflow-hidden group hover:border-[#12F6C8]/50 transition-all duration-300"
+                >
+                  {/* Corner brackets */}
+                  <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#12F6C8]/40" />
+                  <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-[#12F6C8]/40" />
+                  <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-[#12F6C8]/40" />
+                  <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[#12F6C8]/40" />
+                  
+                  {/* Scanner sheen */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#12F6C8]/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                  
+                  {/* Scanlines */}
+                  <div className="absolute inset-0 pointer-events-none opacity-10">
+                    <div className="w-full h-full" style={{ 
+                      backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(18,246,200,0.03) 2px, rgba(18,246,200,0.03) 4px)'
+                    }} />
+                  </div>
+
+                  <h4 className="text-white font-semibold text-sm leading-tight mb-3">{threat}</h4>
+                  <div className="flex items-center gap-2">
+                    <div className="relative">
+                      <div className="w-2 h-2 rounded-full bg-[#12F6C8] animate-pulse" />
+                      <div className="absolute inset-0 w-2 h-2 rounded-full bg-[#12F6C8] animate-ping opacity-75" />
+                    </div>
+                    <span className="text-[#12F6C8] text-xs font-mono tracking-wider" style={{ textShadow: '0 0 10px rgba(18,246,200,0.5)' }}>
+                      MONITORING ACTIVE
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Intelligence Brief Blocks */}
+          <div className="mb-20">
+            <div className="flex items-center gap-3 mb-8">
+              <svg className="w-6 h-6 text-[#12F6C8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <h3 className="text-2xl font-bold text-white">INTELLIGENCE BRIEF BLOCKS</h3>
+              <span className="text-xs text-gray-500 font-mono">(Clickable Unit Profiles)</span>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {[
+                { name: 'Police Departments', status: 'loaded', description: 'Domestic threat escalation prediction' },
+                { name: 'Fusion Centers', status: 'click', description: null },
+                { name: 'Investigators', status: 'loaded', description: 'Digital evidence trail mapping' },
+                { name: 'Analysts', status: 'click', description: null },
+                { name: 'Domestic Violence Units', status: 'click', description: null },
+                { name: 'Crisis Response Teams', status: 'click', description: null },
+                { name: 'Homeland Security Partners', status: 'click', description: null },
+              ].map((unit, i) => (
+                <div 
+                  key={i}
+                  className="relative p-5 bg-[#0A0A0C] border border-[#0B85E5]/20 rounded-lg cursor-pointer group hover:border-[#0B85E5]/60 hover:shadow-lg hover:shadow-[#0B85E5]/20 transition-all duration-300"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#0B85E5]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  
+                  <div className="relative z-10">
+                    <h4 className="text-white font-semibold mb-3">{unit.name}</h4>
+                    {unit.status === 'loaded' ? (
+                      <div className="space-y-1">
+                        <div className="text-[#12F6C8] text-xs font-mono">[ UNIT PROFILE LOADED ]</div>
+                        <div className="text-[#12F6C8] text-xs font-mono">[ THREAT SCENARIO ANALYSIS READY ]</div>
+                        {unit.description && <div className="text-gray-400 text-xs mt-2">{unit.description}</div>}
+                      </div>
+                    ) : (
+                      <div className="text-[#0B85E5] text-xs font-mono group-hover:text-[#12F6C8] transition-colors">
+                        [ CLICK TO ACCESS ]
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* THE G3TI ADVANTAGE */}
+          <div className="mb-16">
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-3 h-3 rounded-full bg-[#12F6C8] animate-pulse" />
+              <h3 className="text-2xl font-bold text-white">THE G3TI ADVANTAGE</h3>
+            </div>
+            
+            <div className="max-w-4xl">
+              <div className="space-y-4">
+                {[
+                  'G3TI exposes machine-speed threats traditional systems cannot see.',
+                  'G3TI predicts crime trajectories before escalation.',
+                  'G3TI identifies synthetic identity actors in milliseconds.',
+                  'G3TI fuses OSINT and behavioral vectors across millions of signals.',
+                  'G3TI empowers agencies with preemptive intelligence.',
+                  'G3TI amplifies law enforcement.',
+                  'G3TI accelerates investigators.',
+                  'G3TI protects the vulnerable.',
+                ].map((advantage, i) => (
+                  <div key={i} className="flex items-start gap-3 group">
+                    <div className="w-2 h-2 rounded-full bg-[#12F6C8] mt-2 group-hover:shadow-lg group-hover:shadow-[#12F6C8]/50 transition-all" />
+                    <p className="text-gray-300 text-lg group-hover:text-white transition-colors">{advantage}</p>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="mt-8 p-6 bg-[#0A0A0C] border border-[#12F6C8]/30 rounded-lg">
+                <p className="text-[#12F6C8] text-xl font-semibold italic text-center">
+                  This is the future of national safety intelligence.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Command Room CTA */}
+          <div className="text-center">
+            <Link 
+              href="/threat-operations-command-room.html"
+              className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#12F6C8] to-[#0B85E5] text-black font-semibold rounded-lg hover:shadow-lg hover:shadow-[#12F6C8]/30 transition-all"
+            >
+              Access Full Command Room
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-20 px-4 bg-gradient-to-b from-[#050505] to-[#0D0D0F]">
         <div className="max-w-4xl mx-auto text-center">
