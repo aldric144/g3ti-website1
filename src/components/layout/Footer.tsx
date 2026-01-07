@@ -21,43 +21,35 @@ export default function Footer() {
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        {/* Main footer content */}
+        {/* Main footer content - 5 columns */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
-          {/* Brand column */}
-          <div className="lg:col-span-2">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#12F6C8] to-[#0B85E5] flex items-center justify-center">
-                <span className="text-black font-bold text-xl">G3</span>
-              </div>
-              <div>
-                <div className="text-[#12F6C8] font-bold text-xl tracking-wider">G3TI</div>
-                <div className="text-gray-500 text-xs tracking-widest">DIGITAL INTELLIGENCE ENVIRONMENT</div>
-              </div>
-            </div>
-            <p className="text-gray-400 text-sm leading-relaxed mb-6">
-              Global 3 Technology & Intelligence™ — Autonomous Protective Intelligence for the AI Threat Era. 
-              Veteran-Owned Technology & Intelligence Company headquartered in Palm Beach, FL.
+          {/* Column 1 - Company Info */}
+          <div className="lg:col-span-1">
+            <h3 className="text-[#12F6C8] font-bold text-lg mb-4 tracking-wider">GLOBAL 3 TECHNOLOGY & INTELLIGENCE™</h3>
+            <p className="text-gray-400 text-sm leading-relaxed mb-4">
+              Autonomous Protective Intelligence for the AI Threat Era
             </p>
-            {/* Global tagline */}
-            <div className="p-4 rounded-lg bg-[#12F6C8]/5 border border-[#12F6C8]/20">
-              <p className="text-[#12F6C8] text-sm italic">
-                &quot;We don&apos;t make technology — we make technology intelligent.&quot;
-              </p>
-            </div>
+            <p className="text-gray-400 text-sm leading-relaxed mb-4">
+              Veteran-Owned Technology & Intelligence Company
+            </p>
+            <p className="text-gray-400 text-sm">
+              Palm Beach, FL
+            </p>
           </div>
 
-          {/* Navigation column */}
+          {/* Column 2 - Navigation */}
           <div>
             <h4 className="text-[#12F6C8] font-semibold mb-4 tracking-wider text-sm">NAVIGATION</h4>
             <ul className="space-y-3">
               {[
                 { label: 'Home', href: '/' },
-                { label: 'Government', href: '/government.html' },
+                { label: 'Origin Dossier', href: '/about.html' },
+                { label: 'Government & Law Enforcement', href: '/government.html' },
                 { label: 'Enterprise', href: '/enterprise.html' },
-                { label: 'Products', href: '/products.html' },
                 { label: 'Contact', href: '/contact.html' },
+                { label: 'Request a Demo', href: '/contact.html' },
               ].map((link) => (
-                <li key={link.href}>
+                <li key={link.href + link.label}>
                   <Link href={link.href} className="text-gray-400 hover:text-[#12F6C8] text-sm transition-colors">
                     {link.label}
                   </Link>
@@ -66,15 +58,15 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Intelligence column */}
+          {/* Column 3 - Legal */}
           <div>
-            <h4 className="text-[#12F6C8] font-semibold mb-4 tracking-wider text-sm">INTELLIGENCE</h4>
+            <h4 className="text-[#12F6C8] font-semibold mb-4 tracking-wider text-sm">LEGAL</h4>
             <ul className="space-y-3">
               {[
-                { label: 'Threat Architecture', href: '/dossiers/threat-architecture.html' },
-                { label: 'Contractor Readiness', href: '/dossiers/contractor-readiness.html' },
-                { label: 'National Security', href: '/dossiers/national-security.html' },
-                { label: 'Addendum', href: '/dossiers/addendum.html' },
+                { label: 'Privacy Policy', href: '/privacy-policy.html' },
+                { label: 'Terms of Use', href: '/terms-of-use.html' },
+                { label: 'Security Notice', href: '/security-notice.html' },
+                { label: 'Intellectual Property', href: '/intellectual-property.html' },
               ].map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className="text-gray-400 hover:text-[#12F6C8] text-sm transition-colors">
@@ -85,17 +77,39 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Compliance column */}
+          {/* Column 4 - Compliance */}
           <div>
             <h4 className="text-[#12F6C8] font-semibold mb-4 tracking-wider text-sm">COMPLIANCE</h4>
             <ul className="space-y-3">
               {[
-                { label: 'AI Governance', href: '/compliance/ai-governance.html' },
-                { label: 'NIST/CJIS', href: '/compliance/nist-cjis.html' },
-                { label: 'Zero Trust', href: '/compliance/zero-trust.html' },
-                { label: 'Data Governance', href: '/compliance/data-governance.html' },
-                { label: 'Privacy Policy', href: '/legal/privacy.html' },
-                { label: 'Terms of Use', href: '/legal/terms.html' },
+                { label: 'AI Governance', href: '/ai-governance.html' },
+                { label: 'Responsible AI', href: '/responsible-ai.html' },
+                { label: 'Data Governance', href: '/data-governance.html' },
+                { label: 'Zero Trust', href: '/zero-trust.html' },
+                { label: 'CJIS/NIST Readiness', href: '/cjis-nist-readiness.html' },
+                { label: 'Responsible Disclosure', href: '/responsible-disclosure.html' },
+                { label: 'Human Protection Pledge', href: '/human-protection-pledge.html' },
+                { label: 'AI Misuse Policy', href: '/ai-misuse-prohibition.html' },
+                { label: 'FedRAMP Alignment Packet', href: '/fedramp-alignment.html' },
+              ].map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="text-gray-400 hover:text-[#12F6C8] text-sm transition-colors">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 5 - Intelligence Dossiers */}
+          <div>
+            <h4 className="text-[#12F6C8] font-semibold mb-4 tracking-wider text-sm">INTELLIGENCE DOSSIERS</h4>
+            <ul className="space-y-3">
+              {[
+                { label: 'Threat Architecture Whitepaper', href: '/threat-architecture.html' },
+                { label: 'Contractor Readiness Binder', href: '/contractor-readiness.html' },
+                { label: 'National Security Briefing Packet', href: '/national-security-briefing.html' },
+                { label: 'Threat Architecture Addendum', href: '/threat-architecture-addendum.html' },
               ].map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className="text-gray-400 hover:text-[#12F6C8] text-sm transition-colors">
@@ -107,16 +121,19 @@ export default function Footer() {
           </div>
         </div>
 
+        {/* Tagline */}
+        <div className="text-center mb-8 py-4 border-t border-b border-[#12F6C8]/10">
+          <p className="text-[#12F6C8]/60 text-sm italic">
+            &quot;Autonomous Intelligence Engine Active — Monitoring Global Threat Surfaces in Real Time.&quot;
+          </p>
+        </div>
+
         {/* Bottom bar */}
-        <div className="pt-8 border-t border-[#12F6C8]/10">
+        <div className="pt-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <span className="text-gray-500 text-sm">
                 © 2026 Global 3 Technology & Intelligence™. All rights reserved.
-              </span>
-              <span className="text-[#12F6C8]/50">|</span>
-              <span className="text-gray-500 text-sm flex items-center gap-2">
-                <span className="text-lg">🇺🇸</span> Veteran-Owned
               </span>
             </div>
             
