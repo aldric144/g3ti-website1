@@ -64,6 +64,10 @@ update_links() {
         # Threat Operations Command Room
         sed -i 's|href="/threat-operations-command-room"|href="/threat-operations-command-room.html"|g' "$file"
         
+        # Intel Feed pages
+        sed -i 's|href="/intel-feed"|href="/intel-feed.html"|g' "$file"
+        sed -i 's|href="/admin/intel-feed"|href="/admin/intel-feed.html"|g' "$file"
+        
         echo "Updated links in: $file"
     done
 }

@@ -25,6 +25,7 @@ const navItems: NavItem[] = [
     { label: 'RTCC-UIP', href: '/products/rtcc-uip.html' },
     { label: 'HeartGuard AI', href: '/products/heartguard.html' },
   ]},
+  { label: 'News & Intelligence', href: '/intel-feed.html' },
   { label: 'Dossiers', href: '/dossiers.html', branches: [
     { label: 'Threat Architecture', href: '/dossiers/threat-architecture.html' },
     { label: 'Contractor Readiness', href: '/dossiers/contractor-readiness.html' },

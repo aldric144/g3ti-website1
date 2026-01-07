@@ -47,6 +47,7 @@ export default function Footer() {
                           { label: 'Government & Law Enforcement', href: '/government.html' },
                           { label: 'Threat Operations Command Room', href: '/threat-operations-command-room.html' },
                           { label: 'Enterprise', href: '/enterprise.html' },
+                          { label: 'News & Intelligence', href: '/intel-feed.html' },
                           { label: 'Contact', href: '/contact.html' },
                           { label: 'Request a Demo', href: '/contact.html' },
                         ].map((link) => (
