@@ -13,7 +13,10 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { label: 'Home', href: '/' },
-  { label: 'Government', href: '/government.html' },
+  { label: 'Government', href: '/government.html', branches: [
+    { label: 'Government Solutions', href: '/government.html' },
+    { label: 'Threat Operations Command Room', href: '/threat-operations-command-room.html' },
+  ]},
   { label: 'Enterprise', href: '/enterprise.html' },
   { label: 'Products', href: '/products.html', branches: [
     { label: 'GhostQuant AI', href: '/products/ghostquant.html' },

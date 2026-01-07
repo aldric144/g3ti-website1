@@ -37,18 +37,19 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* Column 2 - Navigation */}
-          <div>
-            <h4 className="text-[#12F6C8] font-semibold mb-4 tracking-wider text-sm">NAVIGATION</h4>
-            <ul className="space-y-3">
-              {[
-                { label: 'Home', href: '/' },
-                { label: 'Origin Dossier', href: '/about.html' },
-                { label: 'Government & Law Enforcement', href: '/government.html' },
-                { label: 'Enterprise', href: '/enterprise.html' },
-                { label: 'Contact', href: '/contact.html' },
-                { label: 'Request a Demo', href: '/contact.html' },
-              ].map((link) => (
+                    {/* Column 2 - Navigation */}
+                    <div>
+                      <h4 className="text-[#12F6C8] font-semibold mb-4 tracking-wider text-sm">NAVIGATION</h4>
+                      <ul className="space-y-3">
+                        {[
+                          { label: 'Home', href: '/' },
+                          { label: 'Origin Dossier', href: '/about.html' },
+                          { label: 'Government & Law Enforcement', href: '/government.html' },
+                          { label: 'Threat Operations Command Room', href: '/threat-operations-command-room.html' },
+                          { label: 'Enterprise', href: '/enterprise.html' },
+                          { label: 'Contact', href: '/contact.html' },
+                          { label: 'Request a Demo', href: '/contact.html' },
+                        ].map((link) => (
                 <li key={link.href + link.label}>
                   <Link href={link.href} className="text-gray-400 hover:text-[#12F6C8] text-sm transition-colors">
                     {link.label}

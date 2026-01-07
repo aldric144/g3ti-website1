@@ -61,6 +61,9 @@ update_links() {
         sed -i 's|href="/legal/security-notice"|href="/legal/security-notice.html"|g' "$file"
         sed -i 's|href="/legal/intellectual-property"|href="/legal/intellectual-property.html"|g' "$file"
         
+        # Threat Operations Command Room
+        sed -i 's|href="/threat-operations-command-room"|href="/threat-operations-command-room.html"|g' "$file"
+        
         echo "Updated links in: $file"
     done
 }

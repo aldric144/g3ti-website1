@@ -243,6 +243,45 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Threat Operations Command Room CTA */}
+      <section className="py-16 px-4 bg-[#050505] relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#12F6C8]/5 via-transparent to-[#0B85E5]/5" />
+        <div className="max-w-4xl mx-auto relative z-10">
+          <div className="p-8 rounded-2xl bg-[#0A0A0C] border border-[#12F6C8]/30 relative overflow-hidden group hover:border-[#12F6C8]/50 transition-all duration-300">
+            {/* Corner brackets */}
+            <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-[#12F6C8]/60" />
+            <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-[#12F6C8]/60" />
+            <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-[#12F6C8]/60" />
+            <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-[#12F6C8]/60" />
+            
+            {/* Scanner sheen effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#12F6C8]/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+            
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+              <div className="flex items-center gap-4">
+                <div className="relative">
+                  <div className="w-3 h-3 rounded-full bg-[#12F6C8] animate-pulse" />
+                  <div className="absolute inset-0 w-3 h-3 rounded-full bg-[#12F6C8] animate-ping opacity-75" />
+                </div>
+                <div>
+                  <div className="text-[#12F6C8] text-xs font-mono tracking-wider mb-1">CLASSIFIED // FOR AUTHORIZED PERSONNEL</div>
+                  <h3 className="text-xl md:text-2xl font-bold text-white">THREAT OPERATIONS COMMAND ROOM</h3>
+                </div>
+              </div>
+              <Link 
+                href="/threat-operations-command-room.html" 
+                className="px-6 py-3 bg-gradient-to-r from-[#12F6C8] to-[#0B85E5] text-black font-semibold rounded-lg hover:shadow-lg hover:shadow-[#12F6C8]/30 transition-all duration-300 whitespace-nowrap flex items-center gap-2"
+              >
+                Access Command Room
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="py-24 px-4 bg-gradient-to-b from-[#0D0D0F] to-[#050505]">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">We protect what the world isn&apos;t prepared for.</h2>
