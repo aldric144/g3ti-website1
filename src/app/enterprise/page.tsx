@@ -310,6 +310,118 @@ export default function EnterprisePage() {
         </div>
       </section>
 
+      {/* CORPORATE THREAT SKYBRIDGE Section */}
+      <section className="enterprise-skybridge py-24 px-4 bg-[#050505] relative overflow-hidden">
+        {/* Animated scanline overlay */}
+        <div className="absolute inset-0 pointer-events-none opacity-10">
+          <div className="w-full h-full" style={{ 
+            backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(18,246,200,0.03) 2px, rgba(18,246,200,0.03) 4px)'
+          }} />
+        </div>
+        
+        {/* Background grid pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="w-full h-full" style={{ 
+            backgroundImage: 'linear-gradient(#12F6C8 1px, transparent 1px), linear-gradient(90deg, #12F6C8 1px, transparent 1px)',
+            backgroundSize: '50px 50px'
+          }} />
+        </div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          {/* Classified Header */}
+          <div className="classified-header text-center mb-16">
+            <p className="text-[#12F6C8] text-xs tracking-widest opacity-70 font-mono">
+              [ CORPORATE THREAT SKYBRIDGE — ENTERPRISE INTELLIGENCE ARCHITECTURE ]
+            </p>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mt-4">
+              Enterprise Threat Intelligence at <span className="text-[#12F6C8] glow-text">Machine Speed</span>
+            </h2>
+          </div>
+
+          {/* ACTIVE THREAT GRID */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+            {[
+              'Deepfake CEO Fraud',
+              'AI-Generated Phishing',
+              'Identity Compromise',
+              'Credential Leaks',
+              'Insider Threats',
+              'Behavioral Manipulation Attacks',
+              'Data Exfiltration Pipelines',
+              'Corporate Espionage Networks'
+            ].map((threat, i) => (
+              <div 
+                key={i}
+                className="threat-tile border border-[#12F6C8]/30 p-6 rounded-lg bg-black/40 hover:bg-black/60 transition-all duration-300 shadow-lg hover:shadow-[#12F6C8]/30 group relative overflow-hidden"
+              >
+                {/* Corner brackets */}
+                <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#12F6C8]/40 group-hover:border-[#12F6C8]/80 transition-colors" />
+                <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-[#12F6C8]/40 group-hover:border-[#12F6C8]/80 transition-colors" />
+                <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-[#12F6C8]/40 group-hover:border-[#12F6C8]/80 transition-colors" />
+                <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[#12F6C8]/40 group-hover:border-[#12F6C8]/80 transition-colors" />
+                
+                {/* Scanner sheen */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#12F6C8]/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                
+                <h3 className="text-lg font-semibold text-white mb-3">{threat}</h3>
+                <div className="flex items-center gap-2">
+                  <div className="relative">
+                    <div className="w-2 h-2 rounded-full bg-[#12F6C8] animate-pulse" />
+                    <div className="absolute inset-0 w-2 h-2 rounded-full bg-[#12F6C8] animate-ping opacity-75" />
+                  </div>
+                  <p className="text-[#12F6C8] text-xs font-mono tracking-wider" style={{ textShadow: '0 0 10px rgba(18,246,200,0.5)' }}>
+                    ACTIVE THREAT
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* ENTERPRISE THREAT KERNEL */}
+          <div className="kernel-section border-l-4 border-[#12F6C8] pl-6 mb-16">
+            <h3 className="text-3xl font-bold text-white mb-4">
+              ENTERPRISE THREAT KERNEL
+              <span className="block text-[#12F6C8] text-sm font-mono mt-2">
+                [ REAL-TIME THREAT CORRELATION ENGINE ]
+              </span>
+            </h3>
+
+            <div className="space-y-6 max-w-3xl">
+              <p className="text-gray-300 leading-relaxed">
+                Corporate threat actors now operate using machine-speed deception.
+                AI-generated breaches bypass traditional cybersecurity.
+                Deepfake executives authorize fraudulent transfers.
+                Insider attacks exploit identity obfuscation.
+                Behavioral manipulation engines target employee cognition.
+              </p>
+
+              <p className="text-gray-300 leading-relaxed">
+                G3TI&apos;s autonomous intelligence systems analyze threats at the speed they evolve—
+                detecting what firewalls cannot, predicting attack trajectories before they activate,
+                and defending the enterprise with sovereign, adaptive intelligence.
+              </p>
+
+              <p className="text-[#12F6C8] text-xl font-semibold" style={{ textShadow: '0 0 20px rgba(18,246,200,0.3)' }}>
+                This is the G3TI advantage.
+              </p>
+            </div>
+          </div>
+
+          {/* Skybridge CTA */}
+          <div className="text-center">
+            <Link 
+              href="/contact.html"
+              className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#12F6C8] to-[#0B85E5] text-black font-semibold rounded-lg hover:shadow-lg hover:shadow-[#12F6C8]/30 transition-all"
+            >
+              Request Enterprise Briefing
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Metrics Section */}
       <section className="py-16 px-4 bg-[#0D0D0F]">
         <div className="max-w-7xl mx-auto">
