@@ -10,7 +10,7 @@
       "excerpt": "The proliferation of AI-generated deepfake content has reached unprecedented levels in 2026, with threat actors deploying increasingly sophisticated synthetic media attacks.",
       "publishDate": "2026-01-08",
       "tags": ["deepfake", "AI security", "threat intelligence", "synthetic media"],
-      "featuredImage": null,
+      "featuredImage": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1200&h=675&fit=crop",
       "author": "G3TI Threat Intelligence",
       "status": "published"
     },
@@ -24,7 +24,7 @@
       "excerpt": "Federal agencies are rapidly implementing Zero Trust Architecture frameworks in response to escalating cyber threats and new compliance mandates.",
       "publishDate": "2026-01-07",
       "tags": ["zero trust", "federal security", "NIST", "government"],
-      "featuredImage": null,
+      "featuredImage": "https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=1200&h=675&fit=crop",
       "author": "G3TI Threat Intelligence",
       "status": "published"
     },
@@ -38,7 +38,7 @@
       "excerpt": "Insider threats remain one of the most challenging security risks for enterprises, with traditional detection methods often failing to identify malicious actors.",
       "publishDate": "2026-01-06",
       "tags": ["insider threats", "enterprise security", "behavioral AI", "data protection"],
-      "featuredImage": null,
+      "featuredImage": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=675&fit=crop",
       "author": "G3TI Threat Intelligence",
       "status": "published"
     },
@@ -52,7 +52,7 @@
       "excerpt": "Synthetic identity fraud has evolved from isolated criminal activity to sophisticated, coordinated networks that pose significant national security risks.",
       "publishDate": "2026-01-05",
       "tags": ["synthetic identity", "fraud", "national security", "AI threats"],
-      "featuredImage": null,
+      "featuredImage": "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200&h=675&fit=crop",
       "author": "G3TI Threat Intelligence",
       "status": "published"
     },
@@ -66,11 +66,18 @@
       "excerpt": "The speed of modern cyber attacks has exceeded human capacity for real-time response, necessitating the deployment of autonomous threat response systems.",
       "publishDate": "2026-01-04",
       "tags": ["autonomous systems", "threat response", "AI security", "automation"],
-      "featuredImage": null,
+      "featuredImage": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&h=675&fit=crop",
       "author": "G3TI Threat Intelligence",
       "status": "published"
     }
   ],
   "categories": ["Government", "Enterprise", "AI Security", "National Threats", "Technology"],
+  "categoryImageMap": {
+    "Government": "https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=1200&h=675&fit=crop",
+    "Enterprise": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=675&fit=crop",
+    "AI Security": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1200&h=675&fit=crop",
+    "National Threats": "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200&h=675&fit=crop",
+    "Technology": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&h=675&fit=crop"
+  },
   "lastUpdated": "2026-01-08T00:00:00Z"
 }

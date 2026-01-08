@@ -503,11 +503,25 @@
     <p style="margin-top: 0.5rem;"><a href="/news-intelligence.html">&larr; Back to News &amp; Intelligence</a></p>
   </footer>
   
-  <script>
-    const tags = [];
-    const tagInput = document.getElementById('tagInput');
-    const tagsContainer = document.getElementById('tagsContainer');
-    const tagsHidden = document.getElementById('tags');
+    <script>
+      // Category to Unsplash image mapping for automatic image selection
+      const categoryImageMap = {
+        'Government': 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=1200&h=675&fit=crop',
+        'Enterprise': 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=675&fit=crop',
+        'AI Security': 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1200&h=675&fit=crop',
+        'National Threats': 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200&h=675&fit=crop',
+        'Technology': 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&h=675&fit=crop'
+      };
+    
+      // Function to get image URL based on category
+      function getImageForCategory(category) {
+        return categoryImageMap[category] || categoryImageMap['Technology'];
+      }
+    
+      const tags = [];
+      const tagInput = document.getElementById('tagInput');
+      const tagsContainer = document.getElementById('tagsContainer');
+      const tagsHidden = document.getElementById('tags');
     
     tagInput.addEventListener('keydown', function(e) {
       if (e.key === 'Enter') {
@@ -576,33 +590,38 @@
       statusEl.className = 'status-message ' + type;
     }
     
-    document.getElementById('articleForm').addEventListener('submit', function(e) {
-      e.preventDefault();
+        document.getElementById('articleForm').addEventListener('submit', function(e) {
+          e.preventDefault();
       
-      const formData = new FormData(this);
-      const article = Object.fromEntries(formData);
-      article.status = 'published';
-      article.slug = generateSlug(article.title);
-      article.tags = tags;
-      article.publishDate = article.publishDate || new Date().toISOString().split('T')[0];
+          const formData = new FormData(this);
+          const article = Object.fromEntries(formData);
+          article.status = 'published';
+          article.slug = generateSlug(article.title);
+          article.tags = tags;
+          article.publishDate = article.publishDate || new Date().toISOString().split('T')[0];
       
-      if (document.getElementById('autoExcerpt').checked) {
-        article.excerpt = article.content.substring(0, 200) + '...';
-      }
+          // Auto-assign royalty-free image based on category if no custom image provided
+          if (!article.featuredImage || article.featuredImage.trim() === '') {
+            article.featuredImage = getImageForCategory(article.category);
+          }
       
-      console.log('Article to publish:', article);
+          if (document.getElementById('autoExcerpt').checked) {
+            article.excerpt = article.content.substring(0, 200) + '...';
+          }
       
-      const articlesData = JSON.parse(localStorage.getItem('g3ti_articles') || '{"articles":[]}');
-      article.id = String(articlesData.articles.length + 1);
-      articlesData.articles.unshift(article);
-      localStorage.setItem('g3ti_articles', JSON.stringify(articlesData));
+          console.log('Article to publish:', article);
       
-      showStatus('Article published successfully! View at: /news-intelligence/' + article.slug + '.html', 'success');
+          const articlesData = JSON.parse(localStorage.getItem('g3ti_articles') || '{"articles":[]}');
+          article.id = String(articlesData.articles.length + 1);
+          articlesData.articles.unshift(article);
+          localStorage.setItem('g3ti_articles', JSON.stringify(articlesData));
       
-      setTimeout(() => {
-        alert('Note: In a full implementation, this would create the article page at /news-intelligence/' + article.slug + '.html and update the articles.json file. For now, the article data is stored in localStorage.');
-      }, 500);
-    });
+          showStatus('Article published successfully! View at: /news-intelligence/' + article.slug + '.html (Image: ' + article.featuredImage + ')', 'success');
+      
+          setTimeout(() => {
+            alert('Note: In a full implementation, this would create the article page at /news-intelligence/' + article.slug + '.html and update the articles.json file. The featured image has been auto-assigned based on category: ' + article.category);
+          }, 500);
+        });
     
     document.getElementById('publishDate').valueAsDate = new Date();
   </script>
