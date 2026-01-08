@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Create New Article | G3TI News &amp; Intelligence</title>
+  <meta name="description" content="G3TI Content Management - Create new intelligence articles"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      background: #050505;
+      color: white;
+      font-family: system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      background-image: 
+        linear-gradient(rgba(11, 133, 229, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(11, 133, 229, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
+    
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background: rgba(5, 5, 5, 0.95);
+      border-bottom: 1px solid rgba(11, 133, 229, 0.2);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: white;
+    }
+    
+    .logo-box {
+      background: linear-gradient(135deg, #0B85E5, #12F6C8);
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 1.25rem;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+    
+    .nav-links a {
+      color: #9CA3AF;
+      text-decoration: none;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: color 0.3s;
+    }
+    
+    .nav-links a:hover, .nav-links a.active {
+      color: #12F6C8;
+    }
+    
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    .page-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(11, 133, 229, 0.2);
+    }
+    
+    .page-header h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #fff, #12F6C8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .page-header p {
+      color: #6B7280;
+    }
+    
+    .form-section {
+      background: #0A0A0C;
+      border: 1px solid rgba(11, 133, 229, 0.2);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .form-section h2 {
+      font-size: 1.25rem;
+      color: #12F6C8;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-group label {
+      display: block;
+      color: #9CA3AF;
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+      font-family: monospace;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: #050505;
+      border: 1px solid rgba(11, 133, 229, 0.3);
+      border-radius: 6px;
+      color: white;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #12F6C8;
+      box-shadow: 0 0 20px rgba(18, 246, 200, 0.1);
+    }
+    
+    .form-group textarea {
+      min-height: 200px;
+      resize: vertical;
+      font-family: inherit;
+      line-height: 1.6;
+    }
+    
+    .form-group select {
+      cursor: pointer;
+    }
+    
+    .form-group select option {
+      background: #0A0A0C;
+      color: white;
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    
+    .tags-input {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 0.5rem;
+      background: #050505;
+      border: 1px solid rgba(11, 133, 229, 0.3);
+      border-radius: 6px;
+      min-height: 50px;
+    }
+    
+    .tag-item {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      background: rgba(18, 246, 200, 0.1);
+      border: 1px solid #12F6C8;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      color: #12F6C8;
+    }
+    
+    .tag-item button {
+      background: none;
+      border: none;
+      color: #12F6C8;
+      cursor: pointer;
+      font-size: 1rem;
+      line-height: 1;
+    }
+    
+    .tags-input input {
+      flex: 1;
+      min-width: 100px;
+      border: none;
+      background: transparent;
+      padding: 0.25rem;
+    }
+    
+    .tags-input input:focus {
+      outline: none;
+      box-shadow: none;
+    }
+    
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .checkbox-group input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+    
+    .checkbox-group label {
+      margin-bottom: 0;
+      cursor: pointer;
+    }
+    
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: none;
+      font-family: monospace;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #0B85E5, #12F6C8);
+      color: #050505;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(11, 133, 229, 0.3);
+    }
+    
+    .btn-secondary {
+      background: rgba(11, 133, 229, 0.2);
+      border: 1px solid #0B85E5;
+      color: #0B85E5;
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(11, 133, 229, 0.4);
+      color: #12F6C8;
+      border-color: #12F6C8;
+    }
+    
+    .preview-section {
+      background: #0A0A0C;
+      border: 1px solid rgba(18, 246, 200, 0.2);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-top: 2rem;
+    }
+    
+    .preview-section h2 {
+      font-size: 1.25rem;
+      color: #12F6C8;
+      margin-bottom: 1rem;
+    }
+    
+    .preview-content {
+      color: #D1D5DB;
+      line-height: 1.6;
+    }
+    
+    .preview-content h3 {
+      font-size: 1.5rem;
+      color: white;
+      margin-bottom: 0.5rem;
+    }
+    
+    .preview-content .meta {
+      color: #6B7280;
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+    }
+    
+    .auto-publish-section {
+      background: rgba(18, 246, 200, 0.05);
+      border: 1px dashed rgba(18, 246, 200, 0.3);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-top: 2rem;
+    }
+    
+    .auto-publish-section h2 {
+      font-size: 1.25rem;
+      color: #12F6C8;
+      margin-bottom: 1rem;
+    }
+    
+    .auto-publish-section p {
+      color: #9CA3AF;
+      margin-bottom: 1rem;
+    }
+    
+    .api-endpoint {
+      background: #050505;
+      border: 1px solid rgba(11, 133, 229, 0.3);
+      border-radius: 6px;
+      padding: 1rem;
+      font-family: monospace;
+      font-size: 0.875rem;
+      color: #0B85E5;
+      overflow-x: auto;
+    }
+    
+    .status-message {
+      padding: 1rem;
+      border-radius: 6px;
+      margin-top: 1rem;
+      display: none;
+    }
+    
+    .status-message.success {
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid #22C55E;
+      color: #22C55E;
+      display: block;
+    }
+    
+    .status-message.error {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid #EF4444;
+      color: #EF4444;
+      display: block;
+    }
+    
+    footer {
+      border-top: 1px solid rgba(11, 133, 229, 0.2);
+      padding: 3rem 2rem;
+      text-align: center;
+      background: rgba(5, 5, 5, 0.95);
+      margin-top: 4rem;
+    }
+    
+    footer p {
+      color: #6B7280;
+      font-size: 0.875rem;
+    }
+    
+    footer a {
+      color: #0B85E5;
+      text-decoration: none;
+    }
+    
+    footer a:hover {
+      color: #12F6C8;
+    }
+    
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .form-row { grid-template-columns: 1fr; }
+      main { padding: 1rem; }
+      .button-group { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/" class="logo">
+      <div class="logo-box">G3</div>
+      <div>
+        <div style="font-weight: 600; font-size: 1rem;">G3TI</div>
+        <div style="font-size: 0.75rem; color: #9CA3AF; font-family: monospace;">D.I.E. SYSTEM</div>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/government.html">Government</a>
+      <a href="/enterprise.html">Enterprise</a>
+      <a href="/products.html">Products</a>
+      <a href="/news-intelligence.html" class="active">News &amp; Intelligence</a>
+      <a href="/compliance.html">Compliance</a>
+      <a href="/contact.html">Contact</a>
+    </div>
+  </nav>
+  
+  <main>
+    <div class="page-header">
+      <h1>Create New Article</h1>
+      <p>G3TI Content Management System - Manual Article Creation</p>
+    </div>
+    
+    <form id="articleForm">
+      <div class="form-section">
+        <h2>Article Details</h2>
+        
+        <div class="form-group">
+          <label>TITLE *</label>
+          <input type="text" id="title" name="title" placeholder="Enter article title..." required>
+        </div>
+        
+        <div class="form-group">
+          <label>SUBTITLE</label>
+          <input type="text" id="subtitle" name="subtitle" placeholder="Enter article subtitle...">
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>CATEGORY *</label>
+            <select id="category" name="category" required>
+              <option value="">Select category...</option>
+              <option value="Government">Government</option>
+              <option value="Enterprise">Enterprise</option>
+              <option value="AI Security">AI Security</option>
+              <option value="National Threats">National Threats</option>
+              <option value="Technology">Technology</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>PUBLISH DATE</label>
+            <input type="date" id="publishDate" name="publishDate">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>ARTICLE BODY *</label>
+          <textarea id="content" name="content" placeholder="Write your article content here. Use markdown for formatting..." required></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label>TAGS (press Enter to add)</label>
+          <div class="tags-input" id="tagsContainer">
+            <input type="text" id="tagInput" placeholder="Add tags...">
+          </div>
+          <input type="hidden" id="tags" name="tags">
+        </div>
+        
+        <div class="form-group">
+          <label>FEATURED IMAGE URL (optional)</label>
+          <input type="url" id="featuredImage" name="featuredImage" placeholder="https://...">
+        </div>
+        
+        <div class="form-group">
+          <div class="checkbox-group">
+            <input type="checkbox" id="autoExcerpt" name="autoExcerpt" checked>
+            <label for="autoExcerpt">Auto-generate excerpt from content</label>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>CUSTOM EXCERPT (if not auto-generated)</label>
+          <textarea id="excerpt" name="excerpt" placeholder="Custom excerpt..." style="min-height: 100px;"></textarea>
+        </div>
+      </div>
+      
+      <div class="button-group">
+        <button type="submit" class="btn btn-primary">PUBLISH ARTICLE</button>
+        <button type="button" class="btn btn-secondary" onclick="saveDraft()">SAVE AS DRAFT</button>
+        <button type="button" class="btn btn-secondary" onclick="previewArticle()">PREVIEW</button>
+      </div>
+      
+      <div id="statusMessage" class="status-message"></div>
+    </form>
+    
+    <div class="preview-section" id="previewSection" style="display: none;">
+      <h2>Article Preview</h2>
+      <div class="preview-content" id="previewContent"></div>
+    </div>
+    
+    <div class="auto-publish-section">
+      <h2>Automated Publishing API</h2>
+      <p>For automated article generation and publishing, use the following API endpoint:</p>
+      <div class="api-endpoint">
+        POST /api/articles/auto-publish<br>
+        Content-Type: application/json<br><br>
+        {<br>
+        &nbsp;&nbsp;"title": "Article Title",<br>
+        &nbsp;&nbsp;"topic": "Topic for AI generation",<br>
+        &nbsp;&nbsp;"category": "Government|Enterprise|AI Security|National Threats|Technology",<br>
+        &nbsp;&nbsp;"autoGenerate": true<br>
+        }
+      </div>
+      <p style="margin-top: 1rem; font-size: 0.875rem; color: #6B7280;">
+        Note: AI content generation will be enabled in a future update. The API architecture is ready for integration.
+      </p>
+    </div>
+  </main>
+  
+  <footer>
+    <p>&copy; 2026 Global 3 Technology &amp; Intelligence. All rights reserved.</p>
+    <p style="margin-top: 0.5rem;"><a href="/news-intelligence.html">&larr; Back to News &amp; Intelligence</a></p>
+  </footer>
+  
+  <script>
+    const tags = [];
+    const tagInput = document.getElementById('tagInput');
+    const tagsContainer = document.getElementById('tagsContainer');
+    const tagsHidden = document.getElementById('tags');
+    
+    tagInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const tag = this.value.trim();
+        if (tag && !tags.includes(tag)) {
+          tags.push(tag);
+          renderTags();
+        }
+        this.value = '';
+      }
+    });
+    
+    function renderTags() {
+      const tagElements = tags.map((tag, index) => 
+        '<span class="tag-item">' + tag + '<button type="button" onclick="removeTag(' + index + ')">x</button></span>'
+      ).join('');
+      tagsContainer.innerHTML = tagElements + '<input type="text" id="tagInput" placeholder="Add tags...">';
+      document.getElementById('tagInput').addEventListener('keydown', arguments.callee);
+      tagsHidden.value = tags.join(',');
+    }
+    
+    function removeTag(index) {
+      tags.splice(index, 1);
+      renderTags();
+    }
+    
+    function generateSlug(title) {
+      return title.toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
+    }
+    
+    function previewArticle() {
+      const title = document.getElementById('title').value;
+      const subtitle = document.getElementById('subtitle').value;
+      const category = document.getElementById('category').value;
+      const content = document.getElementById('content').value;
+      const date = document.getElementById('publishDate').value || new Date().toISOString().split('T')[0];
+      
+      const previewHTML = 
+        '<div class="article-category" style="display: inline-block; background: rgba(18, 246, 200, 0.1); border: 1px solid #12F6C8; padding: 0.25rem 0.75rem; border-radius: 4px; font-family: monospace; font-size: 0.7rem; color: #12F6C8; margin-bottom: 1rem;">' + category.toUpperCase() + '</div>' +
+        '<h3>' + title + '</h3>' +
+        (subtitle ? '<p style="color: #0B85E5; margin-bottom: 1rem;">' + subtitle + '</p>' : '') +
+        '<p class="meta">' + date + ' | G3TI Threat Intelligence</p>' +
+        '<p>' + content.substring(0, 500) + (content.length > 500 ? '...' : '') + '</p>';
+      
+      document.getElementById('previewContent').innerHTML = previewHTML;
+      document.getElementById('previewSection').style.display = 'block';
+    }
+    
+    function saveDraft() {
+      const formData = new FormData(document.getElementById('articleForm'));
+      const article = Object.fromEntries(formData);
+      article.status = 'draft';
+      article.slug = generateSlug(article.title);
+      
+      localStorage.setItem('draft_' + article.slug, JSON.stringify(article));
+      
+      showStatus('Draft saved successfully! Slug: ' + article.slug, 'success');
+    }
+    
+    function showStatus(message, type) {
+      const statusEl = document.getElementById('statusMessage');
+      statusEl.textContent = message;
+      statusEl.className = 'status-message ' + type;
+    }
+    
+    document.getElementById('articleForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const article = Object.fromEntries(formData);
+      article.status = 'published';
+      article.slug = generateSlug(article.title);
+      article.tags = tags;
+      article.publishDate = article.publishDate || new Date().toISOString().split('T')[0];
+      
+      if (document.getElementById('autoExcerpt').checked) {
+        article.excerpt = article.content.substring(0, 200) + '...';
+      }
+      
+      console.log('Article to publish:', article);
+      
+      const articlesData = JSON.parse(localStorage.getItem('g3ti_articles') || '{"articles":[]}');
+      article.id = String(articlesData.articles.length + 1);
+      articlesData.articles.unshift(article);
+      localStorage.setItem('g3ti_articles', JSON.stringify(articlesData));
+      
+      showStatus('Article published successfully! View at: /news-intelligence/' + article.slug + '.html', 'success');
+      
+      setTimeout(() => {
+        alert('Note: In a full implementation, this would create the article page at /news-intelligence/' + article.slug + '.html and update the articles.json file. For now, the article data is stored in localStorage.');
+      }, 500);
+    });
+    
+    document.getElementById('publishDate').valueAsDate = new Date();
+  </script>
+</body>
+</html>
