@@ -140,6 +140,82 @@
       line-height: 1.6;
     }
     
+    /* Tab Switcher Styles */
+    .tab-container {
+      margin-bottom: 2rem;
+    }
+    
+    .tab-buttons {
+      display: flex;
+      gap: 0;
+      border-bottom: 2px solid rgba(11, 133, 229, 0.3);
+      margin-bottom: 2rem;
+    }
+    
+    .tab-btn {
+      padding: 1rem 2rem;
+      background: transparent;
+      border: none;
+      color: #9CA3AF;
+      font-size: 1rem;
+      font-family: monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    
+    .tab-btn:hover {
+      color: #12F6C8;
+      background: rgba(18, 246, 200, 0.05);
+    }
+    
+    .tab-btn.active {
+      color: #12F6C8;
+    }
+    
+    .tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #0B85E5, #12F6C8);
+      animation: slideIn 0.3s ease;
+    }
+    
+    @keyframes slideIn {
+      from { transform: scaleX(0); }
+      to { transform: scaleX(1); }
+    }
+    
+    .tab-panel {
+      display: none;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    
+    .tab-panel.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+      animation: fadeInUp 0.4s ease;
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
     .controls-section {
       display: flex;
       flex-wrap: wrap;
@@ -252,7 +328,13 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 4rem;
+      overflow: hidden;
+    }
+    
+    .featured-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
     
     .featured-content {
@@ -331,17 +413,6 @@
       animation: fadeInUp 0.5s ease-out;
     }
     
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
     .article-card:hover {
       border-color: rgba(11, 133, 229, 0.6);
       box-shadow: 0 0 30px rgba(11, 133, 229, 0.15);
@@ -354,8 +425,14 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 3rem;
       border-bottom: 1px solid rgba(11, 133, 229, 0.2);
+      overflow: hidden;
+    }
+    
+    .card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
     
     .card-content {
@@ -395,6 +472,97 @@
     }
     
     .card-read-btn:hover {
+      color: #12F6C8;
+    }
+    
+    /* Intelligence Briefs Styles */
+    .briefs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+    
+    .brief-card {
+      background: #0A0A0C;
+      border: 1px solid rgba(18, 246, 200, 0.2);
+      border-radius: 8px;
+      padding: 1.5rem;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .brief-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #12F6C8, #0B85E5);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+    
+    .brief-card:hover::before {
+      transform: scaleX(1);
+    }
+    
+    .brief-card:hover {
+      border-color: rgba(18, 246, 200, 0.5);
+      box-shadow: 0 0 30px rgba(18, 246, 200, 0.1);
+      transform: translateY(-4px);
+    }
+    
+    .brief-tag {
+      display: inline-block;
+      background: rgba(18, 246, 200, 0.1);
+      border: 1px solid #12F6C8;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.65rem;
+      color: #12F6C8;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+    
+    .brief-card h3 {
+      font-size: 1.1rem;
+      color: white;
+      margin-bottom: 0.75rem;
+      line-height: 1.4;
+    }
+    
+    .brief-card .brief-excerpt {
+      color: #9CA3AF;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    .brief-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: #6B7280;
+    }
+    
+    .brief-link {
+      color: #0B85E5;
+      text-decoration: none;
+      font-family: monospace;
+      font-size: 0.8rem;
+      transition: color 0.3s;
+    }
+    
+    .brief-link:hover {
       color: #12F6C8;
     }
     
@@ -465,9 +633,11 @@
       .hero-section h1 { font-size: 2rem; }
       .featured-article { grid-template-columns: 1fr; }
       .articles-grid { grid-template-columns: 1fr; }
+      .briefs-grid { grid-template-columns: 1fr; }
       .controls-section { flex-direction: column; }
       .search-box { min-width: 100%; }
       main { padding: 1rem; }
+      .tab-btn { padding: 0.75rem 1rem; font-size: 0.875rem; }
     }
   </style>
 </head>
@@ -484,6 +654,7 @@
       <a href="/">Home</a>
       <a href="/government.html">Government</a>
       <a href="/enterprise.html">Enterprise</a>
+      <a href="/law-enforcement.html">Law Enforcement</a>
       <a href="/products.html">Products</a>
       <a href="/news-intelligence.html" class="active">News &amp; Intelligence</a>
       <a href="/compliance.html">Compliance</a>
@@ -499,104 +670,187 @@
       <p class="description">G3TI publishes real-time intelligence briefs, enterprise threat analyses, AI security updates, and national safety insights.</p>
     </section>
     
-    <div class="controls-section">
-      <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Search articles..." onkeyup="filterArticles()">
+    <!-- Tab Switcher -->
+    <div class="tab-container">
+      <div class="tab-buttons">
+        <button class="tab-btn active" onclick="switchTab('briefs')">Intelligence Briefs</button>
+        <button class="tab-btn" onclick="switchTab('articles')">Articles</button>
       </div>
-      <div class="category-filters">
-        <button class="filter-btn active" onclick="filterByCategory('all')">All</button>
-        <button class="filter-btn" onclick="filterByCategory('Government')">Government</button>
-        <button class="filter-btn" onclick="filterByCategory('Enterprise')">Enterprise</button>
-        <button class="filter-btn" onclick="filterByCategory('AI Security')">AI Security</button>
-        <button class="filter-btn" onclick="filterByCategory('National Threats')">National Threats</button>
-        <button class="filter-btn" onclick="filterByCategory('Technology')">Technology</button>
+      
+      <!-- Intelligence Briefs Tab -->
+      <div id="briefs-panel" class="tab-panel active">
+        <div class="controls-section">
+          <div class="search-box">
+            <input type="text" id="briefSearchInput" placeholder="Search intelligence briefs..." onkeyup="filterBriefs()">
+          </div>
+          <div class="category-filters" id="briefFilters">
+            <button class="filter-btn active" onclick="filterBriefsByCategory('all', this)">All</button>
+            <button class="filter-btn" onclick="filterBriefsByCategory('Fraud', this)">Fraud</button>
+            <button class="filter-btn" onclick="filterBriefsByCategory('Trafficking', this)">Trafficking</button>
+            <button class="filter-btn" onclick="filterBriefsByCategory('Deepfake', this)">Deepfake</button>
+            <button class="filter-btn" onclick="filterBriefsByCategory('Synthetic Identity', this)">Synthetic Identity</button>
+          </div>
+        </div>
+        
+        <div class="section-header">
+          <h2>INTELLIGENCE <span>BRIEFS</span></h2>
+        </div>
+        
+        <div class="briefs-grid" id="briefsGrid">
+          <div class="brief-card" data-category="Fraud">
+            <div class="brief-tag">FRAUD INTELLIGENCE</div>
+            <h3>AI-Powered Romance Scam Operations at Industrial Scale</h3>
+            <p class="brief-excerpt">Criminal organizations are deploying AI chatbots and deepfake technology to conduct romance scams at unprecedented scale, targeting vulnerable individuals across multiple platforms simultaneously.</p>
+            <div class="brief-meta">
+              <span>January 7, 2026</span>
+              <a href="/intel-feed/ai-powered-romance-scam-operations-at-industrial-scale.html" class="brief-link">[ VIEW BRIEF ]</a>
+            </div>
+          </div>
+          
+          <div class="brief-card" data-category="Deepfake">
+            <div class="brief-tag">DEEPFAKE THREAT</div>
+            <h3>CEO Deepfake Fraud Targeting Enterprise Wire Transfers</h3>
+            <p class="brief-excerpt">Sophisticated deepfake attacks impersonating C-suite executives are being used to authorize fraudulent wire transfers, with losses exceeding $100M in Q4 2025 alone.</p>
+            <div class="brief-meta">
+              <span>January 6, 2026</span>
+              <a href="/intel-feed/ceo-deepfake-fraud-targeting-enterprise-wire-transfers.html" class="brief-link">[ VIEW BRIEF ]</a>
+            </div>
+          </div>
+          
+          <div class="brief-card" data-category="Trafficking">
+            <div class="brief-tag">TRAFFICKING INTEL</div>
+            <h3>Dark Web Marketplace Evolution for Trafficking Operations</h3>
+            <p class="brief-excerpt">Human trafficking networks are increasingly leveraging encrypted dark web marketplaces and cryptocurrency to evade detection, requiring new intelligence approaches.</p>
+            <div class="brief-meta">
+              <span>January 5, 2026</span>
+              <a href="/intel-feed/dark-web-marketplace-evolution-for-trafficking-operations.html" class="brief-link">[ VIEW BRIEF ]</a>
+            </div>
+          </div>
+          
+          <div class="brief-card" data-category="Synthetic Identity">
+            <div class="brief-tag">IDENTITY FRAUD</div>
+            <h3>Synthetic Identity Fraud Losses Exceed $20B Annually</h3>
+            <p class="brief-excerpt">New analysis reveals synthetic identity fraud has become the fastest-growing financial crime, with AI-generated identities bypassing traditional verification systems.</p>
+            <div class="brief-meta">
+              <span>January 4, 2026</span>
+              <a href="/intel-feed/synthetic-identity-fraud-losses-exceed-20b-annually.html" class="brief-link">[ VIEW BRIEF ]</a>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-    
-    <div class="section-header">
-      <h2>FEATURED <span>INTELLIGENCE</span></h2>
-    </div>
-    
-    <article class="featured-article" data-category="AI Security">
-      <div class="featured-image">🛡️</div>
-      <div class="featured-content">
-        <div class="article-category">AI SECURITY</div>
-        <h3>AI Deepfake Threats Reach Critical Mass in 2026</h3>
-        <div class="subtitle">New detection methods struggle to keep pace with synthetic media evolution</div>
-        <div class="article-meta">January 8, 2026 | G3TI Threat Intelligence</div>
-        <p class="excerpt">The proliferation of AI-generated deepfake content has reached unprecedented levels in 2026, with threat actors deploying increasingly sophisticated synthetic media attacks against government officials and corporate executives.</p>
-        <a href="/news-intelligence/ai-deepfake-threats-2026.html" class="read-btn">Read Full Article</a>
+      
+      <!-- Articles Tab -->
+      <div id="articles-panel" class="tab-panel">
+        <div class="controls-section">
+          <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search articles..." onkeyup="filterArticles()">
+          </div>
+          <div class="category-filters" id="articleFilters">
+            <button class="filter-btn active" onclick="filterByCategory('all')">All</button>
+            <button class="filter-btn" onclick="filterByCategory('Government')">Government</button>
+            <button class="filter-btn" onclick="filterByCategory('Enterprise')">Enterprise</button>
+            <button class="filter-btn" onclick="filterByCategory('AI Security')">AI Security</button>
+            <button class="filter-btn" onclick="filterByCategory('National Threats')">National Threats</button>
+            <button class="filter-btn" onclick="filterByCategory('Technology')">Technology</button>
+          </div>
+        </div>
+        
+        <div class="section-header">
+          <h2>FEATURED <span>INTELLIGENCE</span></h2>
+        </div>
+        
+        <article class="featured-article" data-category="AI Security">
+          <div class="featured-image">
+            <img src="/assets/stock/article-images/ai-security.svg" alt="AI Security">
+          </div>
+          <div class="featured-content">
+            <div class="article-category">AI SECURITY</div>
+            <h3>AI Deepfake Threats Reach Critical Mass in 2026</h3>
+            <div class="subtitle">New detection methods struggle to keep pace with synthetic media evolution</div>
+            <div class="article-meta">January 8, 2026 | G3TI Threat Intelligence</div>
+            <p class="excerpt">The proliferation of AI-generated deepfake content has reached unprecedented levels in 2026, with threat actors deploying increasingly sophisticated synthetic media attacks against government officials and corporate executives.</p>
+            <a href="/news-intelligence/ai-deepfake-threats-2026.html" class="read-btn">Read Full Article</a>
+          </div>
+        </article>
+        
+        <div class="section-header">
+          <h2>RECENT <span>ARTICLES</span></h2>
+        </div>
+        
+        <div class="articles-grid" id="articlesGrid">
+          <article class="article-card" data-category="Government">
+            <div class="card-image">
+              <img src="/assets/stock/article-images/government.svg" alt="Government">
+            </div>
+            <div class="card-content">
+              <div class="article-category">GOVERNMENT</div>
+              <h3>Federal Agencies Accelerate Zero Trust Architecture Adoption</h3>
+              <div class="article-meta">January 7, 2026</div>
+              <p class="excerpt">Federal agencies are rapidly implementing Zero Trust Architecture frameworks in response to escalating cyber threats and new compliance mandates.</p>
+              <div class="card-footer">
+                <a href="/news-intelligence/federal-agencies-adopt-zero-trust.html" class="card-read-btn">[ READ ARTICLE ]</a>
+              </div>
+            </div>
+          </article>
+          
+          <article class="article-card" data-category="Enterprise">
+            <div class="card-image">
+              <img src="/assets/stock/article-images/enterprise.svg" alt="Enterprise">
+            </div>
+            <div class="card-content">
+              <div class="article-category">ENTERPRISE</div>
+              <h3>Enterprise Insider Threat Detection: The AI Advantage</h3>
+              <div class="article-meta">January 6, 2026</div>
+              <p class="excerpt">Insider threats remain one of the most challenging security risks for enterprises, with traditional detection methods often failing to identify malicious actors.</p>
+              <div class="card-footer">
+                <a href="/news-intelligence/enterprise-insider-threat-detection.html" class="card-read-btn">[ READ ARTICLE ]</a>
+              </div>
+            </div>
+          </article>
+          
+          <article class="article-card" data-category="National Threats">
+            <div class="card-image">
+              <img src="/assets/stock/article-images/national-threats.svg" alt="National Threats">
+            </div>
+            <div class="card-content">
+              <div class="article-category">NATIONAL THREATS</div>
+              <h3>Synthetic Identity Fraud Networks: A National Security Threat</h3>
+              <div class="article-meta">January 5, 2026</div>
+              <p class="excerpt">Synthetic identity fraud has evolved from isolated criminal activity to sophisticated, coordinated networks that pose significant national security risks.</p>
+              <div class="card-footer">
+                <a href="/news-intelligence/synthetic-identity-fraud-networks.html" class="card-read-btn">[ READ ARTICLE ]</a>
+              </div>
+            </div>
+          </article>
+          
+          <article class="article-card" data-category="Technology">
+            <div class="card-image">
+              <img src="/assets/stock/article-images/technology.svg" alt="Technology">
+            </div>
+            <div class="card-content">
+              <div class="article-category">TECHNOLOGY</div>
+              <h3>Autonomous Threat Response: When Milliseconds Matter</h3>
+              <div class="article-meta">January 4, 2026</div>
+              <p class="excerpt">The speed of modern cyber attacks has exceeded human capacity for real-time response, necessitating the deployment of autonomous threat response systems.</p>
+              <div class="card-footer">
+                <a href="/news-intelligence/autonomous-threat-response-systems.html" class="card-read-btn">[ READ ARTICLE ]</a>
+              </div>
+            </div>
+          </article>
+        </div>
+        
+        <div class="pagination">
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <button class="page-btn">Next &rarr;</button>
+        </div>
+        
+        <div class="admin-link">
+          <p style="color: #6B7280; margin-bottom: 0.5rem;">Content Management</p>
+          <a href="/news-intelligence/new.html">[ CREATE NEW ARTICLE ]</a>
+        </div>
       </div>
-    </article>
-    
-    <div class="section-header">
-      <h2>RECENT <span>ARTICLES</span></h2>
-    </div>
-    
-    <div class="articles-grid" id="articlesGrid">
-      <article class="article-card" data-category="Government">
-        <div class="card-image">🏛️</div>
-        <div class="card-content">
-          <div class="article-category">GOVERNMENT</div>
-          <h3>Federal Agencies Accelerate Zero Trust Architecture Adoption</h3>
-          <div class="article-meta">January 7, 2026</div>
-          <p class="excerpt">Federal agencies are rapidly implementing Zero Trust Architecture frameworks in response to escalating cyber threats and new compliance mandates.</p>
-          <div class="card-footer">
-            <a href="/news-intelligence/federal-agencies-adopt-zero-trust.html" class="card-read-btn">[ READ ARTICLE ]</a>
-          </div>
-        </div>
-      </article>
-      
-      <article class="article-card" data-category="Enterprise">
-        <div class="card-image">🏢</div>
-        <div class="card-content">
-          <div class="article-category">ENTERPRISE</div>
-          <h3>Enterprise Insider Threat Detection: The AI Advantage</h3>
-          <div class="article-meta">January 6, 2026</div>
-          <p class="excerpt">Insider threats remain one of the most challenging security risks for enterprises, with traditional detection methods often failing to identify malicious actors.</p>
-          <div class="card-footer">
-            <a href="/news-intelligence/enterprise-insider-threat-detection.html" class="card-read-btn">[ READ ARTICLE ]</a>
-          </div>
-        </div>
-      </article>
-      
-      <article class="article-card" data-category="National Threats">
-        <div class="card-image">🚨</div>
-        <div class="card-content">
-          <div class="article-category">NATIONAL THREATS</div>
-          <h3>Synthetic Identity Fraud Networks: A National Security Threat</h3>
-          <div class="article-meta">January 5, 2026</div>
-          <p class="excerpt">Synthetic identity fraud has evolved from isolated criminal activity to sophisticated, coordinated networks that pose significant national security risks.</p>
-          <div class="card-footer">
-            <a href="/news-intelligence/synthetic-identity-fraud-networks.html" class="card-read-btn">[ READ ARTICLE ]</a>
-          </div>
-        </div>
-      </article>
-      
-      <article class="article-card" data-category="Technology">
-        <div class="card-image">⚡</div>
-        <div class="card-content">
-          <div class="article-category">TECHNOLOGY</div>
-          <h3>Autonomous Threat Response: When Milliseconds Matter</h3>
-          <div class="article-meta">January 4, 2026</div>
-          <p class="excerpt">The speed of modern cyber attacks has exceeded human capacity for real-time response, necessitating the deployment of autonomous threat response systems.</p>
-          <div class="card-footer">
-            <a href="/news-intelligence/autonomous-threat-response-systems.html" class="card-read-btn">[ READ ARTICLE ]</a>
-          </div>
-        </div>
-      </article>
-    </div>
-    
-    <div class="pagination">
-      <button class="page-btn active">1</button>
-      <button class="page-btn">2</button>
-      <button class="page-btn">3</button>
-      <button class="page-btn">Next &rarr;</button>
-    </div>
-    
-    <div class="admin-link">
-      <p style="color: #6B7280; margin-bottom: 0.5rem;">Content Management</p>
-      <a href="/news-intelligence/new.html">[ CREATE NEW ARTICLE ]</a>
     </div>
   </main>
   
@@ -606,11 +860,23 @@
   </footer>
   
   <script>
+    // Tab switching functionality
+    function switchTab(tabName) {
+      // Update tab buttons
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      // Update tab panels
+      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+      document.getElementById(tabName + '-panel').classList.add('active');
+    }
+    
+    // Articles filtering
     let currentCategory = 'all';
     
     function filterByCategory(category) {
       currentCategory = category;
-      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('#articleFilters .filter-btn').forEach(btn => btn.classList.remove('active'));
       event.target.classList.add('active');
       filterArticles();
     }
@@ -636,6 +902,62 @@
         const matchesCategory = currentCategory === 'all' || featuredCategory === currentCategory;
         featured.style.display = matchesCategory ? 'grid' : 'none';
       }
+    }
+    
+    // Briefs filtering
+    let currentBriefCategory = 'all';
+    
+    function filterBriefsByCategory(category, btn) {
+      currentBriefCategory = category;
+      document.querySelectorAll('#briefFilters .filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      filterBriefs();
+    }
+    
+    function filterBriefs() {
+      const searchTerm = document.getElementById('briefSearchInput').value.toLowerCase();
+      const briefs = document.querySelectorAll('.brief-card');
+      
+      briefs.forEach(brief => {
+        const title = brief.querySelector('h3').textContent.toLowerCase();
+        const excerpt = brief.querySelector('.brief-excerpt').textContent.toLowerCase();
+        const category = brief.dataset.category;
+        
+        const matchesSearch = title.includes(searchTerm) || excerpt.includes(searchTerm);
+        const matchesCategory = currentBriefCategory === 'all' || category === currentBriefCategory;
+        
+        brief.style.display = matchesSearch && matchesCategory ? 'block' : 'none';
+      });
+    }
+    
+    // Load stock image mapping for dynamic content
+    let imageMap = null;
+    fetch('/assets/stock/article-image-map.json')
+      .then(response => response.json())
+      .then(data => { imageMap = data; })
+      .catch(err => console.log('Image map not loaded:', err));
+    
+    function getImageForArticle(category, tags) {
+      if (!imageMap) return '/assets/stock/article-images/ai-security.svg';
+      
+      // Check tags first
+      if (tags && Array.isArray(tags)) {
+        for (const tag of tags) {
+          const tagLower = tag.toLowerCase();
+          for (const [key, value] of Object.entries(imageMap.tags)) {
+            if (tagLower.includes(key.toLowerCase())) {
+              return value;
+            }
+          }
+        }
+      }
+      
+      // Fall back to category
+      if (category && imageMap.categories[category]) {
+        return imageMap.categories[category];
+      }
+      
+      return imageMap.default;
     }
   </script>
 </body>

@@ -1,0 +1,28 @@
+{
+  "categories": {
+    "Government": "/assets/stock/article-images/government.svg",
+    "Enterprise": "/assets/stock/article-images/enterprise.svg",
+    "AI Security": "/assets/stock/article-images/ai-security.svg",
+    "National Threats": "/assets/stock/article-images/national-threats.svg",
+    "Technology": "/assets/stock/article-images/technology.svg"
+  },
+  "tags": {
+    "deepfake": "/assets/stock/article-images/deepfake.svg",
+    "AI crime": "/assets/stock/article-images/ai-crime.svg",
+    "cyber fraud": "/assets/stock/article-images/cyber-fraud.svg",
+    "fraud": "/assets/stock/article-images/cyber-fraud.svg",
+    "DV escalation": "/assets/stock/article-images/dv-escalation.svg",
+    "domestic violence": "/assets/stock/article-images/dv-escalation.svg",
+    "OSINT": "/assets/stock/article-images/osint.svg",
+    "synthetic identity": "/assets/stock/article-images/cyber-fraud.svg",
+    "insider threats": "/assets/stock/article-images/enterprise.svg",
+    "zero trust": "/assets/stock/article-images/government.svg",
+    "autonomous systems": "/assets/stock/article-images/technology.svg",
+    "threat response": "/assets/stock/article-images/ai-security.svg",
+    "synthetic media": "/assets/stock/article-images/deepfake.svg",
+    "romance scam": "/assets/stock/article-images/ai-crime.svg",
+    "trafficking": "/assets/stock/article-images/national-threats.svg",
+    "dark web": "/assets/stock/article-images/national-threats.svg"
+  },
+  "default": "/assets/stock/article-images/ai-security.svg"
+}
