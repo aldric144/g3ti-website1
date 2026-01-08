@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Law Enforcement Operations Command | G3TI</title>
+  <meta name="description" content="G3TI Law Enforcement Operations Command - Autonomous Intelligence for Police, Investigators, Crisis Units & Homeland Security"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      background: #050505;
+      color: white;
+      font-family: system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      background-image: 
+        linear-gradient(rgba(11, 133, 229, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(11, 133, 229, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
+    
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background: rgba(5, 5, 5, 0.95);
+      border-bottom: 1px solid rgba(11, 133, 229, 0.2);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: white;
+    }
+    
+    .logo-box {
+      background: linear-gradient(135deg, #0B85E5, #12F6C8);
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 1.25rem;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+    
+    .nav-links a {
+      color: #9CA3AF;
+      text-decoration: none;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: color 0.3s;
+    }
+    
+    .nav-links a:hover, .nav-links a.active {
+      color: #12F6C8;
+    }
+    
+    main {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 4rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #0B85E5, #12F6C8, #0B85E5, transparent);
+      animation: scanLine 3s ease-in-out infinite;
+    }
+    
+    @keyframes scanLine {
+      0%, 100% { opacity: 0.3; width: 60%; }
+      50% { opacity: 1; width: 90%; }
+    }
+    
+    .hero-badge {
+      display: inline-block;
+      background: rgba(18, 246, 200, 0.1);
+      border: 1px solid #12F6C8;
+      padding: 0.5rem 1.5rem;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.75rem;
+      color: #12F6C8;
+      margin-bottom: 1.5rem;
+      animation: fadeInUp 0.6s ease-out;
+    }
+    
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #fff 0%, #12F6C8 50%, #0B85E5 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: fadeInUp 0.6s ease-out 0.1s both;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.25rem;
+      color: #0B85E5;
+      margin-bottom: 2rem;
+      font-family: monospace;
+      animation: fadeInUp 0.6s ease-out 0.2s both;
+    }
+    
+    .tactical-line {
+      width: 200px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #12F6C8, transparent);
+      margin: 2rem auto;
+      position: relative;
+      animation: fadeInUp 0.6s ease-out 0.3s both;
+    }
+    
+    .tactical-line::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 50px;
+      height: 100%;
+      background: linear-gradient(90deg, #12F6C8, transparent);
+      animation: tacticalScan 2s linear infinite;
+    }
+    
+    @keyframes tacticalScan {
+      0% { left: -50px; }
+      100% { left: 250px; }
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Module Grid */
+    .section-title {
+      font-size: 1.5rem;
+      color: #12F6C8;
+      margin-bottom: 2rem;
+      font-family: monospace;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .section-title::before {
+      content: '';
+      width: 4px;
+      height: 24px;
+      background: linear-gradient(180deg, #12F6C8, #0B85E5);
+      border-radius: 2px;
+    }
+    
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+    
+    .module-card {
+      background: #0A0A0C;
+      border: 1px solid rgba(11, 133, 229, 0.2);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-decoration: none;
+      color: white;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+      animation: fadeInUp 0.6s ease-out both;
+    }
+    
+    .module-card:nth-child(1) { animation-delay: 0.1s; }
+    .module-card:nth-child(2) { animation-delay: 0.15s; }
+    .module-card:nth-child(3) { animation-delay: 0.2s; }
+    .module-card:nth-child(4) { animation-delay: 0.25s; }
+    .module-card:nth-child(5) { animation-delay: 0.3s; }
+    .module-card:nth-child(6) { animation-delay: 0.35s; }
+    .module-card:nth-child(7) { animation-delay: 0.4s; }
+    
+    .module-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, #0B85E5, #12F6C8);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    
+    .module-card:hover {
+      transform: translateY(-5px);
+      border-color: #12F6C8;
+      box-shadow: 0 20px 40px rgba(18, 246, 200, 0.1), 0 0 30px rgba(11, 133, 229, 0.1);
+    }
+    
+    .module-card:hover::before {
+      transform: scaleX(1);
+    }
+    
+    .module-tag {
+      display: inline-block;
+      background: rgba(18, 246, 200, 0.1);
+      border: 1px solid #12F6C8;
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.65rem;
+      color: #12F6C8;
+      margin-bottom: 1rem;
+    }
+    
+    .module-card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+      color: white;
+    }
+    
+    .module-card p {
+      color: #9CA3AF;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+    
+    .module-status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: monospace;
+      font-size: 0.75rem;
+      color: #12F6C8;
+    }
+    
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #12F6C8;
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(18, 246, 200, 0.4); }
+      50% { opacity: 0.7; box-shadow: 0 0 0 8px rgba(18, 246, 200, 0); }
+    }
+    
+    /* Threat Operations Feed */
+    .threat-feed {
+      background: #0A0A0C;
+      border: 1px solid rgba(11, 133, 229, 0.2);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 4rem;
+    }
+    
+    .feed-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(11, 133, 229, 0.2);
+    }
+    
+    .feed-header h2 {
+      font-size: 1.25rem;
+      color: #12F6C8;
+      font-family: monospace;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .live-indicator {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid #EF4444;
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.7rem;
+      color: #EF4444;
+    }
+    
+    .live-dot {
+      width: 6px;
+      height: 6px;
+      background: #EF4444;
+      border-radius: 50%;
+      animation: livePulse 1s ease-in-out infinite;
+    }
+    
+    @keyframes livePulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    
+    .feed-items {
+      display: grid;
+      gap: 1rem;
+    }
+    
+    .feed-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem;
+      background: rgba(5, 5, 5, 0.5);
+      border: 1px solid rgba(11, 133, 229, 0.1);
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    
+    .feed-item:hover {
+      border-color: rgba(18, 246, 200, 0.3);
+      background: rgba(18, 246, 200, 0.02);
+    }
+    
+    .feed-item-content {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .feed-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(18, 246, 200, 0.1);
+      border: 1px solid rgba(18, 246, 200, 0.3);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      animation: iconGlow 3s ease-in-out infinite;
+    }
+    
+    @keyframes iconGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(18, 246, 200, 0); }
+      50% { box-shadow: 0 0 15px rgba(18, 246, 200, 0.3); }
+    }
+    
+    .feed-item h4 {
+      font-size: 0.9rem;
+      color: white;
+      margin-bottom: 0.25rem;
+    }
+    
+    .feed-item-status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: monospace;
+      font-size: 0.7rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+      background: rgba(18, 246, 200, 0.1);
+      border: 1px solid #12F6C8;
+      color: #12F6C8;
+      animation: statusPulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes statusPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(18, 246, 200, 0); }
+      50% { box-shadow: 0 0 10px rgba(18, 246, 200, 0.2); }
+    }
+    
+    /* Advantage Section */
+    .advantage-section {
+      background: linear-gradient(135deg, rgba(11, 133, 229, 0.05), rgba(18, 246, 200, 0.05));
+      border: 1px solid rgba(18, 246, 200, 0.2);
+      border-radius: 12px;
+      padding: 3rem;
+      margin-bottom: 4rem;
+    }
+    
+    .advantage-section h2 {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      background: linear-gradient(135deg, #fff, #12F6C8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .advantage-list {
+      display: grid;
+      gap: 1rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .advantage-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1rem;
+      background: rgba(5, 5, 5, 0.5);
+      border-radius: 8px;
+      animation: slideInLeft 0.6s ease-out both;
+    }
+    
+    .advantage-item:nth-child(1) { animation-delay: 0.1s; }
+    .advantage-item:nth-child(2) { animation-delay: 0.15s; }
+    .advantage-item:nth-child(3) { animation-delay: 0.2s; }
+    .advantage-item:nth-child(4) { animation-delay: 0.25s; }
+    .advantage-item:nth-child(5) { animation-delay: 0.3s; }
+    .advantage-item:nth-child(6) { animation-delay: 0.35s; }
+    .advantage-item:nth-child(7) { animation-delay: 0.4s; }
+    
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    .advantage-bullet {
+      width: 8px;
+      height: 8px;
+      background: #12F6C8;
+      border-radius: 50%;
+      margin-top: 0.5rem;
+      flex-shrink: 0;
+      box-shadow: 0 0 10px rgba(18, 246, 200, 0.5);
+    }
+    
+    .advantage-item p {
+      color: #D1D5DB;
+      line-height: 1.6;
+    }
+    
+    .advantage-item strong {
+      color: #12F6C8;
+    }
+    
+    /* Footer */
+    footer {
+      border-top: 1px solid rgba(11, 133, 229, 0.2);
+      padding: 3rem 2rem;
+      text-align: center;
+      background: rgba(5, 5, 5, 0.95);
+    }
+    
+    footer p {
+      color: #6B7280;
+      font-size: 0.875rem;
+    }
+    
+    footer a {
+      color: #0B85E5;
+      text-decoration: none;
+    }
+    
+    footer a:hover {
+      color: #12F6C8;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hero h1 { font-size: 2rem; }
+      .hero-subtitle { font-size: 1rem; }
+      .module-grid { grid-template-columns: 1fr; }
+      main { padding: 1rem; }
+      .advantage-section { padding: 1.5rem; }
+      .feed-header { flex-direction: column; gap: 1rem; align-items: flex-start; }
+      .feed-item { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/" class="logo">
+      <div class="logo-box">G3</div>
+      <div>
+        <div style="font-weight: 600; font-size: 1rem;">G3TI</div>
+        <div style="font-size: 0.75rem; color: #9CA3AF; font-family: monospace;">D.I.E. SYSTEM</div>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/government.html">Government</a>
+      <a href="/enterprise.html">Enterprise</a>
+      <a href="/law-enforcement.html" class="active">Law Enforcement</a>
+      <a href="/products.html">Products</a>
+      <a href="/news-intelligence.html">News</a>
+      <a href="/compliance.html">Compliance</a>
+      <a href="/contact.html">Contact</a>
+    </div>
+  </nav>
+  
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-badge">TACTICAL INTELLIGENCE PLATFORM</div>
+      <h1>LAW ENFORCEMENT OPERATIONS COMMAND</h1>
+      <p class="hero-subtitle">Autonomous Intelligence for Police, Investigators, Crisis Units &amp; Homeland Security.</p>
+      <div class="tactical-line"></div>
+    </section>
+    
+    <!-- Intel Command Modules -->
+    <h2 class="section-title">INTEL COMMAND MODULES</h2>
+    <div class="module-grid">
+      <a href="/law-enforcement/police.html" class="module-card">
+        <div class="module-tag">UNIT PROFILE LOADED</div>
+        <h3>Police Departments</h3>
+        <p>Domestic threat escalation prediction</p>
+        <div class="module-status">
+          <span class="status-dot"></span>
+          OPERATIONAL READY
+        </div>
+      </a>
+      
+      <a href="/law-enforcement/investigators.html" class="module-card">
+        <div class="module-tag">THREAT SCENARIO ANALYSIS READY</div>
+        <h3>Investigators</h3>
+        <p>Digital evidence trail mapping</p>
+        <div class="module-status">
+          <span class="status-dot"></span>
+          OPERATIONAL READY
+        </div>
+      </a>
+      
+      <a href="/law-enforcement/fusion-centers.html" class="module-card">
+        <div class="module-tag">CLICK TO ACCESS</div>
+        <h3>Fusion Centers</h3>
+        <p>Multi-agency intelligence fusion</p>
+        <div class="module-status">
+          <span class="status-dot"></span>
+          OPERATIONAL READY
+        </div>
+      </a>
+      
+      <a href="/law-enforcement/analysts.html" class="module-card">
+        <div class="module-tag">CLICK TO ACCESS</div>
+        <h3>Analysts</h3>
+        <p>Pattern analytics &amp; anomaly scouting</p>
+        <div class="module-status">
+          <span class="status-dot"></span>
+          OPERATIONAL READY
+        </div>
+      </a>
+      
+      <a href="/law-enforcement/dv-units.html" class="module-card">
+        <div class="module-tag">CLICK TO ACCESS</div>
+        <h3>Domestic Violence Units</h3>
+        <p>Escalation vector analysis</p>
+        <div class="module-status">
+          <span class="status-dot"></span>
+          OPERATIONAL READY
+        </div>
+      </a>
+      
+      <a href="/law-enforcement/crisis-response.html" class="module-card">
+        <div class="module-tag">CLICK TO ACCESS</div>
+        <h3>Crisis Response Teams</h3>
+        <p>AI-augmented triage &amp; risk prioritization</p>
+        <div class="module-status">
+          <span class="status-dot"></span>
+          OPERATIONAL READY
+        </div>
+      </a>
+      
+      <a href="/law-enforcement/homeland-security.html" class="module-card">
+        <div class="module-tag">CLICK TO ACCESS</div>
+        <h3>Homeland Security Partners</h3>
+        <p>Cross-border threat coordination</p>
+        <div class="module-status">
+          <span class="status-dot"></span>
+          OPERATIONAL READY
+        </div>
+      </a>
+    </div>
+    
+    <!-- Threat Operations Feed -->
+    <div class="threat-feed">
+      <div class="feed-header">
+        <h2>THREAT OPERATIONS FEED</h2>
+        <div class="live-indicator">
+          <span class="live-dot"></span>
+          LIVE MONITORING
+        </div>
+      </div>
+      <div class="feed-items">
+        <div class="feed-item">
+          <div class="feed-item-content">
+            <div class="feed-icon">🚨</div>
+            <div>
+              <h4>Domestic Violence Escalation Vectors</h4>
+            </div>
+          </div>
+          <div class="feed-item-status">
+            <span class="status-dot"></span>
+            MONITORING ACTIVE
+          </div>
+        </div>
+        
+        <div class="feed-item">
+          <div class="feed-item-content">
+            <div class="feed-icon">🔗</div>
+            <div>
+              <h4>Human Trafficking Digital Corridors</h4>
+            </div>
+          </div>
+          <div class="feed-item-status">
+            <span class="status-dot"></span>
+            MONITORING ACTIVE
+          </div>
+        </div>
+        
+        <div class="feed-item">
+          <div class="feed-item-content">
+            <div class="feed-icon">👤</div>
+            <div>
+              <h4>Synthetic Identity Clusters</h4>
+            </div>
+          </div>
+          <div class="feed-item-status">
+            <span class="status-dot"></span>
+            MONITORING ACTIVE
+          </div>
+        </div>
+        
+        <div class="feed-item">
+          <div class="feed-item-content">
+            <div class="feed-icon">🤖</div>
+            <div>
+              <h4>AI-Enabled Exploitation Graphs</h4>
+            </div>
+          </div>
+          <div class="feed-item-status">
+            <span class="status-dot"></span>
+            MONITORING ACTIVE
+          </div>
+        </div>
+        
+        <div class="feed-item">
+          <div class="feed-item-content">
+            <div class="feed-icon">🌐</div>
+            <div>
+              <h4>Dark-Web Exploitation Heatmaps</h4>
+            </div>
+          </div>
+          <div class="feed-item-status">
+            <span class="status-dot"></span>
+            MONITORING ACTIVE
+          </div>
+        </div>
+        
+        <div class="feed-item">
+          <div class="feed-item-content">
+            <div class="feed-icon">🎭</div>
+            <div>
+              <h4>Machine-Speed Deception Mapping</h4>
+            </div>
+          </div>
+          <div class="feed-item-status">
+            <span class="status-dot"></span>
+            MONITORING ACTIVE
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Advantage Section -->
+    <div class="advantage-section">
+      <h2>THE G3TI ADVANTAGE</h2>
+      <div class="advantage-list">
+        <div class="advantage-item">
+          <div class="advantage-bullet"></div>
+          <p><strong>G3TI</strong> exposes machine-speed threats traditional systems cannot see.</p>
+        </div>
+        <div class="advantage-item">
+          <div class="advantage-bullet"></div>
+          <p><strong>G3TI</strong> predicts crime trajectories before escalation.</p>
+        </div>
+        <div class="advantage-item">
+          <div class="advantage-bullet"></div>
+          <p><strong>G3TI</strong> identifies synthetic identity actors in milliseconds.</p>
+        </div>
+        <div class="advantage-item">
+          <div class="advantage-bullet"></div>
+          <p><strong>G3TI</strong> fuses OSINT and behavioral vectors across millions of signals.</p>
+        </div>
+        <div class="advantage-item">
+          <div class="advantage-bullet"></div>
+          <p><strong>G3TI</strong> empowers agencies with preemptive intelligence.</p>
+        </div>
+        <div class="advantage-item">
+          <div class="advantage-bullet"></div>
+          <p><strong>G3TI</strong> accelerates investigators.</p>
+        </div>
+        <div class="advantage-item">
+          <div class="advantage-bullet"></div>
+          <p><strong>G3TI</strong> protects the vulnerable.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <footer>
+    <p>&copy; 2026 Global 3 Technology &amp; Intelligence. All rights reserved.</p>
+    <p style="margin-top: 0.5rem;"><a href="/">&larr; Return to Home</a></p>
+  </footer>
+</body>
+</html>
