@@ -1,0 +1,14 @@
+{
+  "briefs": [
+    {
+      "id": "1",
+      "title": "Rise in Supply Chain Attacks Targeting Technology Vendors in 2024",
+      "content": "Recent intelligence indicates a 37% increase in supply chain attacks against technology sector vendors in the first half of 2024. Notably, threat groups such as UNC3944 and APT29 have escalated their campaigns, exploiting software update mechanisms and third-party integrations to infiltrate major IT service providers. These attacks often result in downstream compromise of enterprise clients, with particular focus on cloud service platforms and managed security providers. Organizations are urged to enhance vendor risk management protocols and monitor for anomalous activity linked to trusted software sources, as adversaries increasingly leverage legitimate channels to bypass traditional defenses.",
+      "category": "Technology",
+      "publishDate": "2026-01-09",
+      "slug": "rise-in-supply-chain-attacks-targeting-technology-vendors-in",
+      "status": "published"
+    }
+  ],
+  "lastUpdated": "2026-01-09T01:54:30.939488"
+}
