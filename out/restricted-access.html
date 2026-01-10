@@ -66,12 +66,11 @@
     }
     
     main {
-      max-width: 800px;
+      max-width: 900px;
       margin: 0 auto;
       padding: 2rem;
     }
     
-    /* Warning Banner */
     .warning-banner {
       background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.05));
       border: 2px solid #EF4444;
@@ -108,7 +107,44 @@
       font-size: 1rem;
     }
     
-    /* Form Section */
+    .tabs-container {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .tab-btn {
+      flex: 1;
+      padding: 1rem;
+      background: #0A0A0C;
+      border: 1px solid #333;
+      border-radius: 8px;
+      color: #9CA3AF;
+      font-family: monospace;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .tab-btn.active {
+      background: linear-gradient(135deg, rgba(11, 133, 229, 0.2), rgba(18, 246, 200, 0.1));
+      border-color: #12F6C8;
+      color: #12F6C8;
+    }
+    
+    .tab-btn:hover:not(.active) {
+      border-color: #0B85E5;
+      color: #0B85E5;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
     .form-section {
       background: #0A0A0C;
       border: 1px solid rgba(11, 133, 229, 0.2);
@@ -162,6 +198,7 @@
       color: white;
       font-size: 1rem;
       transition: all 0.3s ease;
+      font-family: inherit;
     }
     
     .form-group input:focus,
@@ -203,22 +240,125 @@
       box-shadow: 0 10px 30px rgba(18, 246, 200, 0.3);
     }
     
-    .approval-notice {
-      background: rgba(11, 133, 229, 0.1);
-      border: 1px solid rgba(11, 133, 229, 0.3);
+    .submit-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .domain-preview {
+      background: #111;
+      border: 1px solid #333;
       border-radius: 8px;
-      padding: 1rem;
-      margin-top: 1.5rem;
-      text-align: center;
+      padding: 1.5rem;
+      margin-top: 1rem;
+      display: none;
     }
     
-    .approval-notice p {
-      color: #0B85E5;
-      font-size: 0.85rem;
+    .domain-preview.show {
+      display: block;
+    }
+    
+    .domain-preview h4 {
+      color: #12F6C8;
       font-family: monospace;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
     }
     
-    /* Footer */
+    .preview-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #222;
+    }
+    
+    .preview-label {
+      color: #9CA3AF;
+      font-size: 0.85rem;
+    }
+    
+    .preview-value {
+      color: #fff;
+      font-weight: 600;
+    }
+    
+    .risk-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    
+    .risk-low { background: #22c55e; color: #000; }
+    .risk-medium { background: #eab308; color: #000; }
+    .risk-high { background: #ef4444; color: #fff; }
+    
+    .domain-badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+    }
+    
+    .domain-government { background: rgba(34, 197, 94, 0.2); color: #22c55e; border: 1px solid #22c55e; }
+    .domain-corporate { background: rgba(59, 130, 246, 0.2); color: #3b82f6; border: 1px solid #3b82f6; }
+    .domain-free_provider { background: rgba(234, 179, 8, 0.2); color: #eab308; border: 1px solid #eab308; }
+    .domain-high_risk { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid #ef4444; }
+    .domain-unknown { background: rgba(156, 163, 175, 0.2); color: #9CA3AF; border: 1px solid #9CA3AF; }
+    
+    .error-msg {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid #EF4444;
+      color: #EF4444;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    
+    .error-msg.show {
+      display: block;
+    }
+    
+    .success-msg {
+      background: rgba(34, 197, 94, 0.2);
+      border: 1px solid #22c55e;
+      color: #22c55e;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    
+    .success-msg.show {
+      display: block;
+    }
+    
+    .login-section {
+      background: #0A0A0C;
+      border: 1px solid rgba(11, 133, 229, 0.2);
+      border-radius: 12px;
+      padding: 2rem;
+    }
+    
+    .verification-step {
+      display: none;
+    }
+    
+    .verification-step.active {
+      display: block;
+    }
+    
+    .code-input {
+      font-size: 1.5rem;
+      letter-spacing: 0.5rem;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    
     footer {
       border-top: 1px solid rgba(11, 133, 229, 0.2);
       padding: 2rem;
@@ -241,12 +381,12 @@
       color: #12F6C8;
     }
     
-    /* Responsive */
     @media (max-width: 768px) {
       .nav-links { display: none; }
       main { padding: 1rem; }
       .warning-banner { padding: 1.5rem; }
-      .form-section { padding: 1.5rem; }
+      .form-section, .login-section { padding: 1.5rem; }
+      .tabs-container { flex-direction: column; }
     }
   </style>
 </head>
@@ -270,7 +410,6 @@
   </nav>
   
   <main>
-    <!-- Warning Banner -->
     <div class="warning-banner">
       <span class="warning-icon">&#9888;&#65039;</span>
       <h1 class="warning-title">RESTRICTED ACCESS</h1>
@@ -280,50 +419,114 @@
       </p>
     </div>
     
-    <!-- Access Request Form -->
-    <div class="form-section">
-      <div class="form-header">
-        <h2>REQUEST ACCESS</h2>
-        <p>Complete the form below to request access to restricted intelligence pages.</p>
+    <div class="tabs-container">
+      <button class="tab-btn active" onclick="switchTab('register')">Request Access</button>
+      <button class="tab-btn" onclick="switchTab('login')">Already Have Access</button>
+    </div>
+    
+    <!-- Registration Tab -->
+    <div id="register-tab" class="tab-content active">
+      <div class="form-section">
+        <div class="form-header">
+          <h2>REQUEST ACCESS</h2>
+          <p>Complete the form below to request access to restricted intelligence pages.</p>
+        </div>
+        
+        <div id="register-error" class="error-msg"></div>
+        <div id="register-success" class="success-msg"></div>
+        
+        <form id="register-form" class="access-form">
+          <div class="form-group">
+            <label for="reg-name">Full Name *</label>
+            <input type="text" id="reg-name" placeholder="Enter your full name" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="reg-agency">Agency / Organization *</label>
+            <input type="text" id="reg-agency" placeholder="e.g., FBI, DHS, Local Police Department" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="reg-email">Official Email Address *</label>
+            <input type="email" id="reg-email" placeholder="your.name@agency.gov" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="reg-password">Create Password *</label>
+            <input type="password" id="reg-password" placeholder="Minimum 8 characters" required minlength="8">
+          </div>
+          
+          <div class="form-group">
+            <label for="reg-reason">Reason for Access Request *</label>
+            <textarea id="reg-reason" placeholder="Please describe why you need access to G3TI restricted intelligence pages..." required></textarea>
+          </div>
+          
+          <div id="domain-preview" class="domain-preview">
+            <h4>DOMAIN EVALUATION</h4>
+            <div class="preview-row">
+              <span class="preview-label">Email Domain</span>
+              <span class="preview-value" id="preview-domain">-</span>
+            </div>
+            <div class="preview-row">
+              <span class="preview-label">Domain Type</span>
+              <span class="preview-value" id="preview-type">-</span>
+            </div>
+            <div class="preview-row">
+              <span class="preview-label">Risk Score</span>
+              <span class="preview-value" id="preview-risk">-</span>
+            </div>
+            <div class="preview-row">
+              <span class="preview-label">Auto-Approval</span>
+              <span class="preview-value" id="preview-auto">-</span>
+            </div>
+          </div>
+          
+          <button type="submit" class="submit-btn" id="register-btn">Submit Access Request</button>
+        </form>
       </div>
-      
-      <form class="access-form" action="https://formsubmit.co/info@global3technology.com" method="POST">
-        <input type="hidden" name="_subject" value="G3TI Restricted Access Request">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_next" value="https://autonomous-intelligence-website-gf2egppg.devinapps.com/access-request-submitted.html">
-        
-        <div class="form-group">
-          <label for="name">Full Name *</label>
-          <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+    </div>
+    
+    <!-- Login Tab -->
+    <div id="login-tab" class="tab-content">
+      <div class="login-section">
+        <div class="form-header">
+          <h2>SECURE LOGIN</h2>
+          <p>Enter your credentials to access restricted intelligence pages.</p>
         </div>
         
-        <div class="form-group">
-          <label for="agency">Agency / Organization *</label>
-          <input type="text" id="agency" name="agency" placeholder="e.g., FBI, DHS, Local Police Department" required>
+        <div id="login-error" class="error-msg"></div>
+        <div id="login-success" class="success-msg"></div>
+        
+        <!-- Step 1: Email/Password -->
+        <div id="login-step1" class="verification-step active">
+          <form id="login-form" class="access-form">
+            <div class="form-group">
+              <label for="login-email">Email Address</label>
+              <input type="email" id="login-email" placeholder="your.name@agency.gov" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="login-password">Password</label>
+              <input type="password" id="login-password" placeholder="Enter your password" required>
+            </div>
+            
+            <button type="submit" class="submit-btn">Login</button>
+          </form>
         </div>
         
-        <div class="form-group">
-          <label for="title">Title / Position *</label>
-          <input type="text" id="title" name="title" placeholder="e.g., Special Agent, Detective, Analyst" required>
+        <!-- Step 2: Verification Code -->
+        <div id="login-step2" class="verification-step">
+          <form id="verify-form" class="access-form">
+            <div class="form-group">
+              <label for="verify-code">Verification Code</label>
+              <input type="text" id="verify-code" class="code-input" placeholder="XXXXXX" required maxlength="6">
+              <p style="color:#9CA3AF;font-size:0.85rem;margin-top:0.5rem">A verification code has been sent to your email address.</p>
+            </div>
+            
+            <button type="submit" class="submit-btn">Verify & Access</button>
+          </form>
         </div>
-        
-        <div class="form-group">
-          <label for="email">Official Email Address *</label>
-          <input type="email" id="email" name="email" placeholder="your.name@agency.gov" required>
-        </div>
-        
-        <div class="form-group">
-          <label for="reason">Reason for Access Request *</label>
-          <textarea id="reason" name="reason" placeholder="Please describe why you need access to G3TI restricted intelligence pages..." required></textarea>
-        </div>
-        
-        <button type="submit" class="submit-btn">Submit Access Request</button>
-        
-        <div class="approval-notice">
-          <p>All access requests require manual approval by G3TI personnel.<br/>You will be contacted at your official email address within 24-48 hours.</p>
-        </div>
-      </form>
+      </div>
     </div>
   </main>
   
@@ -331,5 +534,212 @@
     <p>&copy; 2026 Global 3 Technology & Intelligence. All rights reserved.</p>
     <p style="margin-top: 0.5rem;"><a href="/">&larr; Return to Home</a></p>
   </footer>
+
+  <script>
+    const API_URL = 'https://app-wjugbohz.fly.dev';
+    let loginEmail = '';
+    
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      
+      document.querySelector(`[onclick="switchTab('${tab}')"]`).classList.add('active');
+      document.getElementById(`${tab}-tab`).classList.add('active');
+    }
+    
+    // Domain evaluation on email input
+    let evalTimeout;
+    document.getElementById('reg-email').addEventListener('input', function() {
+      clearTimeout(evalTimeout);
+      const email = this.value;
+      
+      if (email.includes('@') && email.split('@')[1].includes('.')) {
+        evalTimeout = setTimeout(() => evaluateDomain(email), 500);
+      } else {
+        document.getElementById('domain-preview').classList.remove('show');
+      }
+    });
+    
+    async function evaluateDomain(email) {
+      try {
+        const formData = new FormData();
+        formData.append('email', email);
+        
+        const response = await fetch(`${API_URL}/api/evaluate-domain`, {
+          method: 'POST',
+          body: formData
+        });
+        
+        const data = await response.json();
+        
+        const preview = document.getElementById('domain-preview');
+        preview.classList.add('show');
+        
+        document.getElementById('preview-domain').textContent = data.domain;
+        
+        const typeEl = document.getElementById('preview-type');
+        typeEl.innerHTML = `<span class="domain-badge domain-${data.domain_type}">${data.domain_type.replace('_', ' ')}</span>`;
+        
+        const riskEl = document.getElementById('preview-risk');
+        const riskClass = data.risk_score < 40 ? 'risk-low' : data.risk_score < 70 ? 'risk-medium' : 'risk-high';
+        riskEl.innerHTML = `<span class="risk-badge ${riskClass}">${data.risk_score}/100</span>`;
+        
+        const autoEl = document.getElementById('preview-auto');
+        if (data.auto_approve) {
+          autoEl.innerHTML = '<span style="color:#22c55e">ELIGIBLE FOR AUTO-APPROVAL</span>';
+        } else {
+          autoEl.innerHTML = '<span style="color:#eab308">REQUIRES MANUAL APPROVAL</span>';
+        }
+      } catch (err) {
+        console.error('Domain evaluation failed:', err);
+      }
+    }
+    
+    // Registration form
+    document.getElementById('register-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const errorEl = document.getElementById('register-error');
+      const successEl = document.getElementById('register-success');
+      const btn = document.getElementById('register-btn');
+      
+      errorEl.classList.remove('show');
+      successEl.classList.remove('show');
+      btn.disabled = true;
+      btn.textContent = 'Processing...';
+      
+      const data = {
+        email: document.getElementById('reg-email').value,
+        password: document.getElementById('reg-password').value,
+        name: document.getElementById('reg-name').value,
+        agency: document.getElementById('reg-agency').value,
+        reason: document.getElementById('reg-reason').value
+      };
+      
+      try {
+        const response = await fetch(`${API_URL}/api/auth/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok && result.success) {
+          if (result.status === 'approved') {
+            successEl.innerHTML = '<strong>ACCESS GRANTED</strong><br>Your government domain has been automatically approved. You can now log in to access restricted content.';
+          } else {
+            successEl.innerHTML = '<strong>REQUEST SUBMITTED</strong><br>Your access request is pending approval. You will receive an email notification once your request has been reviewed.';
+          }
+          successEl.classList.add('show');
+          this.reset();
+          document.getElementById('domain-preview').classList.remove('show');
+        } else {
+          errorEl.textContent = result.detail || 'Registration failed. Please try again.';
+          errorEl.classList.add('show');
+        }
+      } catch (err) {
+        errorEl.textContent = 'Connection error. Please try again.';
+        errorEl.classList.add('show');
+      }
+      
+      btn.disabled = false;
+      btn.textContent = 'Submit Access Request';
+    });
+    
+    // Login form - Step 1
+    document.getElementById('login-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const errorEl = document.getElementById('login-error');
+      const successEl = document.getElementById('login-success');
+      
+      errorEl.classList.remove('show');
+      successEl.classList.remove('show');
+      
+      loginEmail = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+      
+      try {
+        const response = await fetch(`${API_URL}/api/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: loginEmail, password })
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok && result.success) {
+          if (result.requires_verification) {
+            document.getElementById('login-step1').classList.remove('active');
+            document.getElementById('login-step2').classList.add('active');
+            successEl.textContent = 'Verification code sent to your email.';
+            successEl.classList.add('show');
+          }
+        } else {
+          errorEl.textContent = result.detail || 'Login failed. Please check your credentials.';
+          errorEl.classList.add('show');
+        }
+      } catch (err) {
+        errorEl.textContent = 'Connection error. Please try again.';
+        errorEl.classList.add('show');
+      }
+    });
+    
+    // Verification form - Step 2
+    document.getElementById('verify-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const errorEl = document.getElementById('login-error');
+      const successEl = document.getElementById('login-success');
+      
+      errorEl.classList.remove('show');
+      successEl.classList.remove('show');
+      
+      const code = document.getElementById('verify-code').value;
+      
+      try {
+        const response = await fetch(`${API_URL}/api/auth/verify`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: loginEmail, code })
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok && result.success) {
+          localStorage.setItem('g3ti_token', result.token);
+          localStorage.setItem('g3ti_user', JSON.stringify(result.user));
+          
+          successEl.textContent = 'Access granted. Redirecting...';
+          successEl.classList.add('show');
+          
+          const returnUrl = new URLSearchParams(window.location.search).get('return') || '/government.html';
+          setTimeout(() => {
+            window.location.href = returnUrl;
+          }, 1500);
+        } else {
+          errorEl.textContent = result.detail || 'Invalid verification code.';
+          errorEl.classList.add('show');
+        }
+      } catch (err) {
+        errorEl.textContent = 'Connection error. Please try again.';
+        errorEl.classList.add('show');
+      }
+    });
+    
+    // Check if already logged in
+    const token = localStorage.getItem('g3ti_token');
+    if (token) {
+      fetch(`${API_URL}/api/auth/check`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      }).then(r => r.json()).then(data => {
+        if (data.authenticated && data.has_access) {
+          const returnUrl = new URLSearchParams(window.location.search).get('return') || '/government.html';
+          window.location.href = returnUrl;
+        }
+      }).catch(() => {});
+    }
+  </script>
 </body>
 </html>

@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>G3TI Admin - Access Approvals Dashboard</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #050505;
+      color: #D1D5DB;
+      min-height: 100vh;
+    }
+    .login-container, .dashboard-container {
+      display: none;
+    }
+    .login-container.active, .dashboard-container.active {
+      display: block;
+    }
+    .login-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    .login-box {
+      background: #0A0A0C;
+      border: 2px solid #12F6C8;
+      border-radius: 12px;
+      padding: 3rem;
+      max-width: 400px;
+      width: 100%;
+    }
+    .login-box h1 {
+      color: #12F6C8;
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 1.5rem;
+    }
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    .form-group label {
+      display: block;
+      color: #9CA3AF;
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 1rem;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 8px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 1rem;
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: #12F6C8;
+    }
+    .btn {
+      display: inline-block;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #0B85E5, #12F6C8);
+      color: #050505;
+      width: 100%;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(18, 246, 200, 0.3);
+    }
+    .btn-approve {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #fff;
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+    }
+    .btn-deny {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: #fff;
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+    }
+    .btn-view {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: #fff;
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+    }
+    .error-msg {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid #EF4444;
+      color: #EF4444;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .error-msg.show {
+      display: block;
+    }
+    /* Dashboard */
+    .dashboard-container {
+      padding: 2rem;
+    }
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #333;
+    }
+    .dashboard-header h1 {
+      color: #12F6C8;
+      font-size: 1.5rem;
+    }
+    .logout-btn {
+      background: transparent;
+      border: 1px solid #EF4444;
+      color: #EF4444;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: #0A0A0C;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .stat-card.pending { border-color: #eab308; }
+    .stat-card.approved { border-color: #22c55e; }
+    .stat-card.denied { border-color: #ef4444; }
+    .stat-card.total { border-color: #12F6C8; }
+    .stat-value {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .stat-card.pending .stat-value { color: #eab308; }
+    .stat-card.approved .stat-value { color: #22c55e; }
+    .stat-card.denied .stat-value { color: #ef4444; }
+    .stat-card.total .stat-value { color: #12F6C8; }
+    .stat-label {
+      color: #9CA3AF;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid #333;
+      padding-bottom: 1rem;
+    }
+    .tab {
+      background: transparent;
+      border: 1px solid #333;
+      color: #9CA3AF;
+      padding: 0.75rem 1.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.3s;
+    }
+    .tab.active {
+      background: #12F6C8;
+      color: #050505;
+      border-color: #12F6C8;
+    }
+    .tab:hover:not(.active) {
+      border-color: #12F6C8;
+      color: #12F6C8;
+    }
+    .filters {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .filters input, .filters select {
+      padding: 0.75rem 1rem;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 6px;
+      color: #fff;
+      font-family: inherit;
+    }
+    .filters input:focus, .filters select:focus {
+      outline: none;
+      border-color: #12F6C8;
+    }
+    .users-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #0A0A0C;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .users-table th, .users-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #222;
+    }
+    .users-table th {
+      background: #111;
+      color: #12F6C8;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .users-table tr:hover {
+      background: rgba(18, 246, 200, 0.05);
+    }
+    .risk-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .risk-low { background: #22c55e; color: #000; }
+    .risk-medium { background: #eab308; color: #000; }
+    .risk-high { background: #ef4444; color: #fff; }
+    .domain-badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+    }
+    .domain-government { background: rgba(34, 197, 94, 0.2); color: #22c55e; border: 1px solid #22c55e; }
+    .domain-corporate { background: rgba(59, 130, 246, 0.2); color: #3b82f6; border: 1px solid #3b82f6; }
+    .domain-free_provider { background: rgba(234, 179, 8, 0.2); color: #eab308; border: 1px solid #eab308; }
+    .domain-high_risk { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid #ef4444; }
+    .domain-unknown { background: rgba(156, 163, 175, 0.2); color: #9CA3AF; border: 1px solid #9CA3AF; }
+    .actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: #6B7280;
+    }
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 2rem;
+    }
+    .modal-overlay.show {
+      display: flex;
+    }
+    .modal {
+      background: #0A0A0C;
+      border: 2px solid #12F6C8;
+      border-radius: 12px;
+      max-width: 700px;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid #333;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-header h2 {
+      color: #12F6C8;
+    }
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: #9CA3AF;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    .modal-body {
+      padding: 1.5rem;
+    }
+    .detail-row {
+      display: flex;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #222;
+    }
+    .detail-label {
+      width: 150px;
+      color: #9CA3AF;
+      font-size: 0.875rem;
+    }
+    .detail-value {
+      flex: 1;
+      color: #fff;
+    }
+    .audit-log {
+      margin-top: 1.5rem;
+    }
+    .audit-log h3 {
+      color: #12F6C8;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+    .log-entry {
+      background: #111;
+      padding: 0.75rem;
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+    }
+    .log-entry .action {
+      color: #12F6C8;
+      font-weight: 700;
+    }
+    .log-entry .time {
+      color: #6B7280;
+      font-size: 0.75rem;
+    }
+    .loading {
+      text-align: center;
+      padding: 2rem;
+      color: #12F6C8;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .spinner {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      border: 2px solid #333;
+      border-top-color: #12F6C8;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+  </style>
+</head>
+<body>
+  <div id="login-container" class="login-container active">
+    <div class="login-box">
+      <h1>G3TI ADMIN ACCESS</h1>
+      <div id="login-error" class="error-msg"></div>
+      <form id="login-form">
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="username" required autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="password" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="dashboard-container" class="dashboard-container">
+    <div class="dashboard-header">
+      <h1>G3TI ACCESS CONTROL DASHBOARD</h1>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card pending">
+        <div class="stat-value" id="stat-pending">0</div>
+        <div class="stat-label">Pending</div>
+      </div>
+      <div class="stat-card approved">
+        <div class="stat-value" id="stat-approved">0</div>
+        <div class="stat-label">Approved</div>
+      </div>
+      <div class="stat-card denied">
+        <div class="stat-value" id="stat-denied">0</div>
+        <div class="stat-label">Denied</div>
+      </div>
+      <div class="stat-card total">
+        <div class="stat-value" id="stat-total">0</div>
+        <div class="stat-label">Total Users</div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="pending" onclick="switchTab('pending')">Pending Requests</button>
+      <button class="tab" data-tab="approved" onclick="switchTab('approved')">Approved Users</button>
+      <button class="tab" data-tab="denied" onclick="switchTab('denied')">Denied Users</button>
+      <button class="tab" data-tab="logs" onclick="switchTab('logs')">Audit Logs</button>
+      <button class="tab" data-tab="whitelist" onclick="switchTab('whitelist')">Domain Whitelist</button>
+    </div>
+
+    <div class="filters">
+      <input type="text" id="search" placeholder="Search by email or name..." oninput="filterUsers()">
+      <select id="domain-filter" onchange="filterUsers()">
+        <option value="">All Domains</option>
+        <option value="government">Government</option>
+        <option value="corporate">Corporate</option>
+        <option value="free_provider">Free Provider</option>
+        <option value="high_risk">High Risk</option>
+      </select>
+      <select id="risk-filter" onchange="filterUsers()">
+        <option value="">All Risk Levels</option>
+        <option value="low">Low (0-39)</option>
+        <option value="medium">Medium (40-69)</option>
+        <option value="high">High (70-100)</option>
+      </select>
+    </div>
+
+    <div id="content-area">
+      <div class="loading"><div class="spinner"></div> Loading...</div>
+    </div>
+  </div>
+
+  <!-- User Detail Modal -->
+  <div id="user-modal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>User Details</h2>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-content">
+        <!-- Content loaded dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = 'https://app-wjugbohz.fly.dev';
+    let adminToken = localStorage.getItem('g3ti_admin_token');
+    let currentTab = 'pending';
+    let allUsers = [];
+
+    // Check if already logged in
+    if (adminToken) {
+      showDashboard();
+    }
+
+    // Login form handler
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const errorEl = document.getElementById('login-error');
+
+      try {
+        const response = await fetch(`${API_URL}/api/admin/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          adminToken = data.token;
+          localStorage.setItem('g3ti_admin_token', adminToken);
+          showDashboard();
+        } else {
+          errorEl.textContent = data.detail || 'Invalid credentials';
+          errorEl.classList.add('show');
+        }
+      } catch (err) {
+        errorEl.textContent = 'Connection error. Please try again.';
+        errorEl.classList.add('show');
+      }
+    });
+
+    function showDashboard() {
+      document.getElementById('login-container').classList.remove('active');
+      document.getElementById('dashboard-container').classList.add('active');
+      loadStats();
+      loadUsers('pending');
+    }
+
+    function logout() {
+      localStorage.removeItem('g3ti_admin_token');
+      adminToken = null;
+      document.getElementById('dashboard-container').classList.remove('active');
+      document.getElementById('login-container').classList.add('active');
+    }
+
+    async function loadStats() {
+      try {
+        const response = await fetch(`${API_URL}/api/admin/stats`, {
+          headers: { 'Authorization': `Bearer ${adminToken}` }
+        });
+        const data = await response.json();
+        document.getElementById('stat-pending').textContent = data.pending;
+        document.getElementById('stat-approved').textContent = data.approved;
+        document.getElementById('stat-denied').textContent = data.denied;
+        document.getElementById('stat-total').textContent = data.total;
+      } catch (err) {
+        console.error('Failed to load stats:', err);
+      }
+    }
+
+    async function loadUsers(status) {
+      const contentArea = document.getElementById('content-area');
+      contentArea.innerHTML = '<div class="loading"><div class="spinner"></div> Loading...</div>';
+
+      try {
+        const response = await fetch(`${API_URL}/api/admin/${status}`, {
+          headers: { 'Authorization': `Bearer ${adminToken}` }
+        });
+        const data = await response.json();
+        allUsers = data.users || [];
+        renderUsers(allUsers, status);
+      } catch (err) {
+        contentArea.innerHTML = '<div class="empty-state">Failed to load users</div>';
+      }
+    }
+
+    async function loadLogs() {
+      const contentArea = document.getElementById('content-area');
+      contentArea.innerHTML = '<div class="loading"><div class="spinner"></div> Loading...</div>';
+
+      try {
+        const response = await fetch(`${API_URL}/api/admin/logs?limit=100`, {
+          headers: { 'Authorization': `Bearer ${adminToken}` }
+        });
+        const data = await response.json();
+        renderLogs(data.logs || []);
+      } catch (err) {
+        contentArea.innerHTML = '<div class="empty-state">Failed to load logs</div>';
+      }
+    }
+
+    async function loadWhitelist() {
+      const contentArea = document.getElementById('content-area');
+      contentArea.innerHTML = '<div class="loading"><div class="spinner"></div> Loading...</div>';
+
+      try {
+        const response = await fetch(`${API_URL}/api/admin/whitelist`, {
+          headers: { 'Authorization': `Bearer ${adminToken}` }
+        });
+        const data = await response.json();
+        renderWhitelist(data.domains || []);
+      } catch (err) {
+        contentArea.innerHTML = '<div class="empty-state">Failed to load whitelist</div>';
+      }
+    }
+
+    function renderUsers(users, status) {
+      const contentArea = document.getElementById('content-area');
+      
+      if (users.length === 0) {
+        contentArea.innerHTML = '<div class="empty-state">No users found</div>';
+        return;
+      }
+
+      let html = `
+        <table class="users-table">
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Name</th>
+              <th>Domain</th>
+              <th>Risk Score</th>
+              <th>Agency</th>
+              <th>Created</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      users.forEach(user => {
+        const riskClass = user.risk_score < 40 ? 'risk-low' : user.risk_score < 70 ? 'risk-medium' : 'risk-high';
+        const domainClass = `domain-${user.domain_type || 'unknown'}`;
+        
+        html += `
+          <tr>
+            <td>${user.email}</td>
+            <td>${user.name}</td>
+            <td>
+              <span class="domain-badge ${domainClass}">${user.domain_type || 'unknown'}</span>
+              <br><small style="color:#6B7280">${user.domain}</small>
+            </td>
+            <td><span class="risk-badge ${riskClass}">${user.risk_score}</span></td>
+            <td>${user.agency || '-'}</td>
+            <td><small>${new Date(user.created_at).toLocaleString()}</small></td>
+            <td class="actions">
+              <button class="btn btn-view" onclick="viewUser(${user.id})">View</button>
+              ${status === 'pending' ? `
+                <button class="btn btn-approve" onclick="approveUser(${user.id})">Approve</button>
+                <button class="btn btn-deny" onclick="denyUser(${user.id})">Deny</button>
+              ` : ''}
+            </td>
+          </tr>
+        `;
+      });
+
+      html += '</tbody></table>';
+      contentArea.innerHTML = html;
+    }
+
+    function renderLogs(logs) {
+      const contentArea = document.getElementById('content-area');
+      
+      if (logs.length === 0) {
+        contentArea.innerHTML = '<div class="empty-state">No logs found</div>';
+        return;
+      }
+
+      let html = '<div class="audit-log">';
+      logs.forEach(log => {
+        html += `
+          <div class="log-entry">
+            <span class="action">${log.action}</span>
+            ${log.user_email ? `- ${log.user_email}` : ''}
+            ${log.admin_user ? `by ${log.admin_user}` : ''}
+            ${log.details ? `<br><small style="color:#9CA3AF">${log.details}</small>` : ''}
+            <br><span class="time">${new Date(log.created_at).toLocaleString()}</span>
+          </div>
+        `;
+      });
+      html += '</div>';
+      contentArea.innerHTML = html;
+    }
+
+    function renderWhitelist(domains) {
+      const contentArea = document.getElementById('content-area');
+      
+      let html = `
+        <div style="margin-bottom:1rem">
+          <input type="text" id="new-domain" placeholder="Enter domain (e.g., .agency.gov)" style="padding:0.75rem;background:#1a1a1a;border:1px solid #333;border-radius:6px;color:#fff;margin-right:0.5rem">
+          <button class="btn btn-approve" onclick="addDomain()">Add Domain</button>
+        </div>
+        <table class="users-table">
+          <thead>
+            <tr>
+              <th>Domain</th>
+              <th>Added By</th>
+              <th>Added At</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      domains.forEach(d => {
+        html += `
+          <tr>
+            <td>${d.domain}</td>
+            <td>${d.added_by || 'system'}</td>
+            <td>${d.added_at ? new Date(d.added_at).toLocaleString() : '-'}</td>
+            <td>
+              <button class="btn btn-deny" onclick="removeDomain('${d.domain}')">Remove</button>
+            </td>
+          </tr>
+        `;
+      });
+
+      html += '</tbody></table>';
+      contentArea.innerHTML = html;
+    }
+
+    function switchTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+
+      if (tab === 'logs') {
+        loadLogs();
+      } else if (tab === 'whitelist') {
+        loadWhitelist();
+      } else {
+        loadUsers(tab);
+      }
+    }
+
+    function filterUsers() {
+      const search = document.getElementById('search').value.toLowerCase();
+      const domainFilter = document.getElementById('domain-filter').value;
+      const riskFilter = document.getElementById('risk-filter').value;
+
+      let filtered = allUsers.filter(user => {
+        const matchesSearch = !search || 
+          user.email.toLowerCase().includes(search) || 
+          user.name.toLowerCase().includes(search);
+        
+        const matchesDomain = !domainFilter || user.domain_type === domainFilter;
+        
+        let matchesRisk = true;
+        if (riskFilter === 'low') matchesRisk = user.risk_score < 40;
+        else if (riskFilter === 'medium') matchesRisk = user.risk_score >= 40 && user.risk_score < 70;
+        else if (riskFilter === 'high') matchesRisk = user.risk_score >= 70;
+
+        return matchesSearch && matchesDomain && matchesRisk;
+      });
+
+      renderUsers(filtered, currentTab);
+    }
+
+    async function viewUser(userId) {
+      const modal = document.getElementById('user-modal');
+      const modalContent = document.getElementById('modal-content');
+      modalContent.innerHTML = '<div class="loading"><div class="spinner"></div> Loading...</div>';
+      modal.classList.add('show');
+
+      try {
+        const response = await fetch(`${API_URL}/api/admin/user/${userId}`, {
+          headers: { 'Authorization': `Bearer ${adminToken}` }
+        });
+        const data = await response.json();
+        const user = data.user;
+        const logs = data.logs || [];
+
+        const riskClass = user.risk_score < 40 ? 'risk-low' : user.risk_score < 70 ? 'risk-medium' : 'risk-high';
+
+        let html = `
+          <div class="detail-row"><div class="detail-label">Email</div><div class="detail-value">${user.email}</div></div>
+          <div class="detail-row"><div class="detail-label">Name</div><div class="detail-value">${user.name}</div></div>
+          <div class="detail-row"><div class="detail-label">Status</div><div class="detail-value">${user.status}</div></div>
+          <div class="detail-row"><div class="detail-label">Domain</div><div class="detail-value">${user.domain}</div></div>
+          <div class="detail-row"><div class="detail-label">Domain Type</div><div class="detail-value">${user.domain_type}</div></div>
+          <div class="detail-row"><div class="detail-label">Risk Score</div><div class="detail-value"><span class="risk-badge ${riskClass}">${user.risk_score}</span></div></div>
+          <div class="detail-row"><div class="detail-label">Agency</div><div class="detail-value">${user.agency || '-'}</div></div>
+          <div class="detail-row"><div class="detail-label">Reason</div><div class="detail-value">${user.reason || '-'}</div></div>
+          <div class="detail-row"><div class="detail-label">IP Address</div><div class="detail-value">${user.ip_address || '-'}</div></div>
+          <div class="detail-row"><div class="detail-label">Location</div><div class="detail-value">${user.geolocation || '-'}</div></div>
+          <div class="detail-row"><div class="detail-label">User Agent</div><div class="detail-value" style="word-break:break-all;font-size:0.75rem">${user.user_agent || '-'}</div></div>
+          <div class="detail-row"><div class="detail-label">Created</div><div class="detail-value">${new Date(user.created_at).toLocaleString()}</div></div>
+          ${user.approved_at ? `<div class="detail-row"><div class="detail-label">Approved</div><div class="detail-value">${new Date(user.approved_at).toLocaleString()} by ${user.approved_by}</div></div>` : ''}
+          ${user.last_login ? `<div class="detail-row"><div class="detail-label">Last Login</div><div class="detail-value">${new Date(user.last_login).toLocaleString()}</div></div>` : ''}
+        `;
+
+        if (user.status === 'pending') {
+          html += `
+            <div style="margin-top:1.5rem;display:flex;gap:1rem">
+              <button class="btn btn-approve" onclick="approveUser(${user.id});closeModal()">Approve User</button>
+              <button class="btn btn-deny" onclick="denyUser(${user.id});closeModal()">Deny User</button>
+            </div>
+          `;
+        }
+
+        if (logs.length > 0) {
+          html += '<div class="audit-log"><h3>Activity Log</h3>';
+          logs.slice(0, 10).forEach(log => {
+            html += `
+              <div class="log-entry">
+                <span class="action">${log.action}</span>
+                ${log.details ? `<br><small style="color:#9CA3AF">${log.details}</small>` : ''}
+                <br><span class="time">${new Date(log.created_at).toLocaleString()}</span>
+              </div>
+            `;
+          });
+          html += '</div>';
+        }
+
+        modalContent.innerHTML = html;
+      } catch (err) {
+        modalContent.innerHTML = '<div class="empty-state">Failed to load user details</div>';
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('user-modal').classList.remove('show');
+    }
+
+    async function approveUser(userId) {
+      try {
+        const response = await fetch(`${API_URL}/api/admin/approve/${userId}`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${adminToken}` }
+        });
+        if (response.ok) {
+          loadStats();
+          loadUsers(currentTab);
+        }
+      } catch (err) {
+        alert('Failed to approve user');
+      }
+    }
+
+    async function denyUser(userId) {
+      try {
+        const response = await fetch(`${API_URL}/api/admin/deny/${userId}`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${adminToken}` }
+        });
+        if (response.ok) {
+          loadStats();
+          loadUsers(currentTab);
+        }
+      } catch (err) {
+        alert('Failed to deny user');
+      }
+    }
+
+    async function addDomain() {
+      const domain = document.getElementById('new-domain').value.trim();
+      if (!domain) return;
+
+      try {
+        const response = await fetch(`${API_URL}/api/admin/whitelist`, {
+          method: 'POST',
+          headers: { 
+            'Authorization': `Bearer ${adminToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ domain })
+        });
+        if (response.ok) {
+          document.getElementById('new-domain').value = '';
+          loadWhitelist();
+        } else {
+          const data = await response.json();
+          alert(data.detail || 'Failed to add domain');
+        }
+      } catch (err) {
+        alert('Failed to add domain');
+      }
+    }
+
+    async function removeDomain(domain) {
+      if (!confirm(`Remove ${domain} from whitelist?`)) return;
+
+      try {
+        const response = await fetch(`${API_URL}/api/admin/whitelist/${encodeURIComponent(domain)}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${adminToken}` }
+        });
+        if (response.ok) {
+          loadWhitelist();
+        }
+      } catch (err) {
+        alert('Failed to remove domain');
+      }
+    }
+
+    // Close modal on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+  </script>
+</body>
+</html>
