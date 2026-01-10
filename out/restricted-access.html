@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Restricted Access | G3TI</title>
+  <meta name="description" content="G3TI Restricted Access Gateway - Request access to protected intelligence pages"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      background: #050505;
+      color: white;
+      font-family: system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      background-image: 
+        linear-gradient(rgba(11, 133, 229, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(11, 133, 229, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
+    
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background: rgba(5, 5, 5, 0.95);
+      border-bottom: 1px solid rgba(11, 133, 229, 0.2);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: white;
+    }
+    
+    .logo-box {
+      background: linear-gradient(135deg, #0B85E5, #12F6C8);
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 1.25rem;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+    
+    .nav-links a {
+      color: #9CA3AF;
+      text-decoration: none;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: color 0.3s;
+    }
+    
+    .nav-links a:hover {
+      color: #12F6C8;
+    }
+    
+    main {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    /* Warning Banner */
+    .warning-banner {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.05));
+      border: 2px solid #EF4444;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      animation: pulseWarning 3s ease-in-out infinite;
+    }
+    
+    @keyframes pulseWarning {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+      50% { box-shadow: 0 0 30px rgba(239, 68, 68, 0.3); }
+    }
+    
+    .warning-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    
+    .warning-title {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: #EF4444;
+      margin-bottom: 1rem;
+      font-family: monospace;
+      letter-spacing: 0.1em;
+    }
+    
+    .warning-text {
+      color: #D1D5DB;
+      line-height: 1.8;
+      font-size: 1rem;
+    }
+    
+    /* Form Section */
+    .form-section {
+      background: #0A0A0C;
+      border: 1px solid rgba(11, 133, 229, 0.2);
+      border-radius: 12px;
+      padding: 2rem;
+    }
+    
+    .form-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .form-header h2 {
+      font-size: 1.5rem;
+      color: #12F6C8;
+      margin-bottom: 0.5rem;
+      font-family: monospace;
+    }
+    
+    .form-header p {
+      color: #9CA3AF;
+      font-size: 0.9rem;
+    }
+    
+    .access-form {
+      display: grid;
+      gap: 1.5rem;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .form-group label {
+      color: #12F6C8;
+      font-size: 0.85rem;
+      font-family: monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      background: rgba(5, 5, 5, 0.8);
+      border: 1px solid rgba(11, 133, 229, 0.3);
+      border-radius: 8px;
+      padding: 0.875rem 1rem;
+      color: white;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #12F6C8;
+      box-shadow: 0 0 15px rgba(18, 246, 200, 0.2);
+    }
+    
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: #6B7280;
+    }
+    
+    .form-group textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    
+    .submit-btn {
+      background: linear-gradient(135deg, #0B85E5, #12F6C8);
+      border: none;
+      border-radius: 8px;
+      padding: 1rem 2rem;
+      color: #050505;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+    }
+    
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(18, 246, 200, 0.3);
+    }
+    
+    .approval-notice {
+      background: rgba(11, 133, 229, 0.1);
+      border: 1px solid rgba(11, 133, 229, 0.3);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 1.5rem;
+      text-align: center;
+    }
+    
+    .approval-notice p {
+      color: #0B85E5;
+      font-size: 0.85rem;
+      font-family: monospace;
+    }
+    
+    /* Footer */
+    footer {
+      border-top: 1px solid rgba(11, 133, 229, 0.2);
+      padding: 2rem;
+      text-align: center;
+      background: rgba(5, 5, 5, 0.95);
+      margin-top: 4rem;
+    }
+    
+    footer p {
+      color: #6B7280;
+      font-size: 0.875rem;
+    }
+    
+    footer a {
+      color: #0B85E5;
+      text-decoration: none;
+    }
+    
+    footer a:hover {
+      color: #12F6C8;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      main { padding: 1rem; }
+      .warning-banner { padding: 1.5rem; }
+      .form-section { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/" class="logo">
+      <div class="logo-box">G3</div>
+      <div>
+        <div style="font-weight: 600; font-size: 1rem;">G3TI</div>
+        <div style="font-size: 0.75rem; color: #9CA3AF; font-family: monospace;">D.I.E. SYSTEM</div>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/enterprise.html">Enterprise</a>
+      <a href="/products.html">Products</a>
+      <a href="/news-intelligence.html">News & Intelligence</a>
+      <a href="/compliance.html">Compliance</a>
+      <a href="/contact.html">Contact</a>
+    </div>
+  </nav>
+  
+  <main>
+    <!-- Warning Banner -->
+    <div class="warning-banner">
+      <span class="warning-icon">&#9888;&#65039;</span>
+      <h1 class="warning-title">RESTRICTED ACCESS</h1>
+      <p class="warning-text">
+        This page contains protected intelligence intended only for verified Government and Law Enforcement personnel.<br/>
+        Unauthorized access is prohibited. All requests require approval from G3TI.
+      </p>
+    </div>
+    
+    <!-- Access Request Form -->
+    <div class="form-section">
+      <div class="form-header">
+        <h2>REQUEST ACCESS</h2>
+        <p>Complete the form below to request access to restricted intelligence pages.</p>
+      </div>
+      
+      <form class="access-form" action="https://formsubmit.co/info@global3technology.com" method="POST">
+        <input type="hidden" name="_subject" value="G3TI Restricted Access Request">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_next" value="https://autonomous-intelligence-website-gf2egppg.devinapps.com/access-request-submitted.html">
+        
+        <div class="form-group">
+          <label for="name">Full Name *</label>
+          <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="agency">Agency / Organization *</label>
+          <input type="text" id="agency" name="agency" placeholder="e.g., FBI, DHS, Local Police Department" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="title">Title / Position *</label>
+          <input type="text" id="title" name="title" placeholder="e.g., Special Agent, Detective, Analyst" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Official Email Address *</label>
+          <input type="email" id="email" name="email" placeholder="your.name@agency.gov" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="reason">Reason for Access Request *</label>
+          <textarea id="reason" name="reason" placeholder="Please describe why you need access to G3TI restricted intelligence pages..." required></textarea>
+        </div>
+        
+        <button type="submit" class="submit-btn">Submit Access Request</button>
+        
+        <div class="approval-notice">
+          <p>All access requests require manual approval by G3TI personnel.<br/>You will be contacted at your official email address within 24-48 hours.</p>
+        </div>
+      </form>
+    </div>
+  </main>
+  
+  <footer>
+    <p>&copy; 2026 Global 3 Technology & Intelligence. All rights reserved.</p>
+    <p style="margin-top: 0.5rem;"><a href="/">&larr; Return to Home</a></p>
+  </footer>
+</body>
+</html>
