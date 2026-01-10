@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Law Enforcement Access Authorization | G3TI</title>
+  <meta name="description" content="G3TI Law Enforcement Access Authorization - Enter your authorization code"/>
+  <script src="/js/config.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      background: #050505;
+      color: white;
+      font-family: system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-image: 
+        linear-gradient(rgba(11, 133, 229, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(11, 133, 229, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
+    
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background: rgba(5, 5, 5, 0.95);
+      border-bottom: 1px solid rgba(11, 133, 229, 0.2);
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: white;
+    }
+    
+    .logo-box {
+      background: linear-gradient(135deg, #0B85E5, #12F6C8);
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 1.25rem;
+    }
+    
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    
+    .auth-container {
+      background: #0A0A0C;
+      border: 1px solid rgba(11, 133, 229, 0.3);
+      border-radius: 12px;
+      padding: 3rem;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+    }
+    
+    .auth-badge {
+      display: inline-block;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid #EF4444;
+      padding: 0.5rem 1.5rem;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.75rem;
+      color: #EF4444;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.1em;
+    }
+    
+    .auth-container h1 {
+      font-size: 1.75rem;
+      color: #12F6C8;
+      margin-bottom: 0.5rem;
+      font-family: monospace;
+    }
+    
+    .auth-container p {
+      color: #9CA3AF;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+    
+    .passcode-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .passcode-input {
+      background: rgba(5, 5, 5, 0.8);
+      border: 2px solid rgba(11, 133, 229, 0.3);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      color: white;
+      font-size: 1.25rem;
+      font-family: monospace;
+      text-align: center;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+    }
+    
+    .passcode-input:focus {
+      outline: none;
+      border-color: #12F6C8;
+      box-shadow: 0 0 20px rgba(18, 246, 200, 0.2);
+    }
+    
+    .passcode-input::placeholder {
+      color: #6B7280;
+      letter-spacing: 0.1em;
+    }
+    
+    .submit-btn {
+      background: linear-gradient(135deg, #0B85E5, #12F6C8);
+      border: none;
+      border-radius: 8px;
+      padding: 1rem 2rem;
+      color: #050505;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(18, 246, 200, 0.3);
+    }
+    
+    .error-message {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid #EF4444;
+      border-radius: 8px;
+      padding: 1rem;
+      color: #EF4444;
+      font-family: monospace;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+      display: none;
+    }
+    
+    .error-message.show {
+      display: block;
+      animation: shake 0.5s ease-in-out;
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 2rem;
+      color: #9CA3AF;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.3s;
+    }
+    
+    .back-link:hover {
+      color: #12F6C8;
+    }
+    
+    footer {
+      border-top: 1px solid rgba(11, 133, 229, 0.2);
+      padding: 2rem;
+      text-align: center;
+      background: rgba(5, 5, 5, 0.95);
+    }
+    
+    footer p {
+      color: #6B7280;
+      font-size: 0.875rem;
+    }
+    
+    /* Hidden content container */
+    #protected-content {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/" class="logo">
+      <div class="logo-box">G3</div>
+      <div>
+        <div style="font-weight: 600; font-size: 1rem;">G3TI</div>
+        <div style="font-size: 0.75rem; color: #9CA3AF; font-family: monospace;">D.I.E. SYSTEM</div>
+      </div>
+    </a>
+  </nav>
+  
+  <main>
+    <div class="auth-container" id="auth-screen">
+      <div class="auth-badge">LAW ENFORCEMENT CLEARANCE REQUIRED</div>
+      <h1>AUTHORIZATION CODE</h1>
+      <p>Enter your G3TI Law Enforcement authorization code to access protected intelligence content.</p>
+      
+      <form class="passcode-form" onsubmit="return verifyAccess(event)">
+        <input type="text" class="passcode-input" id="passcode" placeholder="ENTER CODE" autocomplete="off" required>
+        <button type="submit" class="submit-btn">Verify Authorization</button>
+      </form>
+      
+      <div class="error-message" id="error-msg">
+        ACCESS DENIED - Invalid authorization code. Please verify your code and try again.
+      </div>
+      
+      <a href="/restricted-access.html" class="back-link">&larr; Request Access</a>
+    </div>
+    
+    <div id="protected-content"></div>
+  </main>
+  
+  <footer>
+    <p>&copy; 2026 Global 3 Technology & Intelligence. All rights reserved.</p>
+  </footer>
+  
+  <script>
+    function verifyAccess(event) {
+      event.preventDefault();
+      const code = document.getElementById('passcode').value.trim().toUpperCase();
+      const errorMsg = document.getElementById('error-msg');
+      
+      if (verifyPasscode('le', code)) {
+        // Access granted - redirect to actual law enforcement page with bypass
+        sessionStorage.setItem('g3ti_le_auth', 'true');
+        window.location.href = '/law-enforcement.html?auth=verified';
+      } else {
+        // Access denied
+        errorMsg.classList.add('show');
+        document.getElementById('passcode').value = '';
+        setTimeout(() => {
+          errorMsg.classList.remove('show');
+        }, 3000);
+      }
+      return false;
+    }
+  </script>
+</body>
+</html>
