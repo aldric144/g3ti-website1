@@ -1,3 +1,4 @@
+<!-- ADMIN OVERRIDE ENABLED -->
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
@@ -5,6 +6,7 @@
 (function() {
   var API_URL = 'https://app-wjugbohz.fly.dev';
   var token = localStorage.getItem('g3ti_token');
+  var isAdminOverride = localStorage.getItem('g3ti_admin_override') === 'true';
   
   if (!token) {
     document.write('<div id="restriction-overlay" style="position:fixed;inset:0;background:#050505;z-index:99999;display:flex;align-items:center;justify-content:center;"><div style="background:#0A0A0C;border:2px solid #EF4444;border-radius:12px;padding:3rem;max-width:600px;text-align:center;margin:1rem;"><div style="font-size:3rem;margin-bottom:1rem;">&#9888;&#65039;</div><h1 style="color:#EF4444;font-size:1.5rem;font-family:monospace;margin-bottom:1rem;">RESTRICTED ACCESS</h1><p style="color:#D1D5DB;line-height:1.8;margin-bottom:2rem;">This page contains law enforcement intelligence. Authentication required.</p><a href="/restricted-access.html?return=/law-enforcement.html" style="display:inline-block;background:linear-gradient(135deg,#0B85E5,#12F6C8);color:#050505;text-decoration:none;padding:1rem 2rem;border-radius:8px;font-weight:700;font-family:monospace;text-transform:uppercase;letter-spacing:0.05em;">Login / Request Access</a></div></div>');
@@ -18,8 +20,41 @@
       var data = JSON.parse(xhr.responseText);
       if (!data.authenticated || !data.has_access) {
         localStorage.removeItem('g3ti_token');
+        localStorage.removeItem('g3ti_admin_override');
         document.write('<div id="restriction-overlay" style="position:fixed;inset:0;background:#050505;z-index:99999;display:flex;align-items:center;justify-content:center;"><div style="background:#0A0A0C;border:2px solid #EF4444;border-radius:12px;padding:3rem;max-width:600px;text-align:center;margin:1rem;"><div style="font-size:3rem;margin-bottom:1rem;">&#9888;&#65039;</div><h1 style="color:#EF4444;font-size:1.5rem;font-family:monospace;margin-bottom:1rem;">ACCESS DENIED</h1><p style="color:#D1D5DB;line-height:1.8;margin-bottom:2rem;">Your session has expired or you do not have access. Please log in again.</p><a href="/restricted-access.html?return=/law-enforcement.html" style="display:inline-block;background:linear-gradient(135deg,#0B85E5,#12F6C8);color:#050505;text-decoration:none;padding:1rem 2rem;border-radius:8px;font-weight:700;font-family:monospace;text-transform:uppercase;letter-spacing:0.05em;">Login / Request Access</a></div></div>');
         window.stop();
+      }
+      // Check for admin override and show badge
+      if (data.admin_override || isAdminOverride) {
+        window.g3tiAdminOverride = true;
+        // Create badge using window.onload and setInterval to handle React hydration
+        window.addEventListener('load', function() {
+          function createAdminBadge() {
+            if (document.getElementById('admin-override-badge')) return true;
+            if (!document.body) return false;
+            var badge = document.createElement('div');
+            badge.id = 'admin-override-badge';
+            badge.innerHTML = 'ADMIN MODE ACTIVE';
+            badge.style.cssText = 'position:fixed;top:10px;right:10px;z-index:99999;background:linear-gradient(135deg,#EF4444,#DC2626);color:#fff;padding:8px 16px;border-radius:4px;font-family:monospace;font-size:12px;font-weight:700;letter-spacing:0.1em;box-shadow:0 4px 12px rgba(239,68,68,0.4);animation:pulse 2s infinite;';
+            if (!document.getElementById('admin-badge-style')) {
+              var style = document.createElement('style');
+              style.id = 'admin-badge-style';
+              style.textContent = '@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.7}}';
+              document.head.appendChild(style);
+            }
+            document.body.appendChild(badge);
+            return true;
+          }
+          // Use setInterval to continuously check and re-create badge if removed by React
+          var checkCount = 0;
+          var interval = setInterval(function() {
+            createAdminBadge();
+            checkCount++;
+            if (checkCount > 30 || document.getElementById('admin-override-badge')) {
+              clearInterval(interval);
+            }
+          }, 200);
+        });
       }
     } catch(e) {
       document.write('<div id="restriction-overlay" style="position:fixed;inset:0;background:#050505;z-index:99999;display:flex;align-items:center;justify-content:center;"><div style="background:#0A0A0C;border:2px solid #EF4444;border-radius:12px;padding:3rem;max-width:600px;text-align:center;margin:1rem;"><div style="font-size:3rem;margin-bottom:1rem;">&#9888;&#65039;</div><h1 style="color:#EF4444;font-size:1.5rem;font-family:monospace;margin-bottom:1rem;">CONNECTION ERROR</h1><p style="color:#D1D5DB;line-height:1.8;margin-bottom:2rem;">Unable to verify authentication. Please try again.</p><a href="/restricted-access.html?return=/law-enforcement.html" style="display:inline-block;background:linear-gradient(135deg,#0B85E5,#12F6C8);color:#050505;text-decoration:none;padding:1rem 2rem;border-radius:8px;font-weight:700;font-family:monospace;text-transform:uppercase;letter-spacing:0.05em;">Login / Request Access</a></div></div>');
@@ -774,5 +809,34 @@
     <p>&copy; 2026 Global 3 Technology &amp; Intelligence. All rights reserved.</p>
     <p style="margin-top: 0.5rem;"><a href="/">&larr; Return to Home</a></p>
   </footer>
+<script>
+(function() {
+  function showAdminBadge() {
+    if (window.g3tiAdminOverride || localStorage.getItem('g3ti_admin_override') === 'true') {
+      if (document.getElementById('admin-override-badge')) return;
+      if (!document.body) return;
+      var badge = document.createElement('div');
+      badge.id = 'admin-override-badge';
+      badge.innerHTML = 'ADMIN MODE ACTIVE';
+      badge.style.cssText = 'position:fixed;top:10px;right:10px;z-index:99999;background:linear-gradient(135deg,#EF4444,#DC2626);color:#fff;padding:8px 16px;border-radius:4px;font-family:monospace;font-size:12px;font-weight:700;letter-spacing:0.1em;box-shadow:0 4px 12px rgba(239,68,68,0.4);animation:pulse 2s infinite;';
+      if (!document.getElementById('admin-badge-style')) {
+        var style = document.createElement('style');
+        style.id = 'admin-badge-style';
+        style.textContent = '@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.7}}';
+        document.head.appendChild(style);
+      }
+      document.body.appendChild(badge);
+    }
+  }
+  var checkCount = 0;
+  var interval = setInterval(function() {
+    showAdminBadge();
+    checkCount++;
+    if (checkCount > 20 || document.getElementById('admin-override-badge')) {
+      clearInterval(interval);
+    }
+  }, 250);
+})();
+</script>
 </body>
 </html>
