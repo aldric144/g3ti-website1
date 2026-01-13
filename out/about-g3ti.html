@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About G3TI | Global 3 Technology & Intelligence</title>
+  <link rel="stylesheet" href="/_next/static/css/b66dc0aad55d4a42.css">
+  <style>
+    body { background: #050505; color: white; font-family: system-ui, -apple-system, sans-serif; }
+    .dark-grid-bg { 
+      background: linear-gradient(to bottom, #050505, #0D0D0F);
+      min-height: 100vh;
+    }
+    .nav-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      background: rgba(5, 5, 5, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(18, 246, 200, 0.1);
+    }
+    .nav-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+    .nav-logo-box {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #12F6C8, #0B85E5);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: black;
+    }
+    .nav-logo-text {
+      color: #12F6C8;
+      font-weight: bold;
+      font-size: 1.125rem;
+    }
+    .nav-logo-sub {
+      color: #6b7280;
+      font-size: 0.75rem;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+    .nav-link {
+      color: #9ca3af;
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: color 0.3s;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: #12F6C8;
+    }
+    .hero-section {
+      padding: 8rem 1rem 4rem;
+      text-align: center;
+      max-width: 1024px;
+      margin: 0 auto;
+    }
+    .page-title {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: white;
+      margin-bottom: 1rem;
+      letter-spacing: 0.05em;
+    }
+    .page-title span {
+      color: #12F6C8;
+    }
+    .subtitle {
+      font-size: 1.25rem;
+      color: #12F6C8;
+      font-style: italic;
+    }
+    .content-section {
+      max-width: 900px;
+      margin: 0 auto 3rem;
+      padding: 2rem;
+      background: rgba(13, 13, 15, 0.8);
+      border: 1px solid rgba(18, 246, 200, 0.1);
+      border-radius: 12px;
+    }
+    .section-header {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #12F6C8;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .content-section p {
+      color: #d1d5db;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+    .content-section h3 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: white;
+      margin: 1.5rem 0 0.75rem;
+    }
+    .content-section ul {
+      list-style: none;
+      padding: 0;
+    }
+    .content-section ul li {
+      color: #d1d5db;
+      padding: 0.5rem 0;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+    .content-section ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 8px;
+      height: 8px;
+      background: #12F6C8;
+      border-radius: 50%;
+    }
+    footer {
+      background: #050505;
+      border-top: 1px solid rgba(18, 246, 200, 0.1);
+      padding: 4rem 1rem 2rem;
+      margin-top: 4rem;
+    }
+    .footer-grid {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+    .footer-col h4 {
+      color: #12F6C8;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      letter-spacing: 0.1em;
+    }
+    .footer-col ul {
+      list-style: none;
+      padding: 0;
+    }
+    .footer-col ul li {
+      margin-bottom: 0.75rem;
+    }
+    .footer-col ul li a {
+      color: #9ca3af;
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: color 0.3s;
+    }
+    .footer-col ul li a:hover {
+      color: #12F6C8;
+    }
+    .footer-bottom {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(18, 246, 200, 0.1);
+    }
+    .footer-bottom p {
+      color: #6b7280;
+      font-size: 0.875rem;
+    }
+    .footer-tagline {
+      color: rgba(18, 246, 200, 0.6);
+      font-style: italic;
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .page-title { font-size: 1.75rem; }
+      .hero-section { padding-top: 6rem; }
+    }
+  </style>
+</head>
+
+<body class="dark-grid-bg">
+  <header>
+    <nav class="nav-container">
+      <div class="nav-inner">
+        <a href="/" class="nav-logo">
+          <div class="nav-logo-box">G3</div>
+          <div>
+            <div class="nav-logo-text">G3TI</div>
+            <div class="nav-logo-sub">D.I.E. SYSTEM</div>
+          </div>
+        </a>
+        <div class="nav-links">
+          <a href="/" class="nav-link">Home</a>
+          <a href="/about-g3ti.html" class="nav-link active">About</a>
+          <a href="/government.html" class="nav-link">Government</a>
+          <a href="/enterprise.html" class="nav-link">Enterprise</a>
+          <a href="/products.html" class="nav-link">Products</a>
+          <a href="/news-intelligence.html" class="nav-link">News & Intelligence</a>
+          <a href="/compliance.html" class="nav-link">Compliance</a>
+          <a href="/law-enforcement.html" class="nav-link">Law Enforcement</a>
+          <a href="/contact.html" class="nav-link">Contact</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <section class="hero-section">
+    <h1 class="page-title">ABOUT <span>GLOBAL 3 TECHNOLOGY & INTELLIGENCE</span>™</h1>
+    <p class="subtitle">The World's First Autonomous Protective Intelligence Network™</p>
+  </section>
+
+  <section class="content-section">
+    <h2 class="section-header">Our Mission</h2>
+    <p>
+      G3TI is a mission-driven, veteran-led intelligence organization built for an era defined 
+      by AI-driven deception, synthetic identity fraud, and machine-speed threats. We protect 
+      people, agencies, and organizations from attacks the world is not prepared for—by detecting, 
+      predicting, and neutralizing danger before it reaches its target.
+    </p>
+  </section>
+
+  <section class="content-section">
+    <h2 class="section-header">What We Do</h2>
+    <p>
+      We design autonomous protective-intelligence ecosystems that detect deception, predict 
+      emerging threats, neutralize scams and fraud, protect identities and families, support 
+      investigations, and strengthen national and community security.
+    </p>
+  </section>
+
+  <section class="content-section">
+    <h2 class="section-header">The Intelligence Core</h2>
+
+    <h3>Emotional-Forensic AI™</h3>
+    <p>
+      A proprietary behavioral analytics engine identifying deception signals, intent markers, 
+      and high-risk emotional signatures across digital interactions.
+    </p>
+
+    <h3>Machine-Speed Threat Fusion</h3>
+    <p>
+      Threat analysis performed in milliseconds, enabling proactive interception of harmful 
+      activity.
+    </p>
+
+    <h3>Dual-Use Intelligence Architecture</h3>
+    <p>
+      Developed for government and law enforcement, with parallel protective applications 
+      for civilians, victims, and enterprises.
+    </p>
+
+    <h3>Autonomous Protective Intelligence™</h3>
+    <p>
+      A self-learning, continuously adapting intelligence network. Only capability is disclosed—
+      never internal architecture.
+    </p>
+  </section>
+
+  <section class="content-section">
+    <h2 class="section-header">Who We Serve</h2>
+    <ul>
+      <li>Federal agencies</li>
+      <li>State & local law enforcement</li>
+      <li>Homeland security units</li>
+      <li>Crisis response & investigative teams</li>
+      <li>Enterprises facing advanced threats</li>
+      <li>Families & vulnerable populations</li>
+    </ul>
+  </section>
+
+  <section class="content-section">
+    <h2 class="section-header">Why G3TI Is Different</h2>
+    <p>
+      We build intelligence systems that protect life proactively — detecting, predicting, and 
+      neutralizing threats before they reach their target. We stand at the intersection of 
+      national security, behavioral intelligence, forensic analysis, and AI/ML systems, 
+      leading the future of protective intelligence.
+    </p>
+  </section>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>GLOBAL 3 TECHNOLOGY & INTELLIGENCE™</h4>
+        <p style="color: #9ca3af; font-size: 0.875rem; line-height: 1.6;">
+          Autonomous Protective Intelligence for the AI Threat Era<br><br>
+          Veteran-Owned Technology & Intelligence Company<br>
+          Palm Beach, FL<br>
+          Phone: 1-888-603-7845
+        </p>
+      </div>
+      <div class="footer-col">
+        <h4>NAVIGATION</h4>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/about-g3ti.html">About</a></li>
+          <li><a href="/about.html">Origin Dossier</a></li>
+          <li><a href="/government.html">Government & Law Enforcement</a></li>
+          <li><a href="/enterprise.html">Enterprise</a></li>
+          <li><a href="/news-intelligence.html">News & Intelligence</a></li>
+          <li><a href="/law-enforcement.html">Law Enforcement</a></li>
+          <li><a href="/contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>LEGAL</h4>
+        <ul>
+          <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+          <li><a href="/terms-of-use.html">Terms of Use</a></li>
+          <li><a href="/security-notice.html">Security Notice</a></li>
+          <li><a href="/intellectual-property.html">Intellectual Property</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>COMPLIANCE</h4>
+        <ul>
+          <li><a href="/ai-governance.html">AI Governance</a></li>
+          <li><a href="/responsible-ai.html">Responsible AI</a></li>
+          <li><a href="/data-governance.html">Data Governance</a></li>
+          <li><a href="/zero-trust.html">Zero Trust</a></li>
+          <li><a href="/cjis-nist-readiness.html">CJIS/NIST Readiness</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-tagline">"Autonomous Intelligence Engine Active — Monitoring Global Threat Surfaces in Real Time."</p>
+      <p>© 2026 Global 3 Technology & Intelligence™. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>
