@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Solutions | Global 3 Technology & Intelligence</title>
+  <title>Law Enforcement Solutions | Global 3 Technology & Intelligence</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: #050505; color: white; font-family: system-ui, -apple-system, sans-serif; min-height: 100vh; overflow-x: hidden; }
@@ -19,8 +19,13 @@
     .nav-links { display: flex; gap: 0; align-items: center; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
     .nav-link { color: #9ca3af; text-decoration: none; font-size: 0.75rem; font-weight: 500; transition: color 0.3s; white-space: nowrap; padding: 0.5rem 0.6rem; }
     .nav-link:hover, .nav-link.active { color: #12F6C8; }
-
-    /* Cinematic Hero Animation Styles */
+    .nav-dropdown { position: relative; }
+    .nav-dropdown-trigger { cursor: pointer; display: flex; align-items: center; gap: 0.25rem; }
+    .nav-dropdown-trigger::after { content: '▼'; font-size: 0.5rem; margin-left: 0.25rem; }
+    .nav-dropdown-menu { position: absolute; top: 100%; left: 0; background: rgba(5, 5, 5, 0.98); border: 1px solid rgba(18, 246, 200, 0.2); border-radius: 8px; padding: 0.5rem 0; min-width: 160px; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.3s; z-index: 200; }
+    .nav-dropdown:hover .nav-dropdown-menu, .nav-dropdown.active .nav-dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+    .nav-dropdown-menu a { display: block; padding: 0.75rem 1rem; color: #9ca3af; text-decoration: none; font-size: 0.75rem; transition: all 0.3s; }
+    .nav-dropdown-menu a:hover { color: #12F6C8; background: rgba(18, 246, 200, 0.05); }
     .hero { position: relative; padding: 10rem 1rem 4rem; text-align: center; overflow: hidden; min-height: 70vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
     .hero-parallax-grid { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(18, 246, 200, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(18, 246, 200, 0.03) 1px, transparent 1px); background-size: 50px 50px; animation: parallax-drift 20s linear infinite; z-index: -1; }
     @keyframes parallax-drift { 0% { transform: translateY(0); } 100% { transform: translateY(50px); } }
@@ -37,16 +42,16 @@
     .corner-glow.bottom-left { bottom: 20px; left: 20px; border-left: 2px solid rgba(18, 246, 200, 0.3); border-bottom: 2px solid rgba(18, 246, 200, 0.3); }
     .corner-glow.bottom-right { bottom: 20px; right: 20px; border-right: 2px solid rgba(18, 246, 200, 0.3); border-bottom: 2px solid rgba(18, 246, 200, 0.3); }
     .hero:hover .corner-glow { border-color: rgba(18, 246, 200, 0.6); box-shadow: 0 0 20px rgba(18, 246, 200, 0.3); }
-        .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent); z-index: -1; }
-        .hero-badge { display: inline-block; padding: 0.5rem 1.5rem; background: rgba(18, 246, 200, 0.1); border: 1px solid rgba(18, 246, 200, 0.3); border-radius: 50px; color: #12F6C8; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1.5rem; opacity: 0; animation: fadeIn 0.6s ease-out 0.2s forwards; position: relative; z-index: 2; }
-        .hero-title { font-size: 2.5rem; font-weight: bold; color: white; margin-bottom: 1rem; letter-spacing: 0.05em; opacity: 0; animation: fadeIn 0.6s ease-out 0.4s forwards; position: relative; z-index: 2; }
-        .hero-title span { color: #12F6C8; text-shadow: 0 0 30px rgba(18, 246, 200, 0.3); }
-        .hero-subtitle { font-size: 1.125rem; color: #d1d5db; max-width: 900px; margin: 0 auto; line-height: 1.8; opacity: 0; animation: fadeSlideUp 0.6s ease-out 0.6s forwards; position: relative; z-index: 2; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent); z-index: -1; }
+    .hero-badge { display: inline-block; padding: 0.5rem 1.5rem; background: rgba(18, 246, 200, 0.1); border: 1px solid rgba(18, 246, 200, 0.3); border-radius: 50px; color: #12F6C8; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1.5rem; opacity: 0; animation: fadeIn 0.6s ease-out 0.2s forwards; position: relative; z-index: 2; }
+    .hero-title { font-size: 2.5rem; font-weight: bold; color: white; margin-bottom: 1rem; letter-spacing: 0.05em; opacity: 0; animation: fadeIn 0.6s ease-out 0.4s forwards; position: relative; z-index: 2; }
+    .hero-title span { color: #12F6C8; text-shadow: 0 0 30px rgba(18, 246, 200, 0.3); }
+    .hero-subtitle { font-size: 1.125rem; color: #d1d5db; max-width: 900px; margin: 0 auto; line-height: 1.8; opacity: 0; animation: fadeSlideUp 0.6s ease-out 0.6s forwards; position: relative; z-index: 2; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
     .content-wrapper { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem 4rem; position: relative; z-index: 1; }
-    .section { margin-bottom: 4rem; padding: 3rem; background: rgba(13, 13, 15, 0.8); border: 1px solid rgba(18, 246, 200, 0.1); border-radius: 12px; position: relative; opacity: 0; transform: translateY(30px); animation: fadeUp 0.5s ease-out forwards; }
+    .section { margin-bottom: 3rem; padding: 3rem; background: rgba(13, 13, 15, 0.8); border: 1px solid rgba(18, 246, 200, 0.1); border-radius: 12px; position: relative; opacity: 0; transform: translateY(30px); animation: fadeUp 0.5s ease-out forwards; }
     .section::before, .section::after { content: ''; position: absolute; width: 20px; height: 20px; border-color: #12F6C8; border-style: solid; }
     .section::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; border-radius: 12px 0 0 0; }
     .section::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; border-radius: 0 0 12px 0; }
@@ -54,24 +59,17 @@
     .section:nth-child(2) { animation-delay: 0.3s; }
     .section:nth-child(3) { animation-delay: 0.4s; }
     .section:nth-child(4) { animation-delay: 0.5s; }
-    .section:nth-child(5) { animation-delay: 0.6s; }
     .section-header { font-size: 1.5rem; font-weight: bold; color: #12F6C8; margin-bottom: 1.5rem; letter-spacing: 0.1em; text-transform: uppercase; }
-    .section-subheader { font-size: 1rem; color: #9ca3af; margin-bottom: 2rem; line-height: 1.6; }
     .section p { color: #d1d5db; line-height: 1.8; margin-bottom: 1rem; }
-    .highlight-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0; }
-    .highlight-item { background: rgba(18, 246, 200, 0.05); border: 1px solid rgba(18, 246, 200, 0.15); border-radius: 8px; padding: 1rem 1.25rem; color: #d1d5db; font-size: 0.9rem; display: flex; align-items: center; gap: 0.75rem; transition: all 0.3s; }
+    .highlight-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 2rem 0; }
+    .highlight-item { background: rgba(18, 246, 200, 0.05); border: 1px solid rgba(18, 246, 200, 0.15); border-radius: 8px; padding: 1.25rem; color: #d1d5db; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 0.75rem; transition: all 0.3s; }
     .highlight-item:hover { border-color: rgba(18, 246, 200, 0.4); background: rgba(18, 246, 200, 0.08); }
-    .highlight-item::before { content: ''; width: 8px; height: 8px; background: #12F6C8; border-radius: 50%; box-shadow: 0 0 10px rgba(18, 246, 200, 0.5); flex-shrink: 0; }
+    .highlight-item::before { content: ''; width: 8px; height: 8px; background: #12F6C8; border-radius: 50%; box-shadow: 0 0 10px rgba(18, 246, 200, 0.5); flex-shrink: 0; margin-top: 0.4rem; }
     .cta-button { display: inline-block; padding: 1rem 2rem; background: linear-gradient(135deg, rgba(18, 246, 200, 0.15), rgba(11, 133, 229, 0.15)); border: 1px solid rgba(18, 246, 200, 0.4); border-radius: 8px; color: #12F6C8; text-decoration: none; font-size: 0.875rem; font-weight: 600; letter-spacing: 0.05em; transition: all 0.3s; margin-top: 1.5rem; }
     .cta-button:hover { background: linear-gradient(135deg, rgba(18, 246, 200, 0.25), rgba(11, 133, 229, 0.25)); border-color: #12F6C8; box-shadow: 0 0 30px rgba(18, 246, 200, 0.2); transform: translateY(-2px); }
     .cta-button-primary { background: linear-gradient(135deg, #12F6C8, #0B85E5); color: #050505; border: none; font-weight: 700; }
     .cta-button-primary:hover { box-shadow: 0 0 40px rgba(18, 246, 200, 0.4); }
-    .advantage-list { list-style: none; padding: 0; margin: 2rem 0; }
-    .advantage-list li { color: #d1d5db; padding: 1rem 0 1rem 2rem; position: relative; border-bottom: 1px solid rgba(18, 246, 200, 0.1); font-size: 1rem; }
-    .advantage-list li:last-child { border-bottom: none; }
-    .advantage-list li::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 10px; height: 10px; background: linear-gradient(135deg, #12F6C8, #0B85E5); border-radius: 50%; box-shadow: 0 0 15px rgba(18, 246, 200, 0.5); }
-    .section-icon { font-size: 2.5rem; margin-bottom: 1rem; }
-    .divider { height: 2px; background: linear-gradient(to right, transparent, rgba(18, 246, 200, 0.3), transparent); margin: 2rem 0; }
+    .section-icon { font-size: 3rem; margin-bottom: 1rem; }
     footer { background: #050505; border-top: 1px solid rgba(18, 246, 200, 0.1); padding: 4rem 1rem 2rem; position: relative; z-index: 1; }
     .footer-grid { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 3rem; margin-bottom: 3rem; }
     .footer-col h4 { color: #12F6C8; font-size: 0.875rem; font-weight: 600; margin-bottom: 1rem; letter-spacing: 0.1em; }
@@ -81,22 +79,7 @@
     .footer-col ul li a:hover { color: #12F6C8; }
     .footer-bottom { text-align: center; padding-top: 2rem; border-top: 1px solid rgba(18, 246, 200, 0.1); }
     .footer-bottom p { color: #6b7280; font-size: 0.875rem; }
-    @media (max-width: 768px) { 
-      .nav-links { display: none; } 
-      .hero-title { font-size: 1.75rem; } 
-      .hero { padding-top: 7rem; } 
-      .section { padding: 1.5rem; } 
-      .highlight-grid { grid-template-columns: 1fr; }
-    }
-  
-    .nav-dropdown { position: relative; }
-    .nav-dropdown-trigger { cursor: pointer; display: flex; align-items: center; gap: 0.25rem; }
-    .nav-dropdown-trigger::after { content: '▼'; font-size: 0.5rem; margin-left: 0.25rem; }
-    .nav-dropdown-menu { position: absolute; top: 100%; left: 0; background: rgba(5, 5, 5, 0.98); border: 1px solid rgba(18, 246, 200, 0.2); border-radius: 8px; padding: 0.5rem 0; min-width: 160px; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.3s; z-index: 200; }
-    .nav-dropdown:hover .nav-dropdown-menu, .nav-dropdown.active .nav-dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
-    .nav-dropdown-menu a { display: block; padding: 0.75rem 1rem; color: #9ca3af; text-decoration: none; font-size: 0.75rem; transition: all 0.3s; }
-    .nav-dropdown-menu a:hover { color: #12F6C8; background: rgba(18, 246, 200, 0.05); }
-
+    @media (max-width: 768px) { .nav-links { max-width: 70vw; } .nav-link { font-size: 0.65rem; padding: 0.4rem 0.4rem; } .hero-title { font-size: 1.75rem; } .hero { padding-top: 7rem; } .section { padding: 1.5rem; } .highlight-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -134,7 +117,6 @@
   </header>
 
   <section class="hero">
-    <!-- Cinematic Hero Animation Elements -->
     <div class="hero-parallax-grid"></div>
     <div class="particles-container" id="particles"></div>
     <div class="sweep-beam"></div>
@@ -143,68 +125,57 @@
     <div class="corner-glow bottom-left"></div>
     <div class="corner-glow bottom-right"></div>
     
-    <!-- Hero Content -->
-    <div class="hero-badge">Autonomous Protective Intelligence Network</div>
-    <h1 class="hero-title">SOLUTIONS<br><span>One Autonomous Intelligence System. Three Mission Domains.</span></h1>
-    <p class="hero-subtitle">G3TI delivers government-grade protective intelligence for law enforcement, enterprises, and national-security missions — all powered by a unified Autonomous Protective Intelligence Network.</p>
+    <div class="hero-badge">Law Enforcement Intelligence Solutions</div>
+    <h1 class="hero-title">LAW ENFORCEMENT SOLUTIONS<br><span>Real-Time Threat Intelligence for Public Safety</span></h1>
+    <p class="hero-subtitle">G3TI empowers police departments, investigators, fusion centers, and specialized units with autonomous threat detection, predictive risk analysis, and Emotional-Forensic AI — protecting officers and communities at machine speed.</p>
   </section>
 
   <div class="content-wrapper">
-    <!-- Section 2: Government -->
-    <div class="section">
-      <div class="section-icon">🏛️</div>
-      <h2 class="section-header">Government Solutions</h2>
-      <p class="section-subheader">Mission-critical intelligence infrastructure for federal, state, and local government operations.</p>
-      <div class="highlight-grid">
-        <div class="highlight-item">Federal agencies</div>
-        <div class="highlight-item">State Homeland Security</div>
-        <div class="highlight-item">Emergency Management</div>
-        <div class="highlight-item">Intelligence units</div>
-      </div>
-      <a href="/solutions-government.html" class="cta-button">View Government Solutions →</a>
-    </div>
-
-    <!-- Section 3: Law Enforcement -->
     <div class="section">
       <div class="section-icon">🛡️</div>
-      <h2 class="section-header">Law Enforcement Solutions</h2>
-      <p class="section-subheader">Real-time threat intelligence and investigative support for agencies at every level.</p>
-      <div class="highlight-grid">
-        <div class="highlight-item">Police departments</div>
-        <div class="highlight-item">Real-Time Crime Centers</div>
-        <div class="highlight-item">DV units</div>
-        <div class="highlight-item">Fusion centers</div>
-        <div class="highlight-item">Investigators</div>
-      </div>
-      <a href="/solutions-law-enforcement.html" class="cta-button">View Law Enforcement Solutions →</a>
+      <h2 class="section-header">Mission Context</h2>
+      <p>Law enforcement agencies face escalating threats from AI-powered fraud, deepfake impersonation, coordinated criminal networks, and domestic violence situations that can escalate to lethal outcomes in minutes. Traditional investigative tools cannot process the volume and velocity of modern threat data.</p>
+      <p>G3TI's Autonomous Protective Intelligence Network provides real-time threat detection and behavioral analysis that helps officers identify danger before it materializes — protecting both law enforcement personnel and the communities they serve.</p>
     </div>
 
-    <!-- Section 4: Enterprise -->
     <div class="section">
-      <div class="section-icon">🏢</div>
-      <h2 class="section-header">Enterprise Solutions</h2>
-      <p class="section-subheader">Autonomous threat detection and identity protection for organizations facing AI-era risks.</p>
+      <h2 class="section-header">Core Capabilities</h2>
       <div class="highlight-grid">
-        <div class="highlight-item">Corporate security</div>
-        <div class="highlight-item">AI fraud prevention</div>
-        <div class="highlight-item">Insider-risk intelligence</div>
-        <div class="highlight-item">Identity integrity monitoring</div>
+        <div class="highlight-item">Real-time threat monitoring across social media, dark web, and open-source intelligence</div>
+        <div class="highlight-item">Emotional-Forensic AI for behavioral threat assessment and escalation prediction</div>
+        <div class="highlight-item">Deepfake and synthetic identity detection for fraud investigations</div>
+        <div class="highlight-item">Domestic violence risk scoring and lethality assessment tools</div>
+        <div class="highlight-item">Investigative intelligence fusion connecting disparate data sources</div>
+        <div class="highlight-item">Real-Time Crime Center integration with autonomous alert generation</div>
+        <div class="highlight-item">CJIS-compliant data handling and secure evidence management</div>
+        <div class="highlight-item">Officer safety alerts with predictive threat correlation</div>
       </div>
-      <a href="/solutions-enterprise.html" class="cta-button">View Enterprise Solutions →</a>
     </div>
 
-    <!-- Section 5: Unified Intelligence Advantage -->
+    <div class="section">
+      <h2 class="section-header">Who Benefits</h2>
+      <div class="highlight-grid">
+        <div class="highlight-item">Police departments seeking advanced threat intelligence capabilities</div>
+        <div class="highlight-item">Real-Time Crime Centers requiring autonomous monitoring systems</div>
+        <div class="highlight-item">Domestic Violence units needing lethality assessment tools</div>
+        <div class="highlight-item">Fusion centers coordinating multi-agency intelligence sharing</div>
+        <div class="highlight-item">Investigators working complex fraud and identity theft cases</div>
+        <div class="highlight-item">Crisis response teams requiring real-time situational awareness</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-header">Key Intelligence Functions</h2>
+      <p><strong style="color: #12F6C8;">Threat Surface Monitoring:</strong> Continuous scanning of threat vectors targeting officers, facilities, and community members with automated alert generation.</p>
+      <p><strong style="color: #12F6C8;">Behavioral Threat Assessment:</strong> Emotional-Forensic AI analyzes communication patterns, social media activity, and behavioral indicators to predict escalation risk.</p>
+      <p><strong style="color: #12F6C8;">DV Lethality Scoring:</strong> Machine-learning models assess domestic violence situations for escalation potential and recommend protective interventions.</p>
+      <p><strong style="color: #12F6C8;">Investigative Intelligence:</strong> Automated correlation of evidence, suspects, and patterns across cases to accelerate investigations.</p>
+      <p><strong style="color: #12F6C8;">Deception Detection:</strong> AI-powered identification of deepfakes, synthetic identities, and fraudulent communications in criminal investigations.</p>
+    </div>
+
     <div class="section" style="text-align: center;">
-      <h2 class="section-header">Unified Intelligence Advantage</h2>
-      <p class="section-subheader">What sets G3TI apart from legacy security and intelligence providers.</p>
-      <ul class="advantage-list" style="max-width: 600px; margin: 2rem auto;">
-        <li>Autonomous Protective Intelligence</li>
-        <li>Emotional-Forensic AI</li>
-        <li>Machine-speed deception detection</li>
-        <li>Multi-domain threat fusion</li>
-        <li>Predictive risk pipelines</li>
-      </ul>
-      <div class="divider"></div>
+      <h2 class="section-header">Request Agency Briefing</h2>
+      <p>Schedule a briefing to learn how G3TI's Autonomous Protective Intelligence Network can enhance your agency's threat detection and officer safety capabilities.</p>
       <a href="/contact.html" class="cta-button cta-button-primary">Request Intelligence Briefing</a>
     </div>
   </div>
@@ -218,31 +189,30 @@
       <div class="footer-col">
         <h4>SOLUTIONS</h4>
         <ul>
-          <li><a href="/government.html">Government</a></li>
-          <li><a href="/enterprise.html">Enterprise</a></li>
-          <li><a href="/law-enforcement.html">Law Enforcement</a></li>
+          <li><a href="/solutions.html">Solutions Overview</a></li>
+          <li><a href="/solutions-government.html">Government Solutions</a></li>
+          <li><a href="/solutions-law-enforcement.html">Law Enforcement Solutions</a></li>
+          <li><a href="/solutions-enterprise.html">Enterprise Solutions</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>ABOUT</h4>
         <ul>
           <li><a href="/about-g3ti.html">About G3TI</a></li>
+          <li><a href="/manifesto.html">The G3TI Manifesto</a></li>
           <li><a href="/intelligence-engine.html">Intelligence Engine</a></li>
           <li><a href="/why-g3ti.html">Why G3TI</a></li>
-          <li><a href="/manifesto.html">The G3TI Manifesto</a></li>
           <li><a href="/products.html">Products</a></li>
-          <li><a href="/news-intelligence.html">News & Intelligence</a></li>
           <li><a href="/contact.html">Contact</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>COMPLIANCE</h4>
         <ul>
-          <li><a href="/ai-governance.html">AI Governance</a></li>
-          <li><a href="/responsible-ai.html">Responsible AI</a></li>
-          <li><a href="/data-governance.html">Data Governance</a></li>
-          <li><a href="/zero-trust.html">Zero Trust</a></li>
-          <li><a href="/cjis-nist-readiness.html">CJIS/NIST Readiness</a></li>
+          <li><a href="/compliance/ai-governance.html">AI Governance</a></li>
+          <li><a href="/compliance/responsible-ai.html">Responsible AI</a></li>
+          <li><a href="/compliance/zero-trust.html">Zero Trust</a></li>
+          <li><a href="/compliance/fedramp-alignment.html">FedRAMP Alignment</a></li>
         </ul>
       </div>
     </div>
@@ -252,13 +222,10 @@
     </div>
   </footer>
 
-  <!-- Cinematic Hero Animation Script -->
   <script>
     (function() {
       var container = document.getElementById('particles');
       if (!container) return;
-      
-      // Create floating particles
       for (var i = 0; i < 20; i++) {
         var particle = document.createElement('div');
         particle.className = 'particle';
@@ -268,8 +235,6 @@
         particle.style.animationDuration = (10 + Math.random() * 10) + 's';
         container.appendChild(particle);
       }
-      
-      // Create glowing intelligence nodes
       for (var j = 0; j < 8; j++) {
         var node = document.createElement('div');
         node.className = 'node';
@@ -278,7 +243,6 @@
         node.style.animationDelay = Math.random() * 3 + 's';
         container.appendChild(node);
       }
-    
       document.querySelectorAll('.nav-dropdown-trigger').forEach(function(trigger) {
         trigger.addEventListener('click', function() {
           this.parentElement.classList.toggle('active');

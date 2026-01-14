@@ -56,6 +56,15 @@
     .footer-bottom { text-align: center; padding-top: 2rem; border-top: 1px solid rgba(18, 246, 200, 0.1); }
     .footer-bottom p { color: #6b7280; font-size: 0.875rem; }
     @media (max-width: 768px) { .nav-links { max-width: 70vw; } .hero-title { font-size: 2rem; } .hero { padding-top: 7rem; } .section { padding: 1.5rem; } }
+  
+    .nav-dropdown { position: relative; }
+    .nav-dropdown-trigger { cursor: pointer; display: flex; align-items: center; gap: 0.25rem; }
+    .nav-dropdown-trigger::after { content: '▼'; font-size: 0.5rem; margin-left: 0.25rem; }
+    .nav-dropdown-menu { position: absolute; top: 100%; left: 0; background: rgba(5, 5, 5, 0.98); border: 1px solid rgba(18, 246, 200, 0.2); border-radius: 8px; padding: 0.5rem 0; min-width: 160px; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.3s; z-index: 200; }
+    .nav-dropdown:hover .nav-dropdown-menu, .nav-dropdown.active .nav-dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+    .nav-dropdown-menu a { display: block; padding: 0.75rem 1rem; color: #9ca3af; text-decoration: none; font-size: 0.75rem; transition: all 0.3s; }
+    .nav-dropdown-menu a:hover { color: #12F6C8; background: rgba(18, 246, 200, 0.05); }
+
   </style>
 </head>
 <body>
@@ -70,7 +79,13 @@
         </a>
         <div class="nav-links">
           <a href="/" class="nav-link">Home</a>
-          <a href="/about-g3ti.html" class="nav-link">About</a>
+          <div class="nav-dropdown">
+            <span class="nav-link nav-dropdown-trigger">About</span>
+            <div class="nav-dropdown-menu">
+              <a href="/about-g3ti.html">About G3TI</a>
+              <a href="/manifesto.html">Manifesto</a>
+            </div>
+          </div>
           <a href="/intelligence-engine.html" class="nav-link">Intelligence Engine</a>
           <a href="/why-g3ti.html" class="nav-link active">Why G3TI</a>
           <a href="/solutions.html" class="nav-link">Solutions</a>
@@ -172,5 +187,17 @@
       <p>&copy; 2026 Global 3 Technology &amp; Intelligence. All rights reserved.</p>
     </div>
   </footer>
+
+  <script>
+    (function() {
+
+      document.querySelectorAll('.nav-dropdown-trigger').forEach(function(trigger) {
+        trigger.addEventListener('click', function() {
+          this.parentElement.classList.toggle('active');
+        });
+      });
+
+    })();
+  </script>
 </body>
 </html>
