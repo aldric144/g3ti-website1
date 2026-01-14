@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About G3TI | Global 3 Technology & Intelligence</title>
+  <title>Inside the Intelligence Engine | G3TI</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: #050505; color: white; font-family: system-ui, -apple-system, sans-serif; min-height: 100vh; overflow-x: hidden; }
@@ -20,30 +20,20 @@
     .nav-link { color: #9ca3af; text-decoration: none; font-size: 0.8rem; transition: color 0.3s; white-space: nowrap; }
     .nav-link:hover, .nav-link.active { color: #12F6C8; }
     .hero { position: relative; padding: 10rem 1rem 4rem; text-align: center; overflow: hidden; }
-    .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent); z-index: -1; }
     .hero-title { font-size: 2.5rem; font-weight: bold; color: #12F6C8; margin-bottom: 1rem; letter-spacing: 0.1em; text-shadow: 0 0 30px rgba(18, 246, 200, 0.3); animation: fadeUp 0.8s ease-out; }
-    .hero-subtitle { font-size: 1.125rem; color: #d1d5db; max-width: 900px; margin: 0 auto; line-height: 1.8; animation: fadeUp 0.8s ease-out 0.1s both; }
+    .hero-subtitle { font-size: 1.125rem; color: #d1d5db; max-width: 800px; margin: 0 auto; line-height: 1.8; animation: fadeUp 0.8s ease-out 0.1s both; }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
     .content-wrapper { max-width: 1000px; margin: 0 auto; padding: 0 1.5rem 4rem; position: relative; z-index: 1; }
     .section { margin-bottom: 3rem; padding: 2.5rem; background: rgba(13, 13, 15, 0.8); border: 1px solid rgba(18, 246, 200, 0.1); border-radius: 12px; border-left: 4px solid #12F6C8; opacity: 0; transform: translateY(30px); animation: fadeUp 0.5s ease-out forwards; }
-    .section:nth-child(1) { animation-delay: 0.2s; }
-    .section:nth-child(2) { animation-delay: 0.3s; }
-    .section:nth-child(3) { animation-delay: 0.4s; }
-    .section:nth-child(4) { animation-delay: 0.5s; }
-    .section:nth-child(5) { animation-delay: 0.6s; }
+    .section.pulse-border { border: 2px solid #12F6C8; animation: fadeUp 0.5s ease-out forwards, pulse-glow 2s ease-in-out infinite; }
+    @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 10px rgba(18, 246, 200, 0.3); } 50% { box-shadow: 0 0 25px rgba(18, 246, 200, 0.6); } }
     .section-header { font-size: 1.5rem; font-weight: bold; color: #12F6C8; margin-bottom: 1.5rem; letter-spacing: 0.1em; text-transform: uppercase; position: relative; padding-left: 1rem; }
     .section-header::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: linear-gradient(to bottom, #12F6C8, #0B85E5); box-shadow: 0 0 10px rgba(18, 246, 200, 0.5); }
     .section p { color: #d1d5db; line-height: 1.8; margin-bottom: 1rem; }
     .section ul { list-style: none; padding: 0; margin: 1rem 0; }
     .section ul li { color: #d1d5db; padding: 0.5rem 0 0.5rem 1.5rem; position: relative; }
     .section ul li::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 8px; height: 8px; background: #12F6C8; border-radius: 50%; box-shadow: 0 0 8px rgba(18, 246, 200, 0.5); }
-    .subsection-title { font-size: 1.125rem; font-weight: 600; color: white; margin: 1.5rem 0 0.75rem; }
     .divider { height: 2px; background: linear-gradient(to right, transparent, #12F6C8, transparent); margin: 3rem 0; opacity: 0.5; }
-    .highlight { color: #12F6C8; text-shadow: 0 0 10px rgba(18, 246, 200, 0.3); }
-    .numbered-item { display: flex; gap: 1rem; margin-bottom: 1.5rem; }
-    .numbered-item .number { color: #12F6C8; font-weight: bold; font-size: 1.25rem; min-width: 2rem; }
-    .numbered-item .content { flex: 1; }
-    .numbered-item .content strong { color: white; }
     footer { background: #050505; border-top: 1px solid rgba(18, 246, 200, 0.1); padding: 4rem 1rem 2rem; position: relative; z-index: 1; }
     .footer-grid { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 3rem; margin-bottom: 3rem; }
     .footer-col h4 { color: #12F6C8; font-size: 0.875rem; font-weight: 600; margin-bottom: 1rem; letter-spacing: 0.1em; }
@@ -68,13 +58,12 @@
         </a>
         <div class="nav-links">
           <a href="/" class="nav-link">Home</a>
-          <a href="/about-g3ti.html" class="nav-link active">About</a>
-          <a href="/intelligence-engine.html" class="nav-link">Intelligence Engine</a>
+          <a href="/about-g3ti.html" class="nav-link">About</a>
+          <a href="/intelligence-engine.html" class="nav-link active">Intelligence Engine</a>
           <a href="/why-g3ti.html" class="nav-link">Why G3TI</a>
           <a href="/government.html" class="nav-link">Government</a>
           <a href="/enterprise.html" class="nav-link">Enterprise</a>
           <a href="/products.html" class="nav-link">Products</a>
-          <a href="/news-intelligence.html" class="nav-link">News & Intelligence</a>
           <a href="/law-enforcement.html" class="nav-link">Law Enforcement</a>
           <a href="/contact.html" class="nav-link">Contact</a>
         </div>
@@ -82,70 +71,76 @@
     </nav>
   </header>
   <section class="hero">
-    <h1 class="hero-title">ABOUT G3TI</h1>
-    <p class="hero-subtitle">Global 3 Technology & Intelligence (G3TI) is a next-generation intelligence company building autonomous protective systems for governments, law enforcement, enterprises, and civilians facing AI-driven threats, synthetic deception, and machine-speed attacks.</p>
+    <h1 class="hero-title">INSIDE THE INTELLIGENCE ENGINE</h1>
+    <p class="hero-subtitle">A High-Level Breakdown (No Trade Secrets)</p>
   </section>
   <div class="content-wrapper">
     <div class="section">
-      <h2 class="section-header">What We Do</h2>
-      <p>We design, build, and deploy <span class="highlight">Autonomous Protective Intelligence</span> systems that detect, predict, and neutralize threats before they reach their target.</p>
-      <h3 class="subsection-title">Core Capabilities:</h3>
+      <h2 class="section-header">G3TI Autonomous Intelligence Engine - Overview</h2>
+      <p>A multilayered, self-evolving intelligence system that processes millions of data points across deception, behavior, identity, and digital threat vectors.</p>
+    </div>
+    <div class="divider"></div>
+    <div class="section">
+      <h2 class="section-header">1. Deception Intelligence Layer</h2>
+      <p>The first line of defense. It detects:</p>
       <ul>
-        <li>Deception detection (deepfakes, synthetic identities, AI-generated fraud)</li>
-        <li>Behavioral threat modeling (Emotional-Forensic AI)</li>
-        <li>Predictive risk intelligence</li>
-        <li>OSINT + dark data fusion</li>
-        <li>Autonomous threat triage</li>
-        <li>Machine-speed correlation</li>
-        <li>Escalation forecasting</li>
-        <li>Identity protection</li>
-        <li>Victim safety systems</li>
-        <li>Enterprise deception defense</li>
+        <li>AI-generated phishing</li>
+        <li>Deepfake impersonation</li>
+        <li>Synthetic communication anomalies</li>
+        <li>Fraud signatures</li>
+        <li>Coordinated manipulation signals</li>
       </ul>
+      <p>This layer identifies the intent behind the action - not just the action itself.</p>
     </div>
     <div class="divider"></div>
     <div class="section">
-      <h2 class="section-header">Who We Serve</h2>
-      <h3 class="subsection-title">Government</h3>
-      <p>Federal agencies, homeland security, national defense, and intelligence operations.</p>
-      <h3 class="subsection-title">Law Enforcement</h3>
-      <p>State and local police, investigators, fusion centers, crisis response units, and DV/human trafficking task forces.</p>
-      <h3 class="subsection-title">Enterprise</h3>
-      <p>Corporations, financial institutions, healthcare systems, and critical infrastructure operators.</p>
-      <h3 class="subsection-title">Civilians</h3>
-      <p>Families, victims, and individuals targeted by scams, stalking, exploitation, or identity theft.</p>
+      <h2 class="section-header">2. Behavioral Analysis Layer (Emotional-Forensic AI)</h2>
+      <p>Modeled for:</p>
+      <ul>
+        <li>Escalation prediction</li>
+        <li>Emotional volatility mapping</li>
+        <li>Crisis risk modeling</li>
+        <li>Insider threat profiling</li>
+      </ul>
+      <p>This layer understands why a threat is emerging, not just how.</p>
     </div>
     <div class="divider"></div>
     <div class="section">
-      <h2 class="section-header">Why G3TI Is Different</h2>
-      <div class="numbered-item">
-        <span class="number">1.</span>
-        <div class="content"><strong>Unified Intelligence Architecture</strong> - One system serving government, law enforcement, enterprise, and civilian sectors.</div>
-      </div>
-      <div class="numbered-item">
-        <span class="number">2.</span>
-        <div class="content"><strong>Autonomous by Design</strong> - No manual triage. No waiting. Threats are detected and flagged at machine-speed.</div>
-      </div>
-      <div class="numbered-item">
-        <span class="number">3.</span>
-        <div class="content"><strong>Built for AI-Era Threats</strong> - Deepfakes, synthetic identities, AI-generated fraud, and coordinated manipulation.</div>
-      </div>
-      <div class="numbered-item">
-        <span class="number">4.</span>
-        <div class="content"><strong>Behavioral Intelligence Core</strong> - Emotional-Forensic AI detects intent, escalation risk, and deception signals.</div>
-      </div>
-      <div class="numbered-item">
-        <span class="number">5.</span>
-        <div class="content"><strong>Protective, Not Surveillance</strong> - We protect people. We do not surveil them.</div>
-      </div>
+      <h2 class="section-header">3. OSINT + Dark Data Fusion Layer</h2>
+      <p>Aggregates:</p>
+      <ul>
+        <li>Public data</li>
+        <li>Encrypted behavioral markers</li>
+        <li>Digital footprint patterns</li>
+        <li>Human trafficking signals</li>
+        <li>Domestic violence historical vectors</li>
+      </ul>
+      <p>Fuses all sources into a single threat graph.</p>
+    </div>
+    <div class="divider"></div>
+    <div class="section pulse-border">
+      <h2 class="section-header">4. Predictive Risk Pipeline</h2>
+      <p>Forecasts:</p>
+      <ul>
+        <li>Escalation probability</li>
+        <li>Likely target</li>
+        <li>Likely timeline</li>
+        <li>Likely operational method</li>
+      </ul>
+      <p>Outputs early-stage warnings for government, law enforcement, and enterprise administrators.</p>
     </div>
     <div class="divider"></div>
     <div class="section">
-      <h2 class="section-header">The G3TI Intelligence Philosophy</h2>
-      <p>We believe the future of security is not reactive - it is predictive.</p>
-      <p>We believe intelligence should protect everyone - not just governments and corporations.</p>
-      <p>We believe AI should defend people - not deceive them.</p>
-      <p><strong class="highlight">This is Autonomous Protective Intelligence.</strong></p>
+      <h2 class="section-header">5. Autonomous Response Intelligence</h2>
+      <p>Automates:</p>
+      <ul>
+        <li>Notifications</li>
+        <li>Reports</li>
+        <li>Threat triage</li>
+        <li>Risk rankings</li>
+        <li>Correlation summaries</li>
+      </ul>
+      <p>Each sector receives its own tailored intelligence output.</p>
     </div>
   </div>
   <footer>
