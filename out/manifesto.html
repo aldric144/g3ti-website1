@@ -16,7 +16,7 @@
     .nav-logo-box { width: 40px; height: 40px; background: linear-gradient(135deg, #12F6C8, #0B85E5); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: black; }
     .nav-logo-text { color: #12F6C8; font-weight: bold; font-size: 1.125rem; }
     .nav-logo-sub { color: #6b7280; font-size: 0.75rem; }
-    .nav-links { display: flex; gap: 0; align-items: center; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .nav-links { display: flex; gap: 0; align-items: center; flex-wrap: nowrap; overflow: visible; -webkit-overflow-scrolling: touch; }
     .nav-link { color: #9ca3af; text-decoration: none; font-size: 0.75rem; font-weight: 500; transition: color 0.3s; white-space: nowrap; padding: 0.5rem 0.6rem; }
     .nav-link:hover, .nav-link.active { color: #12F6C8; }
     .hero { position: relative; padding: 10rem 1rem 4rem; text-align: center; overflow: hidden; }
@@ -51,7 +51,7 @@
     .nav-dropdown { position: relative; }
     .nav-dropdown-trigger { cursor: pointer; display: flex; align-items: center; gap: 0.25rem; }
     .nav-dropdown-trigger::after { content: '▼'; font-size: 0.5rem; margin-left: 0.25rem; }
-    .nav-dropdown-menu { position: absolute; top: 100%; left: 0; background: rgba(5, 5, 5, 0.98); border: 1px solid rgba(18, 246, 200, 0.2); border-radius: 8px; padding: 0.5rem 0; min-width: 160px; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.3s; z-index: 200; }
+    .nav-dropdown-menu { position: absolute; top: 100%; left: 0; background: rgba(5, 5, 5, 0.98); border: 1px solid rgba(18, 246, 200, 0.2); border-radius: 8px; padding: 0.5rem 0; min-width: 160px; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.3s; z-index: 9999; }
     .nav-dropdown:hover .nav-dropdown-menu, .nav-dropdown.active .nav-dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
     .nav-dropdown-menu a { display: block; padding: 0.75rem 1rem; color: #9ca3af; text-decoration: none; font-size: 0.75rem; transition: all 0.3s; }
     .nav-dropdown-menu a:hover { color: #12F6C8; background: rgba(18, 246, 200, 0.05); }
