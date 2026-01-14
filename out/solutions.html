@@ -16,25 +16,35 @@
     .nav-logo-box { width: 40px; height: 40px; background: linear-gradient(135deg, #12F6C8, #0B85E5); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: black; }
     .nav-logo-text { color: #12F6C8; font-weight: bold; font-size: 1.125rem; }
     .nav-logo-sub { color: #6b7280; font-size: 0.75rem; }
-    .nav-links { display: flex; gap: 0; align-items: center; }
-    .nav-link { color: #9ca3af; text-decoration: none; font-size: 0.8rem; font-weight: 500; transition: color 0.3s; white-space: nowrap; padding: 0.5rem 1rem; }
+    .nav-links { display: flex; gap: 0; align-items: center; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .nav-link { color: #9ca3af; text-decoration: none; font-size: 0.75rem; font-weight: 500; transition: color 0.3s; white-space: nowrap; padding: 0.5rem 0.6rem; }
     .nav-link:hover, .nav-link.active { color: #12F6C8; }
-    .nav-dropdown { position: relative; }
-    .nav-dropdown-trigger { color: #9ca3af; text-decoration: none; font-size: 0.8rem; font-weight: 500; transition: color 0.3s; white-space: nowrap; padding: 0.5rem 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.25rem; }
-    .nav-dropdown-trigger:hover, .nav-dropdown-trigger.active { color: #12F6C8; }
-    .nav-dropdown-trigger::after { content: '▼'; font-size: 0.6rem; margin-left: 0.25rem; }
-    .nav-dropdown-menu { position: absolute; top: 100%; left: 0; background: rgba(5, 5, 5, 0.98); border: 1px solid rgba(18, 246, 200, 0.2); border-radius: 8px; min-width: 180px; opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s ease; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); }
-    .nav-dropdown:hover .nav-dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
-    .nav-dropdown-menu a { display: block; padding: 0.75rem 1rem; color: #9ca3af; text-decoration: none; font-size: 0.8rem; transition: all 0.3s; border-bottom: 1px solid rgba(18, 246, 200, 0.1); }
-    .nav-dropdown-menu a:last-child { border-bottom: none; }
-    .nav-dropdown-menu a:hover { color: #12F6C8; background: rgba(18, 246, 200, 0.05); }
-    .hero { position: relative; padding: 10rem 1rem 4rem; text-align: center; overflow: hidden; }
-    .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent); z-index: -1; }
-    .hero-badge { display: inline-block; padding: 0.5rem 1.5rem; background: rgba(18, 246, 200, 0.1); border: 1px solid rgba(18, 246, 200, 0.3); border-radius: 50px; color: #12F6C8; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1.5rem; animation: fadeUp 0.8s ease-out; }
-    .hero-title { font-size: 2.5rem; font-weight: bold; color: white; margin-bottom: 1rem; letter-spacing: 0.05em; animation: fadeUp 0.8s ease-out 0.1s both; }
-    .hero-title span { color: #12F6C8; text-shadow: 0 0 30px rgba(18, 246, 200, 0.3); }
-    .hero-subtitle { font-size: 1.125rem; color: #d1d5db; max-width: 900px; margin: 0 auto; line-height: 1.8; animation: fadeUp 0.8s ease-out 0.2s both; }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Cinematic Hero Animation Styles */
+    .hero { position: relative; padding: 10rem 1rem 4rem; text-align: center; overflow: hidden; min-height: 70vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .hero-parallax-grid { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(18, 246, 200, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(18, 246, 200, 0.03) 1px, transparent 1px); background-size: 50px 50px; animation: parallax-drift 20s linear infinite; z-index: -1; }
+    @keyframes parallax-drift { 0% { transform: translateY(0); } 100% { transform: translateY(50px); } }
+    .particles-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: 0; pointer-events: none; }
+    .particle { position: absolute; width: 4px; height: 4px; background: #12F6C8; border-radius: 50%; opacity: 0.4; animation: float-particle 15s infinite ease-in-out; box-shadow: 0 0 10px rgba(18, 246, 200, 0.5); }
+    @keyframes float-particle { 0%, 100% { transform: translateY(0) translateX(0); opacity: 0.2; } 25% { transform: translateY(-30px) translateX(10px); opacity: 0.6; } 50% { transform: translateY(-50px) translateX(-10px); opacity: 0.4; } 75% { transform: translateY(-20px) translateX(15px); opacity: 0.5; } }
+    .node { position: absolute; width: 8px; height: 8px; background: radial-gradient(circle, #12F6C8 0%, transparent 70%); border-radius: 50%; animation: pulse-node 3s infinite ease-in-out; }
+    @keyframes pulse-node { 0%, 100% { transform: scale(1); opacity: 0.3; } 50% { transform: scale(1.5); opacity: 0.7; } }
+    .sweep-beam { position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent 0%, rgba(18, 246, 200, 0.08) 50%, transparent 100%); animation: sweep 8s infinite; z-index: 1; pointer-events: none; }
+    @keyframes sweep { 0% { left: -100%; } 100% { left: 200%; } }
+    .corner-glow { position: absolute; width: 100px; height: 100px; pointer-events: none; transition: opacity 0.3s, border-color 0.3s, box-shadow 0.3s; }
+    .corner-glow.top-left { top: 20px; left: 20px; border-left: 2px solid rgba(18, 246, 200, 0.3); border-top: 2px solid rgba(18, 246, 200, 0.3); }
+    .corner-glow.top-right { top: 20px; right: 20px; border-right: 2px solid rgba(18, 246, 200, 0.3); border-top: 2px solid rgba(18, 246, 200, 0.3); }
+    .corner-glow.bottom-left { bottom: 20px; left: 20px; border-left: 2px solid rgba(18, 246, 200, 0.3); border-bottom: 2px solid rgba(18, 246, 200, 0.3); }
+    .corner-glow.bottom-right { bottom: 20px; right: 20px; border-right: 2px solid rgba(18, 246, 200, 0.3); border-bottom: 2px solid rgba(18, 246, 200, 0.3); }
+    .hero:hover .corner-glow { border-color: rgba(18, 246, 200, 0.6); box-shadow: 0 0 20px rgba(18, 246, 200, 0.3); }
+        .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent); z-index: -1; }
+        .hero-badge { display: inline-block; padding: 0.5rem 1.5rem; background: rgba(18, 246, 200, 0.1); border: 1px solid rgba(18, 246, 200, 0.3); border-radius: 50px; color: #12F6C8; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1.5rem; opacity: 0; animation: fadeIn 0.6s ease-out 0.2s forwards; position: relative; z-index: 2; }
+        .hero-title { font-size: 2.5rem; font-weight: bold; color: white; margin-bottom: 1rem; letter-spacing: 0.05em; opacity: 0; animation: fadeIn 0.6s ease-out 0.4s forwards; position: relative; z-index: 2; }
+        .hero-title span { color: #12F6C8; text-shadow: 0 0 30px rgba(18, 246, 200, 0.3); }
+        .hero-subtitle { font-size: 1.125rem; color: #d1d5db; max-width: 900px; margin: 0 auto; line-height: 1.8; opacity: 0; animation: fadeSlideUp 0.6s ease-out 0.6s forwards; position: relative; z-index: 2; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
     .content-wrapper { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem 4rem; position: relative; z-index: 1; }
     .section { margin-bottom: 4rem; padding: 3rem; background: rgba(13, 13, 15, 0.8); border: 1px solid rgba(18, 246, 200, 0.1); border-radius: 12px; position: relative; opacity: 0; transform: translateY(30px); animation: fadeUp 0.5s ease-out forwards; }
     .section::before, .section::after { content: ''; position: absolute; width: 20px; height: 20px; border-color: #12F6C8; border-style: solid; }
@@ -95,17 +105,13 @@
           <a href="/about-g3ti.html" class="nav-link">About</a>
           <a href="/intelligence-engine.html" class="nav-link">Intelligence Engine</a>
           <a href="/why-g3ti.html" class="nav-link">Why G3TI</a>
-          <div class="nav-dropdown">
-            <span class="nav-dropdown-trigger active">Solutions</span>
-            <div class="nav-dropdown-menu">
-              <a href="/government.html">Government</a>
-              <a href="/enterprise.html">Enterprise</a>
-              <a href="/law-enforcement.html">Law Enforcement</a>
-            </div>
-          </div>
+          <a href="/solutions.html" class="nav-link active">Solutions</a>
+          <a href="/government.html" class="nav-link">Government</a>
+          <a href="/enterprise.html" class="nav-link">Enterprise</a>
           <a href="/products.html" class="nav-link">Products</a>
           <a href="/news-intelligence.html" class="nav-link">News & Intelligence</a>
           <a href="/compliance/ai-governance.html" class="nav-link">Compliance</a>
+          <a href="/law-enforcement.html" class="nav-link">Law Enforcement</a>
           <a href="/contact.html" class="nav-link">Contact</a>
         </div>
       </div>
@@ -113,8 +119,18 @@
   </header>
 
   <section class="hero">
-    <div class="hero-badge">Autonomous Protective Intelligence</div>
-    <h1 class="hero-title">One Autonomous Intelligence System.<br><span>Three Mission Domains.</span></h1>
+    <!-- Cinematic Hero Animation Elements -->
+    <div class="hero-parallax-grid"></div>
+    <div class="particles-container" id="particles"></div>
+    <div class="sweep-beam"></div>
+    <div class="corner-glow top-left"></div>
+    <div class="corner-glow top-right"></div>
+    <div class="corner-glow bottom-left"></div>
+    <div class="corner-glow bottom-right"></div>
+    
+    <!-- Hero Content -->
+    <div class="hero-badge">Autonomous Protective Intelligence Network</div>
+    <h1 class="hero-title">SOLUTIONS<br><span>One Autonomous Intelligence System. Three Mission Domains.</span></h1>
     <p class="hero-subtitle">G3TI delivers government-grade protective intelligence for law enforcement, enterprises, and national-security missions — all powered by a unified Autonomous Protective Intelligence Network.</p>
   </section>
 
@@ -193,12 +209,12 @@
         </ul>
       </div>
       <div class="footer-col">
-        <h4>NAVIGATION</h4>
+        <h4>ABOUT</h4>
         <ul>
-          <li><a href="/">Home</a></li>
           <li><a href="/about-g3ti.html">About G3TI</a></li>
           <li><a href="/intelligence-engine.html">Intelligence Engine</a></li>
           <li><a href="/why-g3ti.html">Why G3TI</a></li>
+          <li><a href="/manifesto.html">The G3TI Manifesto</a></li>
           <li><a href="/products.html">Products</a></li>
           <li><a href="/news-intelligence.html">News & Intelligence</a></li>
           <li><a href="/contact.html">Contact</a></li>
@@ -220,5 +236,34 @@
       <p>&copy; 2026 Global 3 Technology &amp; Intelligence. All rights reserved.</p>
     </div>
   </footer>
+
+  <!-- Cinematic Hero Animation Script -->
+  <script>
+    (function() {
+      var container = document.getElementById('particles');
+      if (!container) return;
+      
+      // Create floating particles
+      for (var i = 0; i < 20; i++) {
+        var particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 15 + 's';
+        particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+        container.appendChild(particle);
+      }
+      
+      // Create glowing intelligence nodes
+      for (var j = 0; j < 8; j++) {
+        var node = document.createElement('div');
+        node.className = 'node';
+        node.style.left = Math.random() * 100 + '%';
+        node.style.top = Math.random() * 100 + '%';
+        node.style.animationDelay = Math.random() * 3 + 's';
+        container.appendChild(node);
+      }
+    })();
+  </script>
 </body>
 </html>

