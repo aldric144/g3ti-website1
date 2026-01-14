@@ -8,5 +8,44 @@
 </head>
 <body style="background:#050505;color:#12F6C8;font-family:monospace;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;">
   <p>Redirecting to <a href="/news-intelligence.html" style="color:#0B85E5;">News &amp; Intelligence</a>...</p>
-</body>
+<script id="g3ti-navbar-injector-v2">
+(function() {
+  function injectNavbar() {
+    if (document.getElementById('g3ti-navbar')) return;
+    var navbarHTML = `<header id="g3ti-navbar" style="position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(5,5,5,0.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(18,246,200,0.1);"><nav style="max-width:1280px;margin:0 auto;padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;"><a href="/" style="display:flex;align-items:center;gap:0.75rem;text-decoration:none;"><div style="width:40px;height:40px;background:linear-gradient(135deg,#12F6C8,#0B85E5);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:bold;color:black;">G3</div><div><div style="color:#12F6C8;font-weight:bold;font-size:1.125rem;">G3TI</div><div style="color:#6b7280;font-size:0.75rem;">D.I.E. SYSTEM</div></div></a><div style="display:flex;gap:0;align-items:center;"><a href="/" style="color:#9ca3af;text-decoration:none;font-size:0.8rem;font-weight:500;padding:0.5rem 1rem;white-space:nowrap;">Home</a><a href="/about-g3ti.html" style="color:#9ca3af;text-decoration:none;font-size:0.8rem;font-weight:500;padding:0.5rem 1rem;white-space:nowrap;">About</a><a href="/intelligence-engine.html" style="color:#9ca3af;text-decoration:none;font-size:0.8rem;font-weight:500;padding:0.5rem 1rem;white-space:nowrap;">Intelligence Engine</a><a href="/why-g3ti.html" style="color:#9ca3af;text-decoration:none;font-size:0.8rem;font-weight:500;padding:0.5rem 1rem;white-space:nowrap;">Why G3TI</a><div id="solutions-dropdown" style="position:relative;"><span style="color:#9ca3af;font-size:0.8rem;font-weight:500;padding:0.5rem 1rem;cursor:pointer;display:flex;align-items:center;white-space:nowrap;">Solutions <span style="font-size:0.6rem;margin-left:0.25rem;">▼</span></span><div id="solutions-menu" style="position:absolute;top:100%;left:0;background:rgba(5,5,5,0.98);border:1px solid rgba(18,246,200,0.2);border-radius:8px;min-width:180px;opacity:0;visibility:hidden;transform:translateY(10px);transition:all 0.3s ease;box-shadow:0 10px 40px rgba(0,0,0,0.5);"><a href="/government.html" style="display:block;padding:0.75rem 1rem;color:#9ca3af;text-decoration:none;font-size:0.8rem;border-bottom:1px solid rgba(18,246,200,0.1);">Government</a><a href="/enterprise.html" style="display:block;padding:0.75rem 1rem;color:#9ca3af;text-decoration:none;font-size:0.8rem;border-bottom:1px solid rgba(18,246,200,0.1);">Enterprise</a><a href="/law-enforcement.html" style="display:block;padding:0.75rem 1rem;color:#9ca3af;text-decoration:none;font-size:0.8rem;">Law Enforcement</a></div></div><a href="/products.html" style="color:#9ca3af;text-decoration:none;font-size:0.8rem;font-weight:500;padding:0.5rem 1rem;white-space:nowrap;">Products</a><a href="/news-intelligence.html" style="color:#12F6C8;text-decoration:none;font-size:0.8rem;font-weight:500;padding:0.5rem 1rem;white-space:nowrap;">News & Intelligence</a><a href="/compliance/ai-governance.html" style="color:#9ca3af;text-decoration:none;font-size:0.8rem;font-weight:500;padding:0.5rem 1rem;white-space:nowrap;">Compliance</a><a href="/contact.html" style="color:#9ca3af;text-decoration:none;font-size:0.8rem;font-weight:500;padding:0.5rem 1rem;white-space:nowrap;">Contact</a></div></nav></header>`;
+    document.body.insertAdjacentHTML('afterbegin', navbarHTML);
+    var dropdown = document.getElementById('solutions-dropdown');
+    var menu = document.getElementById('solutions-menu');
+    if (dropdown && menu) {
+      dropdown.addEventListener('mouseenter', function() {
+        menu.style.opacity = '1';
+        menu.style.visibility = 'visible';
+        menu.style.transform = 'translateY(0)';
+      });
+      dropdown.addEventListener('mouseleave', function() {
+        menu.style.opacity = '0';
+        menu.style.visibility = 'hidden';
+        menu.style.transform = 'translateY(10px)';
+      });
+      var links = menu.querySelectorAll('a');
+      links.forEach(function(link) {
+        link.addEventListener('mouseenter', function() {
+          this.style.color = '#12F6C8';
+          this.style.background = 'rgba(18,246,200,0.05)';
+        });
+        link.addEventListener('mouseleave', function() {
+          this.style.color = '#9ca3af';
+          this.style.background = 'transparent';
+        });
+      });
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() { setTimeout(injectNavbar, 100); });
+  } else {
+    setTimeout(injectNavbar, 100);
+  }
+  window.addEventListener('load', function() { setTimeout(injectNavbar, 500); });
+})();
+</script></body>
 </html>

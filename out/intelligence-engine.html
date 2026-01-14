@@ -18,6 +18,24 @@
     .nav-logo-sub { color: #6b7280; font-size: 0.75rem; }
     .nav-links { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
     .nav-link { color: #9ca3af; text-decoration: none; font-size: 0.8rem; transition: color 0.3s; white-space: nowrap; }
+     { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(5, 5, 5, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(18, 246, 200, 0.1); }
+    .nav-inner { max-width: 1280px; margin: 0 auto; padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+    .nav-logo-box { width: 40px; height: 40px; background: linear-gradient(135deg, #12F6C8, #0B85E5); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: black; }
+    .nav-logo-text { color: #12F6C8; font-weight: bold; font-size: 1.125rem; }
+    .nav-logo-sub { color: #6b7280; font-size: 0.75rem; }
+    .nav-links { display: flex; gap: 0; align-items: center; }
+    .nav-link { color: #9ca3af; text-decoration: none; font-size: 0.8rem; font-weight: 500; transition: color 0.3s; white-space: nowrap; padding: 0.5rem 1rem; }
+    .nav-link:hover, .nav-link.active { color: #12F6C8; }
+    .nav-dropdown { position: relative; }
+    .nav-dropdown-trigger { color: #9ca3af; text-decoration: none; font-size: 0.8rem; font-weight: 500; transition: color 0.3s; white-space: nowrap; padding: 0.5rem 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.25rem; }
+    .nav-dropdown-trigger:hover, .nav-dropdown-trigger.active { color: #12F6C8; }
+    .nav-dropdown-trigger::after { content: '▼'; font-size: 0.6rem; margin-left: 0.25rem; }
+    .nav-dropdown-menu { position: absolute; top: 100%; left: 0; background: rgba(5, 5, 5, 0.98); border: 1px solid rgba(18, 246, 200, 0.2); border-radius: 8px; min-width: 180px; opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s ease; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); }
+    .nav-dropdown:hover .nav-dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+    .nav-dropdown-menu a { display: block; padding: 0.75rem 1rem; color: #9ca3af; text-decoration: none; font-size: 0.8rem; transition: all 0.3s; border-bottom: 1px solid rgba(18, 246, 200, 0.1); }
+    .nav-dropdown-menu a:last-child { border-bottom: none; }
+    .nav-dropdown-menu a:hover { color: #12F6C8; background: rgba(18, 246, 200, 0.05); }
     .nav-link:hover, .nav-link.active { color: #12F6C8; }
     .hero { position: relative; padding: 10rem 1rem 4rem; text-align: center; overflow: hidden; }
     .hero-title { font-size: 2.5rem; font-weight: bold; color: #12F6C8; margin-bottom: 1rem; letter-spacing: 0.1em; text-shadow: 0 0 30px rgba(18, 246, 200, 0.3); animation: fadeUp 0.8s ease-out; }
@@ -57,16 +75,22 @@
           <div><div class="nav-logo-text">G3TI</div><div class="nav-logo-sub">D.I.E. SYSTEM</div></div>
         </a>
         <div class="nav-links">
-          <a href="/" class="nav-link">Home</a>
-          <a href="/about-g3ti.html" class="nav-link">About</a>
+          <a href="/" class="nav-link ">Home</a>
+          <a href="/about-g3ti.html" class="nav-link ">About</a>
           <a href="/intelligence-engine.html" class="nav-link active">Intelligence Engine</a>
-          <a href="/why-g3ti.html" class="nav-link">Why G3TI</a>
-          <a href="/government.html" class="nav-link">Government</a>
-          <a href="/enterprise.html" class="nav-link">Enterprise</a>
-          <a href="/products.html" class="nav-link">Products</a>
-          <a href="/news-intelligence.html" class="nav-link">News & Intelligence</a>
-          <a href="/law-enforcement.html" class="nav-link">Law Enforcement</a>
-          <a href="/contact.html" class="nav-link">Contact</a>
+          <a href="/why-g3ti.html" class="nav-link ">Why G3TI</a>
+          <div class="nav-dropdown">
+            <span class="nav-dropdown-trigger ">Solutions</span>
+            <div class="nav-dropdown-menu">
+              <a href="/government.html">Government</a>
+              <a href="/enterprise.html">Enterprise</a>
+              <a href="/law-enforcement.html">Law Enforcement</a>
+            </div>
+          </div>
+          <a href="/products.html" class="nav-link ">Products</a>
+          <a href="/news-intelligence.html" class="nav-link ">News & Intelligence</a>
+          <a href="/compliance/ai-governance.html" class="nav-link ">Compliance</a>
+          <a href="/contact.html" class="nav-link ">Contact</a>
         </div>
       </div>
     </nav>
