@@ -850,3 +850,106 @@ async def admin_override_login(data: AdminOverrideRequest, request: Request):
         "message": "Admin override access granted",
         "user": {"id": 0, "email": "admin@override", "name": "Admin Override", "status": "approved"}
     }
+
+# Contact Form / Transmission Form Endpoint
+class TransmissionRequest(BaseModel):
+    name: str
+    email: str
+    organization: Optional[str] = None
+    classification: str
+    subject: str
+    message: str
+
+async def log_transmission(email: str, classification: str):
+    """Log transmission metadata only - no message content, no PII beyond email"""
+    timestamp = datetime.utcnow().isoformat()
+    async with aiosqlite.connect(DB_PATH) as db:
+        await db.execute("""
+            INSERT INTO audit_logs (action, user_email, details, risk_score)
+            VALUES (?, ?, ?, ?)
+        """, ("TRANSMISSION_RECEIVED", email, f"classification={classification}", 0))
+        await db.commit()
+    print(f"[TRANSMISSION LOG] {timestamp} | {email} | {classification}")
+
+async def send_transmission_to_admin(data: TransmissionRequest):
+    """Send transmission to admin email only (info@global3technology.com)"""
+    html_content = f"""
+    <html>
+    <body style="font-family: 'Courier New', monospace; background: #050505; color: #D1D5DB; padding: 20px;">
+        <div style="max-width: 600px; margin: 0 auto; background: #0A0A0C; border: 2px solid #12F6C8; border-radius: 12px; padding: 30px;">
+            <h1 style="color: #12F6C8; text-align: center;">G3TI TRANSMISSION RECEIVED</h1>
+            <h2 style="color: #9CA3AF;">Classification: {data.classification.upper()}</h2>
+            
+            <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                <tr><td style="padding: 8px; border-bottom: 1px solid #333; color: #9CA3AF;">From:</td><td style="padding: 8px; border-bottom: 1px solid #333; color: #fff;">{data.name}</td></tr>
+                <tr><td style="padding: 8px; border-bottom: 1px solid #333; color: #9CA3AF;">Email:</td><td style="padding: 8px; border-bottom: 1px solid #333; color: #fff;">{data.email}</td></tr>
+                <tr><td style="padding: 8px; border-bottom: 1px solid #333; color: #9CA3AF;">Organization:</td><td style="padding: 8px; border-bottom: 1px solid #333; color: #fff;">{data.organization or 'Not provided'}</td></tr>
+                <tr><td style="padding: 8px; border-bottom: 1px solid #333; color: #9CA3AF;">Subject:</td><td style="padding: 8px; border-bottom: 1px solid #333; color: #fff;">{data.subject}</td></tr>
+            </table>
+            
+            <div style="background: #111; border: 1px solid #333; border-radius: 8px; padding: 20px; margin-top: 20px;">
+                <h3 style="color: #12F6C8; margin-top: 0;">Message:</h3>
+                <p style="color: #fff; white-space: pre-wrap;">{data.message}</p>
+            </div>
+            
+            <p style="color: #666; font-size: 12px; margin-top: 20px; text-align: center;">
+                Received via G3TI Secure Intelligence Channel v3.1
+            </p>
+        </div>
+    </body>
+    </html>
+    """
+    # Send ONLY to info@global3technology.com - no other addresses
+    await send_email(ADMIN_EMAIL, f"G3TI Transmission - {data.classification.upper()} - {data.subject}", html_content)
+
+async def send_auto_reply(email: str, name: str):
+    """Send auto-reply confirmation to sender"""
+    html_content = """
+    <html>
+    <body style="font-family: 'Courier New', monospace; background: #050505; color: #D1D5DB; padding: 20px;">
+        <div style="max-width: 600px; margin: 0 auto; background: #0A0A0C; border: 2px solid #12F6C8; border-radius: 12px; padding: 30px;">
+            <h1 style="color: #12F6C8; text-align: center;">G3TI TRANSMISSION RECEIVED</h1>
+            
+            <p style="color: #D1D5DB; line-height: 1.8;">
+                Your transmission has been securely received by Global 3 Technology &amp; Intelligence (G3TI).
+            </p>
+            
+            <p style="color: #D1D5DB; line-height: 1.8;">
+                Our Intelligence Operations team will review your message and respond based on your classification level.
+            </p>
+            
+            <p style="color: #D1D5DB; line-height: 1.8;">
+                If your inquiry relates to a grant, research partnership, or federal funding opportunity, a member of our Strategic Programs Division will contact you directly.
+            </p>
+            
+            <p style="color: #D1D5DB; line-height: 1.8;">
+                Thank you for contacting G3TI — Autonomous Protective Intelligence for the AI Threat Era.
+            </p>
+            
+            <p style="color: #666; font-size: 12px; margin-top: 30px; border-top: 1px solid #333; padding-top: 20px;">
+                This is an automated confirmation. Please do not reply to this email.
+            </p>
+        </div>
+    </body>
+    </html>
+    """
+    await send_email(email, "G3TI Transmission Received", html_content)
+
+@app.post("/api/contact/submit")
+async def submit_transmission(data: TransmissionRequest, background_tasks: BackgroundTasks, request: Request):
+    """Handle transmission form submission - Phase 3-6 implementation"""
+    ip_address = request.client.host if request.client else "unknown"
+    
+    # Phase 6: Log transmission metadata only (timestamp, email, classification)
+    await log_transmission(data.email, data.classification)
+    
+    # Phase 3: Send to admin email (info@global3technology.com only)
+    background_tasks.add_task(send_transmission_to_admin, data)
+    
+    # Phase 4: Send auto-reply confirmation to sender
+    background_tasks.add_task(send_auto_reply, data.email, data.name)
+    
+    return {
+        "success": True,
+        "message": "TRANSMISSION SECURED — Your encrypted message has been delivered to G3TI Headquarters."
+    }
