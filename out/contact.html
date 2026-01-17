@@ -163,6 +163,190 @@ body > div:first-of-type > nav { display: none !important; }
   window.addEventListener('load', function() { setTimeout(injectNavbar, 500); });
 })();
 </script>
+
+<script>
+(function() {
+  const BACKEND_URL = 'https://app-wjugbohz.fly.dev';
+  
+  function modifyForm() {
+    // Find the form
+    const form = document.querySelector('form.space-y-4');
+    if (!form) {
+      setTimeout(modifyForm, 100);
+      return;
+    }
+    
+    // Check if already modified
+    if (form.dataset.g3tiModified) return;
+    form.dataset.g3tiModified = 'true';
+    form.id = 'transmission-form';
+    
+    // Find the h2 header and update it
+    const formContainer = form.closest('div');
+    if (formContainer) {
+      const header = formContainer.querySelector('h2');
+      if (header && header.textContent === 'Transmission Form') {
+        header.innerHTML = 'TRANSMISSION FORM<p class="text-[#12F6C8] text-xs font-mono mt-1">Secure Intelligence Channel v3.1</p>';
+      }
+    }
+    
+    // Update the Classification dropdown to include Grant option
+    const select = form.querySelector('select');
+    if (select && !select.querySelector('option[value="grant"]')) {
+      // Clear existing options and add new ones in correct order
+      select.innerHTML = `
+        <option value="general" selected>General Inquiry</option>
+        <option value="sales">Sales / Partnership</option>
+        <option value="support">Technical Support</option>
+        <option value="grant">Grant / Research Partnership Inquiry</option>
+        <option value="security">Security Report</option>
+        <option value="government">Government / Federal</option>
+        <option value="classified">Classified (Requires Clearance)</option>
+      `;
+    }
+    
+    // Add name attributes to form fields
+    const inputs = form.querySelectorAll('input, textarea, select');
+    inputs.forEach(input => {
+      const label = input.previousElementSibling || input.closest('div').querySelector('label');
+      if (label) {
+        const labelText = label.textContent.toLowerCase().trim();
+        if (labelText === 'name') input.name = 'name';
+        else if (labelText === 'email') input.name = 'email';
+        else if (labelText === 'organization') input.name = 'organization';
+        else if (labelText === 'classification') input.name = 'classification';
+        else if (labelText === 'subject') input.name = 'subject';
+        else if (labelText === 'message') input.name = 'message';
+      }
+    });
+    
+    // Add section headers
+    const nameInput = form.querySelector('input[placeholder="Agent Name"]');
+    if (nameInput) {
+      const nameDiv = nameInput.closest('.grid');
+      if (nameDiv && !nameDiv.previousElementSibling?.classList?.contains('section-header')) {
+        const agentHeader = document.createElement('h3');
+        agentHeader.className = 'text-[#12F6C8] text-sm font-bold mb-3 font-mono section-header';
+        agentHeader.textContent = 'AGENT INFORMATION';
+        nameDiv.parentNode.insertBefore(agentHeader, nameDiv);
+      }
+    }
+    
+    // Add classification section header
+    if (select) {
+      const selectDiv = select.closest('div');
+      if (selectDiv && !selectDiv.previousElementSibling?.classList?.contains('section-header')) {
+        const classHeader = document.createElement('h3');
+        classHeader.className = 'text-[#12F6C8] text-sm font-bold mb-3 font-mono section-header';
+        classHeader.textContent = 'TRANSMISSION CLASSIFICATION';
+        selectDiv.parentNode.insertBefore(classHeader, selectDiv);
+        
+        // Update label
+        const classLabel = selectDiv.querySelector('label');
+        if (classLabel) classLabel.textContent = 'Classification Level';
+      }
+    }
+    
+    // Add message section header
+    const subjectInput = form.querySelector('input[placeholder="Transmission Subject"]');
+    if (subjectInput) {
+      const subjectDiv = subjectInput.closest('div');
+      if (subjectDiv && !subjectDiv.previousElementSibling?.classList?.contains('section-header')) {
+        const msgHeader = document.createElement('h3');
+        msgHeader.className = 'text-[#12F6C8] text-sm font-bold mb-3 font-mono section-header';
+        msgHeader.textContent = 'MESSAGE DETAILS';
+        subjectDiv.parentNode.insertBefore(msgHeader, subjectDiv);
+      }
+    }
+    
+    // Update Message label to Message Body
+    const messageTextarea = form.querySelector('textarea');
+    if (messageTextarea) {
+      const msgDiv = messageTextarea.closest('div');
+      const msgLabel = msgDiv?.querySelector('label');
+      if (msgLabel && msgLabel.textContent === 'Message') {
+        msgLabel.textContent = 'Message Body';
+      }
+    }
+    
+    // Add notice before submit button
+    const submitBtn = form.querySelector('button[type="submit"]');
+    if (submitBtn && !form.querySelector('.notice-box')) {
+      const notice = document.createElement('div');
+      notice.className = 'notice-box border border-[#12F6C8]/10 rounded-lg p-3 mb-4 bg-[#12F6C8]/5';
+      notice.innerHTML = '<p class="text-gray-400 text-xs font-mono"><span class="text-[#12F6C8]">NOTICE:</span> By submitting this form, you confirm that all transmitted data is truthful, authorized, and compliant with federal communications regulations. Unauthorized use is monitored and logged.</p>';
+      submitBtn.parentNode.insertBefore(notice, submitBtn);
+    }
+    
+    // Create success message container
+    if (!document.getElementById('success-message')) {
+      const successDiv = document.createElement('div');
+      successDiv.id = 'success-message';
+      successDiv.className = 'hidden';
+      successDiv.innerHTML = `
+        <div class="text-center py-8">
+          <div class="inline-block px-6 py-4 bg-[#12F6C8]/10 border border-[#12F6C8] rounded-lg success-animation">
+            <p class="text-[#12F6C8] font-bold font-mono text-lg" style="text-shadow: 0 0 10px #12F6C8, 0 0 20px #12F6C8;">TRANSMISSION SECURED</p>
+            <p class="text-[#12F6C8]/80 font-mono text-sm mt-2">Your encrypted message has been delivered to G3TI Headquarters.</p>
+          </div>
+        </div>
+      `;
+      form.parentNode.insertBefore(successDiv, form.nextSibling);
+    }
+    
+    // Add form submission handler
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'TRANSMITTING...';
+      
+      const formData = {
+        name: form.querySelector('[name="name"]')?.value || form.querySelector('input[placeholder="Agent Name"]')?.value || '',
+        email: form.querySelector('[name="email"]')?.value || form.querySelector('input[type="email"]')?.value || '',
+        organization: form.querySelector('[name="organization"]')?.value || form.querySelector('input[placeholder*="Agency"]')?.value || '',
+        classification: form.querySelector('[name="classification"]')?.value || form.querySelector('select')?.value || 'general',
+        subject: form.querySelector('[name="subject"]')?.value || form.querySelector('input[placeholder="Transmission Subject"]')?.value || '',
+        message: form.querySelector('[name="message"]')?.value || form.querySelector('textarea')?.value || ''
+      };
+      
+      try {
+        const response = await fetch(BACKEND_URL + '/api/contact/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+        
+        if (response.ok) {
+          form.style.display = 'none';
+          const successMessage = document.getElementById('success-message');
+          if (successMessage) {
+            successMessage.classList.remove('hidden');
+          }
+        } else {
+          throw new Error('Submission failed');
+        }
+      } catch (error) {
+        console.error('Transmission error:', error);
+        alert('Transmission failed. Please try again.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
+    });
+  }
+  
+  // Run after DOM is ready and React has hydrated
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(modifyForm, 500);
+    });
+  } else {
+    setTimeout(modifyForm, 500);
+  }
+})();
+</script>
 <style>
 @keyframes glowPulse {
   0%, 100% { box-shadow: 0 0 10px #12F6C8, 0 0 20px #12F6C8, 0 0 30px #12F6C8; }
@@ -175,10 +359,6 @@ body > div:first-of-type > nav { display: none !important; }
   30% { opacity: 0.7; }
   40% { opacity: 1; }
   50% { opacity: 0.9; }
-  60% { opacity: 1; }
-  70% { opacity: 0.85; }
-  80% { opacity: 1; }
-  90% { opacity: 0.75; }
 }
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(20px); }
@@ -188,57 +368,4 @@ body > div:first-of-type > nav { display: none !important; }
   animation: fadeInUp 450ms ease-out, glowPulse 2s ease-in-out infinite, cipherFlicker 3s ease-in-out infinite;
 }
 </style>
-<script>
-(function() {
-  const BACKEND_URL = 'https://app-wjugbohz.fly.dev';
-  
-  document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('transmission-form');
-    const successMessage = document.getElementById('success-message');
-    
-    if (form) {
-      form.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const submitBtn = form.querySelector('button[type="submit"]');
-        const originalText = submitBtn.textContent;
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'TRANSMITTING...';
-        
-        const formData = {
-          name: form.querySelector('[name="name"]').value,
-          email: form.querySelector('[name="email"]').value,
-          organization: form.querySelector('[name="organization"]').value || '',
-          classification: form.querySelector('[name="classification"]').value,
-          subject: form.querySelector('[name="subject"]').value,
-          message: form.querySelector('[name="message"]').value
-        };
-        
-        try {
-          const response = await fetch(BACKEND_URL + '/api/contact/submit', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData)
-          });
-          
-          if (response.ok) {
-            form.style.display = 'none';
-            if (successMessage) {
-              successMessage.classList.remove('hidden');
-              successMessage.querySelector('div > div').classList.add('success-animation');
-            }
-          } else {
-            throw new Error('Submission failed');
-          }
-        } catch (error) {
-          console.error('Transmission error:', error);
-          alert('Transmission failed. Please try again.');
-          submitBtn.disabled = false;
-          submitBtn.textContent = originalText;
-        }
-      });
-    }
-  });
-})();
-</script>
 </body></html>
