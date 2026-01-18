@@ -450,5 +450,39 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 700);
 });
 </script>
+
+<link rel="stylesheet" href="/components/federal-footer/federal-footer.css">
+<script>
+// Federal Proposal Footer - Added BELOW existing footer
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        // Check if federal proposal footer already exists
+        if (document.getElementById('federal-proposal-footer')) return;
+        
+        // Find the existing footer (the animated g3ti-federal-footer)
+        var existingFooter = document.querySelector('footer.g3ti-federal-footer, footer#g3ti-federal-footer, footer');
+        if (existingFooter) {
+            // Create the federal proposal footer element
+            var federalProposalFooter = document.createElement('div');
+            federalProposalFooter.id = 'federal-proposal-footer';
+            federalProposalFooter.className = 'federal-proposal-footer';
+            federalProposalFooter.innerHTML = `
+                <div class="federal-proposal-footer-container">
+                    <p class="federal-proposal-footer-title">GLOBAL 3 TECHNOLOGY & INTELLIGENCE™</p>
+                    <p class="federal-proposal-footer-subtitle">Unsolicited Proposal Grade – Federal & Law Enforcement Engagement</p>
+                    <p class="federal-proposal-footer-tagline">Autonomous Protective Intelligence for the AI Threat Era</p>
+                    <p class="federal-proposal-footer-veteran">Veteran-Owned Technology & Intelligence Company</p>
+                    <div class="federal-proposal-footer-divider"></div>
+                    <p class="federal-proposal-footer-compliance-label">Compliance & Readiness:</p>
+                    <p class="federal-proposal-footer-compliance-items">CJIS | NIST 800-53 | Zero Trust | AI Governance | Data Protection</p>
+                </div>
+            `;
+            
+            // Insert AFTER the existing footer (not replace it)
+            existingFooter.parentNode.insertBefore(federalProposalFooter, existingFooter.nextSibling);
+        }
+    }, 800);
+});
+</script>
 </body>
 </html>
