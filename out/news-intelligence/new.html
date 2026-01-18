@@ -373,7 +373,17 @@
       main { padding: 1rem; }
       .button-group { flex-direction: column; }
     }
-  </style>
+  
+    footer { background: #050505; border-top: 1px solid rgba(18, 246, 200, 0.1); padding: 4rem 1rem 2rem; position: relative; z-index: 1; }
+    .footer-grid { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 3rem; margin-bottom: 3rem; }
+    .footer-col h4 { color: #12F6C8; font-size: 0.875rem; font-weight: 600; margin-bottom: 1rem; letter-spacing: 0.1em; }
+    .footer-col ul { list-style: none; padding: 0; }
+    .footer-col ul li { margin-bottom: 0.75rem; }
+    .footer-col ul li a { color: #9ca3af; text-decoration: none; font-size: 0.875rem; transition: color 0.3s; }
+    .footer-col ul li a:hover { color: #12F6C8; }
+    .footer-bottom { text-align: center; padding-top: 2rem; border-top: 1px solid rgba(18, 246, 200, 0.1); }
+    .footer-bottom p { color: #6b7280; font-size: 0.875rem; }
+</style>
 </head>
 <body>
   <nav>
@@ -502,8 +512,47 @@
   </main>
   
   <footer>
-    <p>&copy; 2026 Global 3 Technology &amp; Intelligence. All rights reserved.</p>
-    <p style="margin-top: 0.5rem;"><a href="/news-intelligence.html">&larr; Back to News &amp; Intelligence</a></p>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>GLOBAL 3 TECHNOLOGY &amp; INTELLIGENCE</h4>
+        <p style="color: #9ca3af; font-size: 0.875rem; line-height: 1.6;">Autonomous Protective Intelligence for the AI Threat Era<br><br>Veteran-Owned Technology &amp; Intelligence Company<br>Palm Beach, FL<br>Phone: 1-888-603-7845</p>
+      </div>
+      <div class="footer-col">
+        <h4>NAVIGATION</h4>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/about-g3ti.html">About G3TI</a></li>
+          <li><a href="/intelligence-engine.html">Intelligence Engine</a></li>
+          <li><a href="/why-g3ti.html">Why G3TI</a></li>
+          <li><a href="/government.html">Government</a></li>
+          <li><a href="/enterprise.html">Enterprise</a></li>
+          <li><a href="/law-enforcement.html">Law Enforcement</a></li>
+          <li><a href="/contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>TECHNOLOGY</h4>
+        <ul>
+          <li><a href="/intelligence-engine.html">Intelligence Engine</a></li>
+          <li><a href="/products.html">Products</a></li>
+          <li><a href="/threat-architecture.html">Threat Architecture</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>COMPLIANCE</h4>
+        <ul>
+          <li><a href="/ai-governance.html">AI Governance</a></li>
+          <li><a href="/responsible-ai.html">Responsible AI</a></li>
+          <li><a href="/data-governance.html">Data Governance</a></li>
+          <li><a href="/zero-trust.html">Zero Trust</a></li>
+          <li><a href="/cjis-nist-readiness.html">CJIS/NIST Readiness</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p style="color: rgba(18, 246, 200, 0.6); font-style: italic; font-size: 0.875rem; margin-bottom: 1rem;">"Autonomous Intelligence Engine Active - Monitoring Global Threat Surfaces in Real Time."</p>
+      <p>&copy; 2026 Global 3 Technology &amp; Intelligence. All rights reserved.</p>
+    </div>
   </footer>
   
     <script>
@@ -669,6 +718,95 @@
     setTimeout(injectNavbar, 100);
   }
   window.addEventListener('load', function() { setTimeout(injectNavbar, 500); });
+})();
+</script><script id="g3ti-mega-footer-injector">
+(function() {
+  function injectMegaFooter() {
+    // Remove any existing footer
+    var existingFooters = document.querySelectorAll('footer');
+    existingFooters.forEach(function(f) { f.remove(); });
+    
+    // Create the new mega-footer
+    var footer = document.createElement('footer');
+    footer.innerHTML = `
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>GLOBAL 3 TECHNOLOGY & INTELLIGENCE</h4>
+        <p style="color: #9ca3af; font-size: 0.875rem; line-height: 1.6;">Autonomous Protective Intelligence for the AI Threat Era<br><br>Veteran-Owned Technology & Intelligence Company<br>Palm Beach, FL<br>Phone: 1-888-603-7845</p>
+      </div>
+      <div class="footer-col">
+        <h4>NAVIGATION</h4>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/about-g3ti.html">About G3TI</a></li>
+          <li><a href="/intelligence-engine.html">Intelligence Engine</a></li>
+          <li><a href="/why-g3ti.html">Why G3TI</a></li>
+          <li><a href="/government.html">Government</a></li>
+          <li><a href="/enterprise.html">Enterprise</a></li>
+          <li><a href="/law-enforcement.html">Law Enforcement</a></li>
+          <li><a href="/contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>TECHNOLOGY</h4>
+        <ul>
+          <li><a href="/intelligence-engine.html">Intelligence Engine</a></li>
+          <li><a href="/products.html">Products</a></li>
+          <li><a href="/threat-architecture.html">Threat Architecture</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>COMPLIANCE</h4>
+        <ul>
+          <li><a href="/ai-governance.html">AI Governance</a></li>
+          <li><a href="/responsible-ai.html">Responsible AI</a></li>
+          <li><a href="/data-governance.html">Data Governance</a></li>
+          <li><a href="/zero-trust.html">Zero Trust</a></li>
+          <li><a href="/cjis-nist-readiness.html">CJIS/NIST Readiness</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p style="color: rgba(18, 246, 200, 0.6); font-style: italic; font-size: 0.875rem; margin-bottom: 1rem;">"Autonomous Intelligence Engine Active - Monitoring Global Threat Surfaces in Real Time."</p>
+      <p>&copy; 2026 Global 3 Technology & Intelligence. All rights reserved.</p>
+    </div>
+    `;
+    
+    // Add footer styles if not present
+    if (!document.querySelector('#g3ti-mega-footer-styles')) {
+      var style = document.createElement('style');
+      style.id = 'g3ti-mega-footer-styles';
+      style.textContent = `
+        footer { background: #050505; border-top: 1px solid rgba(18, 246, 200, 0.1); padding: 4rem 1rem 2rem; position: relative; z-index: 1; }
+        .footer-grid { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 3rem; margin-bottom: 3rem; }
+        .footer-col h4 { color: #12F6C8; font-size: 0.875rem; font-weight: 600; margin-bottom: 1rem; letter-spacing: 0.1em; }
+        .footer-col ul { list-style: none; padding: 0; margin: 0; }
+        .footer-col ul li { margin-bottom: 0.75rem; }
+        .footer-col ul li a { color: #9ca3af; text-decoration: none; font-size: 0.875rem; transition: color 0.3s; }
+        .footer-col ul li a:hover { color: #12F6C8; }
+        .footer-bottom { text-align: center; padding-top: 2rem; border-top: 1px solid rgba(18, 246, 200, 0.1); }
+        .footer-bottom p { color: #6b7280; font-size: 0.875rem; }
+      `;
+      document.head.appendChild(style);
+    }
+    
+    // Append footer to body
+    document.body.appendChild(footer);
+  }
+  
+  // Run on DOMContentLoaded and also after a delay to catch React-rendered footers
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(injectMegaFooter, 100);
+    });
+  } else {
+    setTimeout(injectMegaFooter, 100);
+  }
+  
+  // Also run after window load to catch late-rendered content
+  window.addEventListener('load', function() {
+    setTimeout(injectMegaFooter, 500);
+  });
 })();
 </script></body>
 </html>
