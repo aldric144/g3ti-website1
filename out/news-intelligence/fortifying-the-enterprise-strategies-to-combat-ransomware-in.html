@@ -37,7 +37,11 @@
     footer p { color: #6B7280; font-size: 0.875rem; }
     @media (max-width: 768px) { .nav-links { display: none; } .article-header h1 { font-size: 1.75rem; } main { padding: 1rem; } }
   </style>
-</head>
+<style id="hide-react-footer">
+/* Hide React-rendered footer, show only static mega-footer */
+body > div:first-of-type > footer { display: none !important; }
+footer.g3ti-mega-footer { display: block !important; }
+</style></head>
 <body>
   <nav>
     <a href="/" class="logo"><div class="logo-box">G3</div><div><div style="font-weight: 600; font-size: 1rem;">G3TI</div><div style="font-size: 0.75rem; color: #9CA3AF; font-family: monospace;">D.I.E. SYSTEM</div></div></a>
@@ -125,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 700);
 });
 </script>
-<footer style="background:#050505;border-top:1px solid rgba(18,246,200,0.1);padding:60px 20px 30px;margin-top:80px;">
+<footer class="g3ti-mega-footer" style="background:#050505;border-top:1px solid rgba(18,246,200,0.1);padding:60px 20px 30px;margin-top:80px;">
 <div style="max-width:1400px;margin:0 auto;">
 <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:40px;margin-bottom:40px;" class="g3ti-footer-grid">
 <!-- COLUMN 1 — G3TI CORE -->

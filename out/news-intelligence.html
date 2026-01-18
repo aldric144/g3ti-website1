@@ -640,7 +640,11 @@
       .tab-btn { padding: 0.75rem 1rem; font-size: 0.875rem; }
     }
   </style>
-</head>
+<style id="hide-react-footer">
+/* Hide React-rendered footer, show only static mega-footer */
+body > div:first-of-type > footer { display: none !important; }
+footer.g3ti-mega-footer { display: block !important; }
+</style></head>
 <body>
   <nav>
     <a href="/" class="logo">
@@ -994,7 +998,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 700);
 });
 </script>
-<footer style="background:#050505;border-top:1px solid rgba(18,246,200,0.1);padding:60px 20px 30px;margin-top:80px;">
+<footer class="g3ti-mega-footer" style="background:#050505;border-top:1px solid rgba(18,246,200,0.1);padding:60px 20px 30px;margin-top:80px;">
 <div style="max-width:1400px;margin:0 auto;">
 <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:40px;margin-bottom:40px;" class="g3ti-footer-grid">
 <!-- COLUMN 1 — G3TI CORE -->
