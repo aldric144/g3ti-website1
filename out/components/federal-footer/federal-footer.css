@@ -1,0 +1,100 @@
+/* Federal Proposal Footer - Scoped CSS */
+/* This CSS is isolated and does not affect any other site elements */
+
+.federal-proposal-footer {
+    background: #02070A;
+    border-top: 1px solid #12F6C8;
+    box-shadow: 0 -2px 20px rgba(18, 246, 200, 0.15);
+    padding: 40px 20px 30px;
+    margin-top: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.federal-proposal-footer * {
+    box-sizing: border-box;
+}
+
+.federal-proposal-footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.federal-proposal-footer-title {
+    font-family: 'Orbitron', 'Inter', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #12F6C8;
+    letter-spacing: 0.1em;
+    margin: 0 0 8px 0;
+    text-transform: uppercase;
+}
+
+.federal-proposal-footer-subtitle {
+    font-family: 'Orbitron', 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #6b7280;
+    letter-spacing: 0.08em;
+    margin: 0 0 12px 0;
+    text-transform: uppercase;
+}
+
+.federal-proposal-footer-tagline {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-style: italic;
+    color: #9ca3af;
+    margin: 0 0 6px 0;
+}
+
+.federal-proposal-footer-veteran {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin: 0 0 20px 0;
+}
+
+.federal-proposal-footer-divider {
+    width: 100px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #12F6C8, transparent);
+    margin: 0 auto 20px;
+}
+
+.federal-proposal-footer-compliance-label {
+    font-family: 'Orbitron', 'Inter', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #12F6C8;
+    letter-spacing: 0.1em;
+    margin: 0 0 8px 0;
+    text-transform: uppercase;
+}
+
+.federal-proposal-footer-compliance-items {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    color: #4b5563;
+    letter-spacing: 0.05em;
+    margin: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .federal-proposal-footer {
+        padding: 30px 15px 20px;
+    }
+    
+    .federal-proposal-footer-title {
+        font-size: 0.95rem;
+    }
+    
+    .federal-proposal-footer-subtitle {
+        font-size: 0.65rem;
+    }
+    
+    .federal-proposal-footer-tagline {
+        font-size: 0.75rem;
+    }
+}
