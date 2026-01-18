@@ -1,0 +1,193 @@
+/* G3TI Maximum 6-Column Footer - Scoped Styles */
+/* All styles scoped to .footer-g3ti-max to avoid conflicts */
+
+.footer-g3ti-max {
+  background: linear-gradient(180deg, #02060A 0%, #040D11 100%);
+  position: relative;
+  width: 100%;
+  padding: 40px 40px 20px 40px;
+  box-sizing: border-box;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow: hidden;
+}
+
+/* Blueprint Grid Overlay */
+.footer-g3ti-max::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(rgba(18, 246, 200, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(18, 246, 200, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* 6-Column Grid Layout */
+.footer-g3ti-max-content {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 30px;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  align-items: start;
+}
+
+/* Column Styles */
+.footer-g3ti-max-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Column Headers */
+.footer-g3ti-max-column-header {
+  font-family: 'Orbitron', 'Inter', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #12F6C8;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid rgba(18, 246, 200, 0.2);
+  padding-bottom: 8px;
+}
+
+/* G3TI Core Column (Column 1) */
+.footer-g3ti-max-core {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.footer-g3ti-max-core-title {
+  font-family: 'Orbitron', 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #12F6C8;
+  letter-spacing: 1px;
+  line-height: 1.3;
+}
+
+.footer-g3ti-max-core-tagline {
+  font-size: 0.7rem;
+  color: #8b9da8;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+.footer-g3ti-max-core-veteran {
+  font-size: 0.7rem;
+  color: #6b7c87;
+  line-height: 1.4;
+}
+
+.footer-g3ti-max-core-location {
+  font-size: 0.7rem;
+  color: #6b7c87;
+  margin-top: 8px;
+}
+
+.footer-g3ti-max-core-phone {
+  font-size: 0.7rem;
+  color: #12F6C8;
+}
+
+/* Link Lists */
+.footer-g3ti-max-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.footer-g3ti-max-column li {
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+
+.footer-g3ti-max-column a {
+  color: #a8b8c3;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.footer-g3ti-max-column a:hover {
+  color: #12F6C8;
+  text-shadow: 0 0 8px rgba(18, 246, 200, 0.5);
+}
+
+.footer-g3ti-max-column span.inactive {
+  color: #4b5563;
+  font-size: 0.72rem;
+}
+
+/* Footer Bottom - Tagline */
+.footer-g3ti-max-bottom {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(18, 246, 200, 0.15);
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.footer-g3ti-max-tagline {
+  font-family: 'Orbitron', 'Inter', sans-serif;
+  font-size: 0.7rem;
+  color: #12F6C8;
+  font-style: italic;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 10px rgba(18, 246, 200, 0.3);
+}
+
+.footer-g3ti-max-copyright {
+  font-size: 0.65rem;
+  color: #4b5563;
+  margin-top: 10px;
+}
+
+/* Tablet Responsiveness - 3 columns */
+@media (max-width: 1200px) {
+  .footer-g3ti-max-content {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+  }
+}
+
+/* Mobile Responsiveness - 1 column */
+@media (max-width: 768px) {
+  .footer-g3ti-max {
+    padding: 30px 20px 20px 20px;
+  }
+  
+  .footer-g3ti-max-content {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+  
+  .footer-g3ti-max-column {
+    text-align: center;
+  }
+  
+  .footer-g3ti-max-column-header {
+    text-align: center;
+  }
+  
+  .footer-g3ti-max-column ul {
+    align-items: center;
+  }
+  
+  .footer-g3ti-max-core {
+    align-items: center;
+    text-align: center;
+  }
+}
