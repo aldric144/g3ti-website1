@@ -467,4 +467,115 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 500);
 });
 </script>
+
+<script>
+// G3TI Federal Proposal Footer Injection Script
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        // Check if federal footer already exists
+        if (document.getElementById('federal-proposal-footer')) return;
+        
+        // Find the existing footer
+        var existingFooter = document.querySelector('footer');
+        if (existingFooter) {
+            // Create the federal footer element
+            var federalFooter = document.createElement('div');
+            federalFooter.id = 'federal-proposal-footer';
+            federalFooter.className = 'federal-proposal-footer';
+            federalFooter.innerHTML = `
+                <div class="federal-proposal-footer-container">
+                    <p class="federal-proposal-footer-title">GLOBAL 3 TECHNOLOGY & INTELLIGENCE™</p>
+                    <p class="federal-proposal-footer-subtitle">Unsolicited Proposal Grade – Federal & Law Enforcement Engagement</p>
+                    <p class="federal-proposal-footer-tagline">Autonomous Protective Intelligence for the AI Threat Era</p>
+                    <p class="federal-proposal-footer-veteran">Veteran-Owned Technology & Intelligence Company</p>
+                    <div class="federal-proposal-footer-divider"></div>
+                    <p class="federal-proposal-footer-compliance-label">Compliance & Readiness:</p>
+                    <p class="federal-proposal-footer-compliance-items">CJIS | NIST 800-53 | Zero Trust | AI Governance | Data Protection</p>
+                </div>
+            `;
+            
+            // Add styles
+            var style = document.createElement('style');
+            style.textContent = `
+                .federal-proposal-footer {
+                    background: #02070A;
+                    border-top: 1px solid #12F6C8;
+                    box-shadow: 0 -2px 20px rgba(18, 246, 200, 0.15);
+                    padding: 40px 20px 30px;
+                    margin-top: 0;
+                    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                }
+                .federal-proposal-footer-container {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                .federal-proposal-footer-title {
+                    font-family: 'Orbitron', 'Inter', sans-serif;
+                    font-size: 1.1rem;
+                    font-weight: 700;
+                    color: #12F6C8;
+                    letter-spacing: 0.1em;
+                    margin: 0 0 8px 0;
+                    text-transform: uppercase;
+                }
+                .federal-proposal-footer-subtitle {
+                    font-family: 'Orbitron', 'Inter', sans-serif;
+                    font-size: 0.75rem;
+                    font-weight: 500;
+                    color: #6b7280;
+                    letter-spacing: 0.08em;
+                    margin: 0 0 12px 0;
+                    text-transform: uppercase;
+                }
+                .federal-proposal-footer-tagline {
+                    font-family: 'Inter', sans-serif;
+                    font-size: 0.85rem;
+                    font-style: italic;
+                    color: #9ca3af;
+                    margin: 0 0 6px 0;
+                }
+                .federal-proposal-footer-veteran {
+                    font-family: 'Inter', sans-serif;
+                    font-size: 0.75rem;
+                    color: #6b7280;
+                    margin: 0 0 20px 0;
+                }
+                .federal-proposal-footer-divider {
+                    width: 100px;
+                    height: 1px;
+                    background: linear-gradient(90deg, transparent, #12F6C8, transparent);
+                    margin: 0 auto 20px;
+                }
+                .federal-proposal-footer-compliance-label {
+                    font-family: 'Orbitron', 'Inter', sans-serif;
+                    font-size: 0.7rem;
+                    font-weight: 600;
+                    color: #12F6C8;
+                    letter-spacing: 0.1em;
+                    margin: 0 0 8px 0;
+                    text-transform: uppercase;
+                }
+                .federal-proposal-footer-compliance-items {
+                    font-family: 'Inter', sans-serif;
+                    font-size: 0.75rem;
+                    color: #4b5563;
+                    letter-spacing: 0.05em;
+                    margin: 0;
+                }
+                @media (max-width: 768px) {
+                    .federal-proposal-footer { padding: 30px 15px 20px; }
+                    .federal-proposal-footer-title { font-size: 0.95rem; }
+                    .federal-proposal-footer-subtitle { font-size: 0.65rem; }
+                    .federal-proposal-footer-tagline { font-size: 0.75rem; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // Insert after the existing footer
+            existingFooter.parentNode.insertBefore(federalFooter, existingFooter.nextSibling);
+        }
+    }, 600);
+});
+</script>
 </body></html>
