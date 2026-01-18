@@ -884,114 +884,103 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
+
+
+<link rel="stylesheet" href="/assets/css/footer.css">
 <script>
-// G3TI Federal Proposal Footer Injection Script
+// G3TI Animated Federal-Grade Footer - Option D (Scanline Effect)
 document.addEventListener('DOMContentLoaded', function() {
     setTimeout(function() {
-        // Check if federal footer already exists
-        if (document.getElementById('federal-proposal-footer')) return;
+        // Remove any existing footer overrides
+        var existingFederalFooter = document.getElementById('federal-proposal-footer');
+        if (existingFederalFooter) existingFederalFooter.remove();
         
         // Find the existing footer
         var existingFooter = document.querySelector('footer');
         if (existingFooter) {
-            // Create the federal footer element
-            var federalFooter = document.createElement('div');
-            federalFooter.id = 'federal-proposal-footer';
-            federalFooter.className = 'federal-proposal-footer';
-            federalFooter.innerHTML = `
-                <div class="federal-proposal-footer-container">
-                    <p class="federal-proposal-footer-title">GLOBAL 3 TECHNOLOGY & INTELLIGENCE™</p>
-                    <p class="federal-proposal-footer-subtitle">Unsolicited Proposal Grade – Federal & Law Enforcement Engagement</p>
-                    <p class="federal-proposal-footer-tagline">Autonomous Protective Intelligence for the AI Threat Era</p>
-                    <p class="federal-proposal-footer-veteran">Veteran-Owned Technology & Intelligence Company</p>
-                    <div class="federal-proposal-footer-divider"></div>
-                    <p class="federal-proposal-footer-compliance-label">Compliance & Readiness:</p>
-                    <p class="federal-proposal-footer-compliance-items">CJIS | NIST 800-53 | Zero Trust | AI Governance | Data Protection</p>
+            // Create the new animated federal footer
+            var newFooter = document.createElement('footer');
+            newFooter.className = 'g3ti-federal-footer';
+            newFooter.id = 'g3ti-federal-footer';
+            newFooter.innerHTML = `
+                <div class="g3ti-footer-content">
+                    <!-- Left Side - Logo -->
+                    <div class="g3ti-footer-logo-section">
+                        <div class="g3ti-footer-logo-wrapper">
+                            <img src="/assets/img/g3ti-emblem.svg" alt="G3TI Emblem" class="g3ti-footer-logo">
+                        </div>
+                    </div>
+                    
+                    <!-- Center - Navigation Columns -->
+                    <nav class="g3ti-footer-nav">
+                        <div class="g3ti-footer-column">
+                            <h4 class="g3ti-footer-column-header">About G3TI</h4>
+                            <ul>
+                                <li><a href="/about-g3ti.html">About G3TI</a></li>
+                                <li><a href="/manifesto.html">Manifesto</a></li>
+                                <li><a href="/about.html">Origin Dossier</a></li>
+                                <li><a href="/hbcu-alliance.html">HBCU Intelligence Alliance</a></li>
+                                <li><a href="/why-g3ti.html">Why G3TI</a></li>
+                                <li><span>Careers</span></li>
+                            </ul>
+                        </div>
+                        <div class="g3ti-footer-column">
+                            <h4 class="g3ti-footer-column-header">Solutions</h4>
+                            <ul>
+                                <li><a href="/solutions.html">Solutions Overview</a></li>
+                                <li><a href="/solutions-government.html">Government Intelligence</a></li>
+                                <li><a href="/solutions-law-enforcement.html">Law Enforcement</a></li>
+                                <li><a href="/solutions-enterprise.html">Enterprise Intelligence</a></li>
+                                <li><a href="/intelligence-engine.html">Intelligence Engine</a></li>
+                            </ul>
+                        </div>
+                        <div class="g3ti-footer-column">
+                            <h4 class="g3ti-footer-column-header">Resources</h4>
+                            <ul>
+                                <li><a href="/threat-architecture.html">Threat Architecture</a></li>
+                                <li><a href="/national-security-briefing.html">Security Briefing</a></li>
+                                <li><a href="/contractor-readiness.html">Contractor Readiness</a></li>
+                                <li><a href="/news-intelligence.html">News & Intelligence</a></li>
+                            </ul>
+                        </div>
+                        <div class="g3ti-footer-column">
+                            <h4 class="g3ti-footer-column-header">Access & Contact</h4>
+                            <ul>
+                                <li><a href="/contact.html">Transmission Form</a></li>
+                                <li><a href="/government.html">Government Portal</a></li>
+                                <li><a href="/law-enforcement.html">Law Enforcement Portal</a></li>
+                                <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+                                <li><a href="/terms-of-use.html">Terms of Use</a></li>
+                            </ul>
+                        </div>
+                    </nav>
+                    
+                    <!-- Right Side - Compliance & Encryption -->
+                    <div class="g3ti-footer-compliance">
+                        <div class="g3ti-compliance-header">Compliance Ready</div>
+                        <div class="g3ti-compliance-badges">
+                            <span class="g3ti-compliance-badge">CJIS</span>
+                            <span class="g3ti-compliance-badge">NIST 800-53</span>
+                            <span class="g3ti-compliance-badge">Zero Trust</span>
+                            <span class="g3ti-compliance-badge">FedRAMP</span>
+                        </div>
+                        <div class="g3ti-encryption-indicator">
+                            <span class="g3ti-encryption-dot"></span>
+                            <span class="g3ti-encryption-text">AES-256 Encrypted</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="g3ti-footer-bottom">
+                    <div class="g3ti-footer-tagline">"Autonomous Intelligence Engine Active — Monitoring Global Threat Surfaces in Real Time."</div>
+                    <div class="g3ti-footer-copyright">© 2026 Global 3 Technology & Intelligence™. All rights reserved.</div>
                 </div>
             `;
             
-            // Add styles
-            var style = document.createElement('style');
-            style.textContent = `
-                .federal-proposal-footer {
-                    background: #02070A;
-                    border-top: 1px solid #12F6C8;
-                    box-shadow: 0 -2px 20px rgba(18, 246, 200, 0.15);
-                    padding: 40px 20px 30px;
-                    margin-top: 0;
-                    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                }
-                .federal-proposal-footer-container {
-                    max-width: 1200px;
-                    margin: 0 auto;
-                    text-align: center;
-                }
-                .federal-proposal-footer-title {
-                    font-family: 'Orbitron', 'Inter', sans-serif;
-                    font-size: 1.1rem;
-                    font-weight: 700;
-                    color: #12F6C8;
-                    letter-spacing: 0.1em;
-                    margin: 0 0 8px 0;
-                    text-transform: uppercase;
-                }
-                .federal-proposal-footer-subtitle {
-                    font-family: 'Orbitron', 'Inter', sans-serif;
-                    font-size: 0.75rem;
-                    font-weight: 500;
-                    color: #6b7280;
-                    letter-spacing: 0.08em;
-                    margin: 0 0 12px 0;
-                    text-transform: uppercase;
-                }
-                .federal-proposal-footer-tagline {
-                    font-family: 'Inter', sans-serif;
-                    font-size: 0.85rem;
-                    font-style: italic;
-                    color: #9ca3af;
-                    margin: 0 0 6px 0;
-                }
-                .federal-proposal-footer-veteran {
-                    font-family: 'Inter', sans-serif;
-                    font-size: 0.75rem;
-                    color: #6b7280;
-                    margin: 0 0 20px 0;
-                }
-                .federal-proposal-footer-divider {
-                    width: 100px;
-                    height: 1px;
-                    background: linear-gradient(90deg, transparent, #12F6C8, transparent);
-                    margin: 0 auto 20px;
-                }
-                .federal-proposal-footer-compliance-label {
-                    font-family: 'Orbitron', 'Inter', sans-serif;
-                    font-size: 0.7rem;
-                    font-weight: 600;
-                    color: #12F6C8;
-                    letter-spacing: 0.1em;
-                    margin: 0 0 8px 0;
-                    text-transform: uppercase;
-                }
-                .federal-proposal-footer-compliance-items {
-                    font-family: 'Inter', sans-serif;
-                    font-size: 0.75rem;
-                    color: #4b5563;
-                    letter-spacing: 0.05em;
-                    margin: 0;
-                }
-                @media (max-width: 768px) {
-                    .federal-proposal-footer { padding: 30px 15px 20px; }
-                    .federal-proposal-footer-title { font-size: 0.95rem; }
-                    .federal-proposal-footer-subtitle { font-size: 0.65rem; }
-                    .federal-proposal-footer-tagline { font-size: 0.75rem; }
-                }
-            `;
-            document.head.appendChild(style);
-            
-            // Insert after the existing footer
-            existingFooter.parentNode.insertBefore(federalFooter, existingFooter.nextSibling);
+            // Replace the existing footer with the new one
+            existingFooter.parentNode.replaceChild(newFooter, existingFooter);
         }
-    }, 600);
+    }, 700);
 });
 </script>
 </body>
