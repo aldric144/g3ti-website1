@@ -56,21 +56,20 @@
   background: linear-gradient(90deg, transparent, #0A2B2F 20%, #12F6C8 50%, #0A2B2F 80%, transparent);
 }
 
-/* Footer Content Layout */
+/* Footer Content Layout - 6 Column Grid */
 .g3ti-footer-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: 160px repeat(4, 1fr) 180px;
+  gap: 30px;
   max-width: 1400px;
   margin: 0 auto;
   position: relative;
   z-index: 1;
-  gap: 30px;
+  align-items: start;
 }
 
-/* Left Side - Logo Section */
+/* Column 1 - Logo Section */
 .g3ti-footer-logo-section {
-  flex: 0 0 160px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -117,13 +116,9 @@
   border-radius: 8px;
 }
 
-/* Center - Navigation Columns */
+/* Navigation Columns (Columns 2-5) */
 .g3ti-footer-nav {
-  flex: 1;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  max-width: 800px;
+  display: contents;
 }
 
 .g3ti-footer-column {
@@ -171,9 +166,8 @@
   font-size: 0.72rem;
 }
 
-/* Right Side - Compliance & Encryption */
+/* Column 6 - Compliance & Encryption */
 .g3ti-footer-compliance {
-  flex: 0 0 180px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -260,6 +254,20 @@
 }
 
 /* Mobile Responsiveness */
+@media (max-width: 1200px) {
+  .g3ti-footer-content {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .g3ti-footer-logo-section {
+    grid-column: span 1;
+  }
+  
+  .g3ti-footer-compliance {
+    align-items: center;
+  }
+}
+
 @media (max-width: 1024px) {
   .g3ti-federal-footer {
     max-height: none;
@@ -267,23 +275,19 @@
   }
   
   .g3ti-footer-content {
-    flex-wrap: wrap;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
   }
   
   .g3ti-footer-logo-section {
-    flex: 0 0 100%;
-    margin-bottom: 20px;
-  }
-  
-  .g3ti-footer-nav {
-    flex: 1 1 100%;
-    grid-template-columns: repeat(2, 1fr);
+    grid-column: span 2;
+    margin-bottom: 10px;
   }
   
   .g3ti-footer-compliance {
-    flex: 0 0 100%;
+    grid-column: span 2;
     align-items: center;
-    margin-top: 20px;
+    margin-top: 10px;
   }
 }
 
