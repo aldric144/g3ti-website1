@@ -1,111 +1,18 @@
-<!DOCTYPE html>
-<html lang="en" class="dark">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>G3TI | Intelligence Unit Profile</title>
-  <meta name="description" content="Global 3 Technology & Intelligence - Intelligence Unit Profile"/>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      background: #050505;
-      color: white;
-      font-family: system-ui, -apple-system, sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    .container {
-      text-align: center;
-      padding: 2rem;
-      border: 1px solid rgba(11, 133, 229, 0.3);
-      border-radius: 12px;
-      background: linear-gradient(135deg, rgba(11, 133, 229, 0.1) 0%, transparent 100%);
-      max-width: 600px;
-    }
-    .icon {
-      font-size: 4rem;
-      margin-bottom: 1rem;
-    }
-    h1 {
-      color: #12F6C8;
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      font-family: monospace;
-    }
-    .status {
-      color: #0B85E5;
-      font-family: monospace;
-      font-size: 0.875rem;
-      margin-bottom: 1.5rem;
-    }
-    p {
-      color: #9CA3AF;
-      line-height: 1.6;
-    }
-    .back-link {
-      display: inline-block;
-      margin-top: 2rem;
-      padding: 0.75rem 1.5rem;
-      background: rgba(11, 133, 229, 0.2);
-      border: 1px solid #0B85E5;
-      border-radius: 6px;
-      color: #0B85E5;
-      text-decoration: none;
-      font-family: monospace;
-      transition: all 0.3s;
-    }
-    .back-link:hover {
-      background: rgba(11, 133, 229, 0.4);
-      color: #12F6C8;
-      border-color: #12F6C8;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="icon">🔒</div>
-    <h1>[ UNIT PROFILE PAGE LOADED SUCCESSFULLY ]</h1>
-    <div class="status">[ SECURE CONNECTION ESTABLISHED ]</div>
-    <p>This intelligence unit profile is currently being populated with classified operational data. Full content will be available upon authorization.</p>
-    <a href="/government.html" class="back-link">← RETURN TO GOVERNMENT PORTAL</a>
-  </div>
+#!/usr/bin/env python3
+"""
+Script to update all HTML pages with the mega-footer from about-g3ti.html.
+This replaces any existing footer with the exact 6-column mega-footer template.
+"""
 
-<script>
-// Federal Proposal Footer - Added BELOW the new 6-column footer
-document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(function() {
-        // Check if federal proposal footer already exists
-        if (document.getElementById('federal-proposal-footer')) return;
-        
-        // Find the new 6-column footer
-        var mainFooter = document.getElementById('footer-g3ti-max');
-        if (mainFooter) {
-            // Create the federal proposal footer element
-            var federalProposalFooter = document.createElement('div');
-            federalProposalFooter.id = 'federal-proposal-footer';
-            federalProposalFooter.className = 'federal-proposal-footer';
-            federalProposalFooter.innerHTML = `
-                <div class="federal-proposal-footer-container">
-                    <p class="federal-proposal-footer-title">GLOBAL 3 TECHNOLOGY & INTELLIGENCE&trade;</p>
-                    <p class="federal-proposal-footer-subtitle">Unsolicited Proposal Grade – Federal & Law Enforcement Engagement</p>
-                    <p class="federal-proposal-footer-tagline">Autonomous Protective Intelligence for the AI Threat Era</p>
-                    <p class="federal-proposal-footer-veteran">Veteran-Owned Technology & Intelligence Company</p>
-                    <div class="federal-proposal-footer-divider"></div>
-                    <p class="federal-proposal-footer-compliance-label">Compliance & Readiness:</p>
-                    <p class="federal-proposal-footer-compliance-items">CJIS | NIST 800-53 | Zero Trust | AI Governance | Data Protection</p>
-                </div>
-            `;
-            
-            // Insert AFTER the main footer
-            mainFooter.parentNode.insertBefore(federalProposalFooter, mainFooter.nextSibling);
-        }
-    }, 700);
-});
-</script>
-<footer style="background:#050505;border-top:1px solid rgba(18,246,200,0.1);padding:60px 20px 30px;margin-top:80px;">
+import os
+import re
+from pathlib import Path
+
+# Directory containing HTML files
+OUT_DIR = Path("/home/ubuntu/repos/g3ti-website1/out")
+
+# The exact mega-footer HTML from about-g3ti.html (lines 178-272)
+MEGA_FOOTER_HTML = '''<footer style="background:#050505;border-top:1px solid rgba(18,246,200,0.1);padding:60px 20px 30px;margin-top:80px;">
 <div style="max-width:1400px;margin:0 auto;">
 <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:40px;margin-bottom:40px;" class="g3ti-footer-grid">
 <!-- COLUMN 1 — G3TI CORE -->
@@ -199,9 +106,10 @@ document.addEventListener('DOMContentLoaded', function() {
 @media (max-width: 1200px) { .g3ti-footer-grid { grid-template-columns: repeat(3, 1fr) !important; } }
 @media (max-width: 768px) { .g3ti-footer-grid { grid-template-columns: 1fr !important; } }
 </style>
-</footer>
-<link rel="stylesheet" href="/components/federal-footer/federal-footer.css">
-<!-- Federal Proposal Footer - Isolated Component -->
+</footer>'''
+
+# Federal Proposal Footer HTML (to be added after the mega-footer)
+FEDERAL_FOOTER_HTML = '''<!-- Federal Proposal Footer - Isolated Component -->
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <div class="federal-proposal-footer" id="federal-proposal-footer">
     <div class="federal-proposal-footer-container">
@@ -214,47 +122,95 @@ document.addEventListener('DOMContentLoaded', function() {
         <p class="federal-proposal-footer-compliance-items">CJIS | NIST 800-53 | Zero Trust | AI Governance | Data Protection</p>
     </div>
 </div>
-<!-- End Federal Proposal Footer -->
-<script id="g3ti-navbar-v4-injector">
-(function() {
-  function injectNavbar() {
-    // Remove any previous navbar attempts
-    var oldNavs = document.querySelectorAll('#g3ti-navbar, #g3ti-navbar-v3, #g3ti-navbar-v4, [id^="g3ti-navbar"]');
-    oldNavs.forEach(function(el) { el.remove(); });
-    var oldScripts = document.querySelectorAll('[id^="g3ti-navbar-injector"]');
-    oldScripts.forEach(function(el) { if (el.id !== 'g3ti-navbar-v4-injector') el.remove(); });
+<!-- End Federal Proposal Footer -->'''
+
+# Federal Footer CSS
+FEDERAL_FOOTER_CSS = '''<link rel="stylesheet" href="/components/federal-footer/federal-footer.css">'''
+
+def update_html_file(filepath):
+    """Update a single HTML file with the mega-footer."""
+    with open(filepath, 'r', encoding='utf-8') as f:
+        content = f.read()
     
-    var navbarHTML = `<header id="g3ti-navbar-v4" style="position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(5,5,5,0.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(18,246,200,0.1);"><style>.g3ti-dropdown{position:relative;display:inline-block;}.g3ti-dropdown-trigger{cursor:pointer;color:#9ca3af;text-decoration:none;font-size:0.75rem;font-weight:500;padding:0.5rem 0.6rem;white-space:nowrap;display:flex;align-items:center;}.g3ti-dropdown-trigger:hover{color:#12F6C8;}.g3ti-dropdown-trigger::after{content:'▼';font-size:0.5rem;margin-left:0.25rem;}.g3ti-dropdown-menu{position:absolute;top:100%;left:0;background:rgba(5,5,5,0.98);border:1px solid rgba(18,246,200,0.2);border-radius:8px;padding:0.5rem 0;min-width:200px;opacity:0;visibility:hidden;transform:translateY(-10px);transition:all 0.3s;z-index:9999;}.g3ti-dropdown:hover .g3ti-dropdown-menu,.g3ti-dropdown.active .g3ti-dropdown-menu{opacity:1;visibility:visible;transform:translateY(0);}.g3ti-dropdown-menu a{display:block;padding:0.75rem 1rem;color:#9ca3af;text-decoration:none;font-size:0.75rem;transition:all 0.3s;}.g3ti-dropdown-menu a:hover{color:#12F6C8;background:rgba(18,246,200,0.05);}</style><nav style="max-width:1400px;margin:0 auto;padding:0.75rem 1.5rem;display:flex;align-items:center;justify-content:space-between;"><a href="/" style="display:flex;align-items:center;gap:0.75rem;text-decoration:none;"><div style="width:36px;height:36px;background:linear-gradient(135deg,#12F6C8,#0B85E5);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:bold;color:black;font-size:0.875rem;">G3</div><div><div style="color:#12F6C8;font-weight:bold;font-size:1rem;">G3TI</div><div style="color:#6b7280;font-size:0.65rem;">D.I.E. SYSTEM</div></div></a><div style="display:flex;gap:0;align-items:center;flex-wrap:nowrap;overflow:visible;"><a href="/" style="color:#9ca3af;text-decoration:none;font-size:0.75rem;font-weight:500;padding:0.5rem 0.6rem;white-space:nowrap;">Home</a><a href="/government.html" style="color:#9ca3af;text-decoration:none;font-size:0.75rem;font-weight:500;padding:0.5rem 0.6rem;white-space:nowrap;">Government</a><a href="/law-enforcement.html" style="color:#9ca3af;text-decoration:none;font-size:0.75rem;font-weight:500;padding:0.5rem 0.6rem;white-space:nowrap;">Law Enforcement</a><a href="/enterprise.html" style="color:#9ca3af;text-decoration:none;font-size:0.75rem;font-weight:500;padding:0.5rem 0.6rem;white-space:nowrap;">Enterprise</a><a href="/products.html" style="color:#9ca3af;text-decoration:none;font-size:0.75rem;font-weight:500;padding:0.5rem 0.6rem;white-space:nowrap;">Products</a><div class="g3ti-dropdown"><span class="g3ti-dropdown-trigger">Dossiers</span><div class="g3ti-dropdown-menu"><a href="/dossiers/threat-architecture.html">Threat Architecture</a><a href="/dossiers/national-security-briefing.html">National Security Briefing</a><a href="/dossiers/contractor-readiness.html">Contractor Readiness</a><a href="/dossiers/addendum.html">Addendum</a></div></div><a href="/compliance/ai-governance.html" style="color:#9ca3af;text-decoration:none;font-size:0.75rem;font-weight:500;padding:0.5rem 0.6rem;white-space:nowrap;">Compliance</a><a href="/news-intelligence.html" style="color:#9ca3af;text-decoration:none;font-size:0.75rem;font-weight:500;padding:0.5rem 0.6rem;white-space:nowrap;">News & Intelligence</a><div class="g3ti-dropdown"><span class="g3ti-dropdown-trigger">About</span><div class="g3ti-dropdown-menu"><a href="/about.html">About G3TI</a><a href="/manifesto.html">Manifesto</a><a href="/hbcu-alliance.html">HBCU Intelligence Alliance</a></div></div><a href="/intelligence-engine.html" style="color:#9ca3af;text-decoration:none;font-size:0.75rem;font-weight:500;padding:0.5rem 0.6rem;white-space:nowrap;">Intelligence Engine</a><a href="/why-g3ti.html" style="color:#9ca3af;text-decoration:none;font-size:0.75rem;font-weight:500;padding:0.5rem 0.6rem;white-space:nowrap;">Why G3TI</a><a href="/contact.html" style="color:#9ca3af;text-decoration:none;font-size:0.75rem;font-weight:500;padding:0.5rem 0.6rem;white-space:nowrap;">Contact</a></div></nav></header>`;
-    document.body.insertAdjacentHTML('afterbegin', navbarHTML);
+    original_content = content
     
-    // Dropdown click handler for mobile
-    document.querySelectorAll('.g3ti-dropdown-trigger').forEach(function(trigger) {
-      trigger.addEventListener('click', function(e) {
-        e.stopPropagation();
-        this.parentElement.classList.toggle('active');
-      });
-    });
-    document.addEventListener('click', function() {
-      document.querySelectorAll('.g3ti-dropdown').forEach(function(d) { d.classList.remove('active'); });
-    });
-    // Hide React navbar if exists
-    var reactNav = document.querySelector('body > div > nav');
-    if (reactNav) reactNav.style.display = 'none';
+    # Remove old footer override scripts
+    content = re.sub(r'<script>\s*// G3TI Footer Override Script.*?</script>', '', content, flags=re.DOTALL)
+    content = re.sub(r'<script>\s*// G3TI Maximum 6-Column Footer.*?</script>', '', content, flags=re.DOTALL)
     
-    // Add hover effects
-    var links = document.querySelectorAll('#g3ti-navbar-v4 a[href^="/"]');
-    links.forEach(function(link) {
-      var originalColor = link.style.color;
-      link.addEventListener('mouseenter', function() { this.style.color = '#12F6C8'; });
-      link.addEventListener('mouseleave', function() { this.style.color = originalColor; });
-    });
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() { setTimeout(injectNavbar, 100); });
-  } else {
-    setTimeout(injectNavbar, 100);
-  }
-  window.addEventListener('load', function() { setTimeout(injectNavbar, 500); });
-})();
-</script></body>
-</html>
+    # Remove old footer-g3ti-max CSS link
+    content = re.sub(r'<link rel="stylesheet" href="/components/footer-g3ti-max/footer-g3ti-max\.css">\s*', '', content)
+    
+    # Remove old federal footer CSS link (we'll add it back in the right place)
+    content = re.sub(r'<link rel="stylesheet" href="/components/federal-footer/federal-footer\.css">\s*', '', content)
+    
+    # Remove existing federal proposal footer div
+    content = re.sub(r'<!-- Federal Proposal Footer.*?<!-- End Federal Proposal Footer -->', '', content, flags=re.DOTALL)
+    
+    # Remove any existing footer element (various patterns)
+    # Pattern 1: Static footer with inline styles
+    content = re.sub(r'<footer style="background:#050505.*?</footer>', '', content, flags=re.DOTALL)
+    # Pattern 2: Footer with class
+    content = re.sub(r'<footer class="[^"]*"[^>]*>.*?</footer>', '', content, flags=re.DOTALL)
+    # Pattern 3: Plain footer tag
+    content = re.sub(r'<footer>.*?</footer>', '', content, flags=re.DOTALL)
+    
+    # Clean up multiple newlines
+    content = re.sub(r'\n{3,}', '\n\n', content)
+    
+    # Find the position to insert the footer (before </body> or before navbar script)
+    # We want to insert the footer before the navbar injection script
+    
+    # Check if there's a navbar script
+    navbar_match = re.search(r'<script id="g3ti-navbar-v4-injector">', content)
+    
+    if navbar_match:
+        # Insert footer before the navbar script
+        insert_pos = navbar_match.start()
+        content = content[:insert_pos] + MEGA_FOOTER_HTML + '\n' + FEDERAL_FOOTER_CSS + '\n' + FEDERAL_FOOTER_HTML + '\n' + content[insert_pos:]
+    elif '</body>' in content:
+        # Insert before </body>
+        content = content.replace('</body>', MEGA_FOOTER_HTML + '\n' + FEDERAL_FOOTER_CSS + '\n' + FEDERAL_FOOTER_HTML + '\n</body>')
+    else:
+        print(f"  Warning: No </body> tag found in {filepath.name}")
+        return False
+    
+    # Only write if content changed
+    if content != original_content:
+        with open(filepath, 'w', encoding='utf-8') as f:
+            f.write(content)
+        return True
+    else:
+        print(f"  Skipping {filepath.name} - no changes needed")
+        return False
+
+def main():
+    """Process all HTML files in the out directory."""
+    html_files = list(OUT_DIR.glob('**/*.html'))
+    print(f"Found {len(html_files)} HTML files")
+    
+    updated = 0
+    skipped = 0
+    errors = 0
+    
+    for filepath in html_files:
+        # Skip files in components directory
+        if 'components' in str(filepath):
+            print(f"Skipping component: {filepath.name}")
+            skipped += 1
+            continue
+        
+        print(f"Processing: {filepath.relative_to(OUT_DIR)}")
+        try:
+            if update_html_file(filepath):
+                updated += 1
+            else:
+                skipped += 1
+        except Exception as e:
+            print(f"  Error: {e}")
+            errors += 1
+    
+    print(f"\nDone! Updated {updated} files, skipped {skipped} files, {errors} errors")
+
+if __name__ == '__main__':
+    main()
