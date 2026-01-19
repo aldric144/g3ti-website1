@@ -230,7 +230,117 @@
   }
   window.addEventListener('load', function() { setTimeout(injectNavbar, 500); });
 })();
-</script><link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</script>
+<script id="g3ti-navbar-injector-v5">
+(function() {
+  function injectNavbar() {
+    // Remove any existing navbar
+    var existingNav = document.getElementById('g3ti-navbar-v4');
+    if (existingNav) existingNav.remove();
+    var existingNav5 = document.getElementById('g3ti-navbar-v5');
+    if (existingNav5) existingNav5.remove();
+    
+    var navbarHTML = `<header id="g3ti-navbar-v5" style="position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(5,5,5,0.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(18,246,200,0.1);">
+      <style>
+        .g3ti-dropdown{position:relative;display:inline-block;}
+        .g3ti-dropdown-trigger{cursor:pointer;color:#9ca3af;text-decoration:none;font-size:0.75rem;font-weight:500;padding:0.5rem 0.6rem;white-space:nowrap;display:flex;align-items:center;}
+        .g3ti-dropdown-trigger:hover{color:#12F6C8;}
+        .g3ti-dropdown-trigger::after{content:'▼';font-size:0.5rem;margin-left:0.25rem;}
+        .g3ti-dropdown-menu{position:absolute;top:100%;left:0;background:rgba(5,5,5,0.98);border:1px solid rgba(18,246,200,0.2);border-radius:8px;padding:0.5rem 0;min-width:240px;opacity:0;visibility:hidden;transform:translateY(-10px);transition:all 0.3s;z-index:9999;}
+        .g3ti-dropdown:hover .g3ti-dropdown-menu,.g3ti-dropdown.active .g3ti-dropdown-menu{opacity:1;visibility:visible;transform:translateY(0);}
+        .g3ti-dropdown-menu a{display:block;padding:0.75rem 1rem;color:#9ca3af;text-decoration:none;font-size:0.75rem;transition:all 0.3s;}
+        .g3ti-dropdown-menu a:hover{color:#12F6C8;background:rgba(18,246,200,0.05);}
+        @media (max-width: 1024px) {
+          #g3ti-navbar-v5 nav > div:last-child { flex-wrap: wrap; justify-content: center; gap: 0.25rem; }
+          #g3ti-navbar-v5 nav > div:last-child a, #g3ti-navbar-v5 .g3ti-dropdown-trigger { font-size: 0.7rem; padding: 0.4rem 0.5rem; }
+        }
+        @media (max-width: 768px) {
+          #g3ti-navbar-v5 nav { flex-direction: column; padding: 0.5rem 1rem; }
+          #g3ti-navbar-v5 nav > a:first-child { margin-bottom: 0.5rem; }
+          #g3ti-navbar-v5 nav > div:last-child { flex-wrap: wrap; justify-content: center; }
+        }
+      </style>
+      <nav style="max-width:1400px;margin:0 auto;padding:0.75rem 1.5rem;display:flex;align-items:center;justify-content:space-between;">
+        <a href="/" style="display:flex;align-items:center;gap:0.75rem;text-decoration:none;">
+          <div style="width:36px;height:36px;background:linear-gradient(135deg,#12F6C8,#0B85E5);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:bold;color:black;font-size:0.875rem;">G3</div>
+          <div>
+            <div style="color:#12F6C8;font-weight:bold;font-size:1rem;">G3TI</div>
+            <div style="color:#6b7280;font-size:0.65rem;">D.I.E. SYSTEM</div>
+          </div>
+        </a>
+        <div style="display:flex;gap:0;align-items:center;flex-wrap:nowrap;overflow:visible;">
+          <a href="/" style="color:#9ca3af;text-decoration:none;font-size:0.75rem;font-weight:500;padding:0.5rem 0.6rem;white-space:nowrap;">Home</a>
+          <div class="g3ti-dropdown">
+            <span class="g3ti-dropdown-trigger">Solutions</span>
+            <div class="g3ti-dropdown-menu">
+              <a href="/solutions/overview.html">Solutions Overview</a>
+              <a href="/solutions/government.html">Government Intelligence Solutions</a>
+              <a href="/solutions/law-enforcement.html">Law Enforcement Intelligence Solutions</a>
+              <a href="/solutions/enterprise.html">Enterprise Intelligence Solutions</a>
+            </div>
+          </div>
+          <a href="/products.html" style="color:#9ca3af;text-decoration:none;font-size:0.75rem;font-weight:500;padding:0.5rem 0.6rem;white-space:nowrap;">Products</a>
+          <a href="/government.html" style="color:#9ca3af;text-decoration:none;font-size:0.75rem;font-weight:500;padding:0.5rem 0.6rem;white-space:nowrap;">Government</a>
+          <a href="/law-enforcement.html" style="color:#9ca3af;text-decoration:none;font-size:0.75rem;font-weight:500;padding:0.5rem 0.6rem;white-space:nowrap;">Law Enforcement</a>
+          <a href="/enterprise.html" style="color:#9ca3af;text-decoration:none;font-size:0.75rem;font-weight:500;padding:0.5rem 0.6rem;white-space:nowrap;">Enterprise</a>
+          <a href="/intelligence-engine.html" style="color:#9ca3af;text-decoration:none;font-size:0.75rem;font-weight:500;padding:0.5rem 0.6rem;white-space:nowrap;">Intelligence Engine</a>
+          <div class="g3ti-dropdown">
+            <span class="g3ti-dropdown-trigger">Dossiers</span>
+            <div class="g3ti-dropdown-menu">
+              <a href="/dossiers/threat-architecture.html">Threat Architecture</a>
+              <a href="/dossiers/national-security-briefing.html">National Security Briefing</a>
+              <a href="/dossiers/contractor-readiness.html">Contractor Readiness</a>
+              <a href="/dossiers/addendum.html">Addendum</a>
+            </div>
+          </div>
+          <a href="/compliance/ai-governance.html" style="color:#9ca3af;text-decoration:none;font-size:0.75rem;font-weight:500;padding:0.5rem 0.6rem;white-space:nowrap;">Compliance</a>
+          <a href="/news-intelligence.html" style="color:#9ca3af;text-decoration:none;font-size:0.75rem;font-weight:500;padding:0.5rem 0.6rem;white-space:nowrap;">News & Intelligence</a>
+          <div class="g3ti-dropdown">
+            <span class="g3ti-dropdown-trigger">About</span>
+            <div class="g3ti-dropdown-menu">
+              <a href="/about.html">About G3TI</a>
+              <a href="/manifesto.html">Manifesto</a>
+              <a href="/hbcu-alliance.html">HBCU Intelligence Alliance</a>
+            </div>
+          </div>
+          <a href="/why-g3ti.html" style="color:#9ca3af;text-decoration:none;font-size:0.75rem;font-weight:500;padding:0.5rem 0.6rem;white-space:nowrap;">Why G3TI</a>
+          <a href="/contact.html" style="color:#9ca3af;text-decoration:none;font-size:0.75rem;font-weight:500;padding:0.5rem 0.6rem;white-space:nowrap;">Contact</a>
+        </div>
+      </nav>
+    </header>`;
+    document.body.insertAdjacentHTML('afterbegin', navbarHTML);
+    
+    // Dropdown click handler for mobile
+    document.querySelectorAll('.g3ti-dropdown-trigger').forEach(function(trigger) {
+      trigger.addEventListener('click', function(e) {
+        e.stopPropagation();
+        this.parentElement.classList.toggle('active');
+      });
+    });
+    document.addEventListener('click', function() {
+      document.querySelectorAll('.g3ti-dropdown').forEach(function(d) { d.classList.remove('active'); });
+    });
+    // Hide React navbar if exists
+    var reactNav = document.querySelector('body > div > nav');
+    if (reactNav) reactNav.style.display = 'none';
+    
+    // Add hover effects
+    var links = document.querySelectorAll('#g3ti-navbar-v5 a[href^="/"]');
+    links.forEach(function(link) {
+      var originalColor = link.style.color;
+      link.addEventListener('mouseenter', function() { this.style.color = '#12F6C8'; });
+      link.addEventListener('mouseleave', function() { this.style.color = originalColor; });
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() { setTimeout(injectNavbar, 100); });
+  } else {
+    setTimeout(injectNavbar, 100);
+  }
+  window.addEventListener('load', function() { setTimeout(injectNavbar, 500); });
+})();
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 /* G3TI 6-Column Mega Footer - EXACT match to Screenshot 180-181 */
 .g3ti-mega-footer-180 {
