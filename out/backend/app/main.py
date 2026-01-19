@@ -852,6 +852,11 @@ async def admin_override_login(data: AdminOverrideRequest, request: Request):
     }
 
 # Contact Form / Transmission Form Endpoint
+# Rate limiting storage (in-memory for simplicity, resets on restart)
+rate_limit_store: dict = {}
+RATE_LIMIT_MAX = 5  # Max submissions per IP
+RATE_LIMIT_WINDOW = 3600  # 1 hour in seconds
+
 class TransmissionRequest(BaseModel):
     name: str
     email: str
@@ -860,39 +865,101 @@ class TransmissionRequest(BaseModel):
     subject: str
     message: str
 
-async def log_transmission(email: str, classification: str):
+def sanitize_input(text: str) -> str:
+    """Sanitize input to prevent XSS and injection attacks"""
+    if not text:
+        return ""
+    # HTML escape special characters
+    text = text.replace("&", "&amp;")
+    text = text.replace("<", "&lt;")
+    text = text.replace(">", "&gt;")
+    text = text.replace('"', "&quot;")
+    text = text.replace("'", "&#x27;")
+    # Remove any null bytes
+    text = text.replace("\x00", "")
+    # Limit length
+    return text[:10000]
+
+def generate_reference_id() -> str:
+    """Generate unique reference ID: G3TI-YYYYMMDD-XXXXX"""
+    date_part = datetime.utcnow().strftime("%Y%m%d")
+    random_part = secrets.token_hex(3).upper()[:5]
+    return f"G3TI-{date_part}-{random_part}"
+
+async def check_rate_limit(ip_address: str) -> bool:
+    """Check if IP has exceeded rate limit. Returns True if allowed, False if blocked."""
+    current_time = datetime.utcnow().timestamp()
+    
+    if ip_address not in rate_limit_store:
+        rate_limit_store[ip_address] = []
+    
+    # Clean old entries
+    rate_limit_store[ip_address] = [
+        t for t in rate_limit_store[ip_address] 
+        if current_time - t < RATE_LIMIT_WINDOW
+    ]
+    
+    if len(rate_limit_store[ip_address]) >= RATE_LIMIT_MAX:
+        return False
+    
+    rate_limit_store[ip_address].append(current_time)
+    return True
+
+async def log_transmission(email: str, classification: str, reference_id: str, ip_address: str):
     """Log transmission metadata only - no message content, no PII beyond email"""
     timestamp = datetime.utcnow().isoformat()
     async with aiosqlite.connect(DB_PATH) as db:
         await db.execute("""
-            INSERT INTO audit_logs (action, user_email, details, risk_score)
-            VALUES (?, ?, ?, ?)
-        """, ("TRANSMISSION_RECEIVED", email, f"classification={classification}", 0))
+            INSERT INTO audit_logs (action, user_email, ip_address, details, risk_score)
+            VALUES (?, ?, ?, ?, ?)
+        """, ("TRANSMISSION_RECEIVED", email, ip_address, f"ref={reference_id},classification={classification}", 0))
         await db.commit()
-    print(f"[TRANSMISSION LOG] {timestamp} | {email} | {classification}")
+    print(f"[TRANSMISSION LOG] {timestamp} | {reference_id} | {email} | {classification} | {ip_address}")
 
-async def send_transmission_to_admin(data: TransmissionRequest):
+async def send_transmission_to_admin(data: TransmissionRequest, reference_id: str, timestamp: str, ip_address: str, user_agent: str):
     """Send transmission to admin email only (info@global3technology.com)"""
+    # Sanitize all inputs for email
+    safe_name = sanitize_input(data.name)
+    safe_email = sanitize_input(data.email)
+    safe_org = sanitize_input(data.organization or "Not provided")
+    safe_subject = sanitize_input(data.subject)
+    safe_message = sanitize_input(data.message)
+    safe_classification = sanitize_input(data.classification)
+    safe_ip = sanitize_input(ip_address)
+    safe_ua = sanitize_input(user_agent)
+    
     html_content = f"""
     <html>
     <body style="font-family: 'Courier New', monospace; background: #050505; color: #D1D5DB; padding: 20px;">
-        <div style="max-width: 600px; margin: 0 auto; background: #0A0A0C; border: 2px solid #12F6C8; border-radius: 12px; padding: 30px;">
-            <h1 style="color: #12F6C8; text-align: center;">G3TI TRANSMISSION RECEIVED</h1>
-            <h2 style="color: #9CA3AF;">Classification: {data.classification.upper()}</h2>
+        <div style="max-width: 700px; margin: 0 auto; background: #0A0A0C; border: 2px solid #12F6C8; border-radius: 12px; padding: 30px;">
+            <h1 style="color: #12F6C8; text-align: center;">NEW ENCRYPTED TRANSMISSION RECEIVED</h1>
+            <h2 style="color: #EF4444; text-align: center;">Classification: {safe_classification.upper()}</h2>
+            
+            <div style="background: #111; border: 1px solid #12F6C8; border-radius: 8px; padding: 15px; margin: 20px 0;">
+                <p style="color: #12F6C8; margin: 0; font-size: 14px;">Reference ID: <strong>{reference_id}</strong></p>
+                <p style="color: #9CA3AF; margin: 5px 0 0 0; font-size: 12px;">Timestamp: {timestamp}</p>
+            </div>
             
             <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
-                <tr><td style="padding: 8px; border-bottom: 1px solid #333; color: #9CA3AF;">From:</td><td style="padding: 8px; border-bottom: 1px solid #333; color: #fff;">{data.name}</td></tr>
-                <tr><td style="padding: 8px; border-bottom: 1px solid #333; color: #9CA3AF;">Email:</td><td style="padding: 8px; border-bottom: 1px solid #333; color: #fff;">{data.email}</td></tr>
-                <tr><td style="padding: 8px; border-bottom: 1px solid #333; color: #9CA3AF;">Organization:</td><td style="padding: 8px; border-bottom: 1px solid #333; color: #fff;">{data.organization or 'Not provided'}</td></tr>
-                <tr><td style="padding: 8px; border-bottom: 1px solid #333; color: #9CA3AF;">Subject:</td><td style="padding: 8px; border-bottom: 1px solid #333; color: #fff;">{data.subject}</td></tr>
+                <tr><td style="padding: 10px; border-bottom: 1px solid #333; color: #9CA3AF; width: 140px;">Agent Name:</td><td style="padding: 10px; border-bottom: 1px solid #333; color: #fff;">{safe_name}</td></tr>
+                <tr><td style="padding: 10px; border-bottom: 1px solid #333; color: #9CA3AF;">Email:</td><td style="padding: 10px; border-bottom: 1px solid #333; color: #12F6C8;">{safe_email}</td></tr>
+                <tr><td style="padding: 10px; border-bottom: 1px solid #333; color: #9CA3AF;">Organization:</td><td style="padding: 10px; border-bottom: 1px solid #333; color: #fff;">{safe_org}</td></tr>
+                <tr><td style="padding: 10px; border-bottom: 1px solid #333; color: #9CA3AF;">Classification:</td><td style="padding: 10px; border-bottom: 1px solid #333; color: #EF4444; font-weight: bold;">{safe_classification.upper()}</td></tr>
+                <tr><td style="padding: 10px; border-bottom: 1px solid #333; color: #9CA3AF;">Subject:</td><td style="padding: 10px; border-bottom: 1px solid #333; color: #fff;">{safe_subject}</td></tr>
             </table>
             
             <div style="background: #111; border: 1px solid #333; border-radius: 8px; padding: 20px; margin-top: 20px;">
-                <h3 style="color: #12F6C8; margin-top: 0;">Message:</h3>
-                <p style="color: #fff; white-space: pre-wrap;">{data.message}</p>
+                <h3 style="color: #12F6C8; margin-top: 0;">Message Body:</h3>
+                <p style="color: #fff; white-space: pre-wrap; line-height: 1.6;">{safe_message}</p>
             </div>
             
-            <p style="color: #666; font-size: 12px; margin-top: 20px; text-align: center;">
+            <div style="background: #0D0D0F; border: 1px solid #333; border-radius: 8px; padding: 15px; margin-top: 20px;">
+                <h4 style="color: #9CA3AF; margin: 0 0 10px 0; font-size: 12px;">SECURITY LOGGING</h4>
+                <p style="color: #666; font-size: 11px; margin: 5px 0;">IP Address: {safe_ip}</p>
+                <p style="color: #666; font-size: 11px; margin: 5px 0; word-break: break-all;">User-Agent: {safe_ua}</p>
+            </div>
+            
+            <p style="color: #666; font-size: 12px; margin-top: 20px; text-align: center; border-top: 1px solid #333; padding-top: 15px;">
                 Received via G3TI Secure Intelligence Channel v3.1
             </p>
         </div>
@@ -900,15 +967,25 @@ async def send_transmission_to_admin(data: TransmissionRequest):
     </html>
     """
     # Send ONLY to info@global3technology.com - no other addresses
-    await send_email(ADMIN_EMAIL, f"G3TI Transmission - {data.classification.upper()} - {data.subject}", html_content)
+    await send_email(ADMIN_EMAIL, f"New Encrypted Transmission Received – {safe_classification.upper()}", html_content)
 
-async def send_auto_reply(email: str, name: str):
+async def send_auto_reply(email: str, name: str, reference_id: str):
     """Send auto-reply confirmation to sender"""
-    html_content = """
+    safe_name = sanitize_input(name)
+    html_content = f"""
     <html>
     <body style="font-family: 'Courier New', monospace; background: #050505; color: #D1D5DB; padding: 20px;">
         <div style="max-width: 600px; margin: 0 auto; background: #0A0A0C; border: 2px solid #12F6C8; border-radius: 12px; padding: 30px;">
             <h1 style="color: #12F6C8; text-align: center;">G3TI TRANSMISSION RECEIVED</h1>
+            
+            <div style="background: #111; border: 1px solid #12F6C8; border-radius: 8px; padding: 15px; margin: 20px 0; text-align: center;">
+                <p style="color: #9CA3AF; margin: 0; font-size: 12px;">Your Reference ID:</p>
+                <p style="color: #12F6C8; margin: 5px 0 0 0; font-size: 18px; font-weight: bold;">{reference_id}</p>
+            </div>
+            
+            <p style="color: #D1D5DB; line-height: 1.8;">
+                Dear {safe_name},
+            </p>
             
             <p style="color: #D1D5DB; line-height: 1.8;">
                 Your transmission has been securely received by Global 3 Technology &amp; Intelligence (G3TI).
@@ -927,29 +1004,50 @@ async def send_auto_reply(email: str, name: str):
             </p>
             
             <p style="color: #666; font-size: 12px; margin-top: 30px; border-top: 1px solid #333; padding-top: 20px;">
-                This is an automated confirmation. Please do not reply to this email.
+                This is an automated confirmation. Please do not reply to this email.<br>
+                Reference ID: {reference_id}
             </p>
         </div>
     </body>
     </html>
     """
-    await send_email(email, "G3TI Transmission Received", html_content)
+    await send_email(email, f"G3TI Transmission Received - {reference_id}", html_content)
 
 @app.post("/api/contact/submit")
 async def submit_transmission(data: TransmissionRequest, background_tasks: BackgroundTasks, request: Request):
-    """Handle transmission form submission - Phase 3-6 implementation"""
+    """Handle transmission form submission with security measures"""
     ip_address = request.client.host if request.client else "unknown"
+    user_agent = request.headers.get("user-agent", "unknown")
+    timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
     
-    # Phase 6: Log transmission metadata only (timestamp, email, classification)
-    await log_transmission(data.email, data.classification)
+    # Rate limiting check
+    if not await check_rate_limit(ip_address):
+        raise HTTPException(
+            status_code=429, 
+            detail="Rate limit exceeded. Please wait before submitting again."
+        )
     
-    # Phase 3: Send to admin email (info@global3technology.com only)
-    background_tasks.add_task(send_transmission_to_admin, data)
+    # Basic input validation
+    if not data.name or not data.email or not data.message:
+        raise HTTPException(status_code=400, detail="Required fields missing")
     
-    # Phase 4: Send auto-reply confirmation to sender
-    background_tasks.add_task(send_auto_reply, data.email, data.name)
+    if len(data.email) > 254 or "@" not in data.email:
+        raise HTTPException(status_code=400, detail="Invalid email format")
+    
+    # Generate reference ID
+    reference_id = generate_reference_id()
+    
+    # Log transmission metadata
+    await log_transmission(data.email, data.classification, reference_id, ip_address)
+    
+    # Send to admin email (info@global3technology.com only)
+    background_tasks.add_task(send_transmission_to_admin, data, reference_id, timestamp, ip_address, user_agent)
+    
+    # Send auto-reply confirmation to sender
+    background_tasks.add_task(send_auto_reply, data.email, data.name, reference_id)
     
     return {
         "success": True,
+        "reference_id": reference_id,
         "message": "TRANSMISSION SECURED — Your encrypted message has been delivered to G3TI Headquarters."
     }
