@@ -50,146 +50,443 @@
   }
   window.addEventListener('load', function() { setTimeout(injectNavbar, 500); });
 })();
-</script><link rel="stylesheet" href="/components/federal-footer/federal-footer.css">
-<link rel="stylesheet" href="/assets/css/footer.css">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<script id="g3ti-footer-injector">
-// G3TI Footer Injection Script - Correct footer matching screenshot 192/193
+</script><link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* G3TI 6-Column Mega Footer - EXACT match to Screenshot 180-181 */
+.g3ti-mega-footer-180 {
+    background: linear-gradient(180deg, #02060A 0%, #040D11 100%);
+    position: relative;
+    width: 100%;
+    padding: 60px 40px 30px;
+    box-sizing: border-box;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.g3ti-mega-footer-180::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        linear-gradient(rgba(18, 246, 200, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(18, 246, 200, 0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.g3ti-mega-footer-180::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #0A2B2F 20%, #12F6C8 50%, #0A2B2F 80%, transparent);
+}
+
+.g3ti-mega-footer-180-content {
+    display: grid;
+    grid-template-columns: 200px repeat(5, 1fr);
+    gap: 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+/* Column 1 - G3TI CORE */
+.g3ti-mega-footer-180-core {
+    display: flex;
+    flex-direction: column;
+}
+
+.g3ti-mega-footer-180-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.g3ti-mega-footer-180-logo-hex {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #12F6C8, #0B85E5);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #000;
+    font-size: 1.1rem;
+    font-family: 'Orbitron', sans-serif;
+}
+
+.g3ti-mega-footer-180-logo-text {
+    color: #12F6C8;
+    font-weight: 700;
+    font-size: 1.4rem;
+    font-family: 'Orbitron', sans-serif;
+}
+
+.g3ti-mega-footer-180-core-title {
+    color: #9ca3af;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+.g3ti-mega-footer-180-core-tagline {
+    color: #6b7280;
+    font-size: 0.75rem;
+    font-style: italic;
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.g3ti-mega-footer-180-core-veteran {
+    color: #6b7280;
+    font-size: 0.75rem;
+    margin-bottom: 8px;
+}
+
+.g3ti-mega-footer-180-core-location {
+    color: #6b7280;
+    font-size: 0.75rem;
+    margin-bottom: 8px;
+}
+
+.g3ti-mega-footer-180-core-phone {
+    color: #12F6C8;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+/* Navigation Columns */
+.g3ti-mega-footer-180-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.g3ti-mega-footer-180-column-header {
+    font-family: 'Orbitron', 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #12F6C8;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(18, 246, 200, 0.2);
+}
+
+.g3ti-mega-footer-180-column ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.g3ti-mega-footer-180-column li {
+    margin-bottom: 8px;
+}
+
+.g3ti-mega-footer-180-column a {
+    color: #9ca3af;
+    text-decoration: none;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.g3ti-mega-footer-180-column a:hover {
+    color: #12F6C8;
+    text-shadow: 0 0 8px rgba(18, 246, 200, 0.5);
+}
+
+.g3ti-mega-footer-180-column .inactive {
+    color: #4b5563;
+    font-size: 0.8rem;
+}
+
+/* Footer Bottom Bar */
+.g3ti-mega-footer-180-bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(18, 246, 200, 0.1);
+    position: relative;
+    z-index: 1;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.g3ti-mega-footer-180-tagline {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-style: italic;
+    color: #12F6C8;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.g3ti-mega-footer-180-copyright {
+    font-size: 0.75rem;
+    color: #6b7280;
+    text-align: center;
+}
+
+/* Federal Proposal Footer - Screenshot 181 */
+.federal-footer-181 {
+    background: #02070A;
+    border-top: 1px solid #12F6C8;
+    box-shadow: 0 -2px 20px rgba(18, 246, 200, 0.15);
+    padding: 40px 20px 30px;
+    margin-top: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.federal-footer-181-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.federal-footer-181-title {
+    font-family: 'Orbitron', 'Inter', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #12F6C8;
+    letter-spacing: 0.1em;
+    margin: 0 0 8px 0;
+    text-transform: uppercase;
+}
+
+.federal-footer-181-subtitle {
+    font-family: 'Orbitron', 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #6b7280;
+    letter-spacing: 0.08em;
+    margin: 0 0 12px 0;
+    text-transform: uppercase;
+}
+
+.federal-footer-181-tagline {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-style: italic;
+    color: #9ca3af;
+    margin: 0 0 6px 0;
+}
+
+.federal-footer-181-veteran {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin: 0 0 20px 0;
+}
+
+.federal-footer-181-divider {
+    width: 100px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #12F6C8, transparent);
+    margin: 0 auto 20px;
+}
+
+.federal-footer-181-compliance-label {
+    font-family: 'Orbitron', 'Inter', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #12F6C8;
+    letter-spacing: 0.1em;
+    margin: 0 0 8px 0;
+    text-transform: uppercase;
+}
+
+.federal-footer-181-compliance-items {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    color: #4b5563;
+    letter-spacing: 0.05em;
+    margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .g3ti-mega-footer-180-content {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .g3ti-mega-footer-180-core {
+        grid-column: span 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .g3ti-mega-footer-180 {
+        padding: 40px 20px 20px;
+    }
+    .g3ti-mega-footer-180-content {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .g3ti-mega-footer-180-content {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+<script id="g3ti-footer-180-181-injector">
+// G3TI Footer Injection - EXACT match to Screenshot 180-181
 (function() {
-    function injectFooter() {
-        // Find and remove any existing footer
-        var existingFooters = document.querySelectorAll('footer, .g3ti-mega-footer, .g3ti-federal-footer');
-        existingFooters.forEach(function(f) {
-            f.remove();
-        });
+    function injectFooter180181() {
+        // Remove ALL existing footers
+        var existingFooters = document.querySelectorAll('footer, .g3ti-mega-footer, .g3ti-federal-footer, .g3ti-mega-footer-180, .federal-footer-181, #federal-proposal-footer');
+        existingFooters.forEach(function(f) { f.remove(); });
         
-        // Remove any existing federal footer
-        var existingFederalFooter = document.getElementById('federal-proposal-footer');
-        if (existingFederalFooter) {
-            existingFederalFooter.remove();
-        }
-        
-        // Create the main footer (hexagonal emblem, 4 nav columns, compliance badges)
-        var mainFooter = document.createElement('footer');
-        mainFooter.className = 'g3ti-federal-footer';
-        mainFooter.innerHTML = `
-            <div class="g3ti-footer-content">
-                <!-- Column 1: Logo -->
-                <div class="g3ti-footer-logo-section">
-                    <div class="g3ti-footer-logo-wrapper">
-                        <img src="/assets/img/g3ti-emblem.svg" alt="G3TI" class="g3ti-footer-logo">
+        // Create main 6-column mega footer (Screenshot 180)
+        var megaFooter = document.createElement('footer');
+        megaFooter.className = 'g3ti-mega-footer-180';
+        megaFooter.innerHTML = `
+            <div class="g3ti-mega-footer-180-content">
+                <!-- Column 1: G3TI CORE -->
+                <div class="g3ti-mega-footer-180-core">
+                    <div class="g3ti-mega-footer-180-logo">
+                        <div class="g3ti-mega-footer-180-logo-hex">G3</div>
+                        <span class="g3ti-mega-footer-180-logo-text">G3TI</span>
                     </div>
+                    <div class="g3ti-mega-footer-180-core-title">GLOBAL 3 TECHNOLOGY &<br>INTELLIGENCE&trade;</div>
+                    <div class="g3ti-mega-footer-180-core-tagline">Autonomous Protective Intelligence for the AI Threat Era</div>
+                    <div class="g3ti-mega-footer-180-core-veteran">Veteran-Owned Technology & Intelligence Company</div>
+                    <div class="g3ti-mega-footer-180-core-location">Palm Beach, FL</div>
+                    <div class="g3ti-mega-footer-180-core-phone">Phone: 1-888-603-7845</div>
                 </div>
                 
-                <!-- Column 2: About G3TI -->
-                <div class="g3ti-footer-column">
-                    <h4 class="g3ti-footer-column-header">About G3TI</h4>
+                <!-- Column 2: ABOUT G3TI -->
+                <div class="g3ti-mega-footer-180-column">
+                    <div class="g3ti-mega-footer-180-column-header">About G3TI</div>
                     <ul>
                         <li><a href="/about-g3ti.html">About G3TI</a></li>
                         <li><a href="/manifesto.html">Manifesto</a></li>
                         <li><a href="/about.html">Origin Dossier</a></li>
-                        <li><a href="/hbcu-alliance.html">HBCU Intelligence Alliance</a></li>
+                        <li><a href="/hbcu-alliance.html">HBCU Intelligence Alliance&trade;</a></li>
                         <li><a href="/why-g3ti.html">Why G3TI</a></li>
-                        <li><span>Careers</span></li>
+                        <li><span class="inactive">Careers</span></li>
+                        <li><span class="inactive">Executive Leadership</span></li>
                     </ul>
                 </div>
                 
-                <!-- Column 3: Solutions -->
-                <div class="g3ti-footer-column">
-                    <h4 class="g3ti-footer-column-header">Solutions</h4>
+                <!-- Column 3: SOLUTIONS -->
+                <div class="g3ti-mega-footer-180-column">
+                    <div class="g3ti-mega-footer-180-column-header">Solutions</div>
                     <ul>
                         <li><a href="/solutions.html">Solutions Overview</a></li>
-                        <li><a href="/solutions-government.html">Government Intelligence</a></li>
-                        <li><a href="/solutions-law-enforcement.html">Law Enforcement</a></li>
-                        <li><a href="/solutions-enterprise.html">Enterprise Intelligence</a></li>
-                        <li><a href="/intelligence-engine.html">Intelligence Engine</a></li>
+                        <li><a href="/solutions-government.html">Government Intelligence Solutions</a></li>
+                        <li><a href="/solutions-law-enforcement.html">Law Enforcement Intelligence Solutions</a></li>
+                        <li><a href="/solutions-enterprise.html">Enterprise Intelligence Solutions</a></li>
+                        <li><span class="inactive">AI-Driven Risk Mitigation</span></li>
+                        <li><span class="inactive">Autonomous Threat Operations</span></li>
                     </ul>
                 </div>
                 
-                <!-- Column 4: Resources -->
-                <div class="g3ti-footer-column">
-                    <h4 class="g3ti-footer-column-header">Resources</h4>
+                <!-- Column 4: INTELLIGENCE RESOURCES -->
+                <div class="g3ti-mega-footer-180-column">
+                    <div class="g3ti-mega-footer-180-column-header">Intelligence Resources</div>
                     <ul>
-                        <li><a href="/threat-architecture.html">Threat Architecture</a></li>
-                        <li><a href="/national-security-briefing.html">Security Briefing</a></li>
-                        <li><a href="/contractor-readiness.html">Contractor Readiness</a></li>
+                        <li><a href="/dossiers/threat-architecture.html">Threat Architecture Whitepaper</a></li>
+                        <li><a href="/dossiers/national-security-briefing.html">National Security Briefing Packet</a></li>
+                        <li><a href="/dossiers/contractor-readiness.html">Contractor Readiness Binder</a></li>
+                        <li><a href="/dossiers/addendum.html">Threat Architecture Addendum</a></li>
+                        <li><a href="/intelligence-engine.html">Intelligence Engine Overview</a></li>
                         <li><a href="/news-intelligence.html">News & Intelligence</a></li>
                     </ul>
                 </div>
                 
-                <!-- Column 5: Access & Contact -->
-                <div class="g3ti-footer-column">
-                    <h4 class="g3ti-footer-column-header">Access & Contact</h4>
+                <!-- Column 5: COMPLIANCE & SECURITY -->
+                <div class="g3ti-mega-footer-180-column">
+                    <div class="g3ti-mega-footer-180-column-header">Compliance & Security</div>
                     <ul>
-                        <li><a href="/contact.html">Transmission Form</a></li>
-                        <li><a href="/government.html">Government Portal</a></li>
-                        <li><a href="/law-enforcement.html">Law Enforcement Portal</a></li>
-                        <li><a href="/privacy-policy.html">Privacy Policy</a></li>
-                        <li><a href="/terms-of-use.html">Terms of Use</a></li>
+                        <li><a href="/legal/privacy-policy.html">Privacy Policy</a></li>
+                        <li><a href="/legal/terms-of-use.html">Terms of Use</a></li>
+                        <li><a href="/legal/security-notice.html">Security Notice</a></li>
+                        <li><a href="/legal/intellectual-property.html">Intellectual Property</a></li>
+                        <li><a href="/compliance/ai-governance.html">AI Governance</a></li>
+                        <li><a href="/compliance/responsible-ai.html">Responsible AI</a></li>
+                        <li><a href="/compliance/data-governance.html">Data Governance</a></li>
+                        <li><a href="/compliance/zero-trust.html">Zero Trust</a></li>
+                        <li><a href="/compliance/cjis-nist.html">CJIS/NIST Readiness</a></li>
+                        <li><a href="/compliance/responsible-disclosure.html">Responsible Disclosure</a></li>
+                        <li><a href="/compliance/ai-misuse-prohibition.html">AI Misuse Policy</a></li>
+                        <li><a href="/compliance/fedramp-alignment.html">FedRAMP Alignment Packet</a></li>
                     </ul>
                 </div>
                 
-                <!-- Column 6: Compliance -->
-                <div class="g3ti-footer-compliance">
-                    <div class="g3ti-compliance-header">Compliance Ready</div>
-                    <div class="g3ti-compliance-badges">
-                        <span class="g3ti-compliance-badge">CJIS</span>
-                        <span class="g3ti-compliance-badge">NIST 800-53</span>
-                        <span class="g3ti-compliance-badge">Zero Trust</span>
-                        <span class="g3ti-compliance-badge">FedRAMP</span>
-                    </div>
-                    <div class="g3ti-encryption-indicator">
-                        <span class="g3ti-encryption-dot"></span>
-                        <span class="g3ti-encryption-text">AES-256 Encrypted</span>
-                    </div>
+                <!-- Column 6: ACCESS & CONTACT -->
+                <div class="g3ti-mega-footer-180-column">
+                    <div class="g3ti-mega-footer-180-column-header">Access & Contact</div>
+                    <ul>
+                        <li><a href="/contact.html">Transmission Form (Secure Contact)</a></li>
+                        <li><a href="/contact.html">Request a Demo</a></li>
+                        <li><a href="/government.html">Government Access Portal</a></li>
+                        <li><a href="/law-enforcement.html">Law Enforcement Access Portal</a></li>
+                        <li><span class="inactive">Classified Request (Clearance Required)</span></li>
+                        <li><span class="inactive">Media / Press Inquiries</span></li>
+                    </ul>
                 </div>
             </div>
             
-            <div class="g3ti-footer-bottom">
-                <div class="g3ti-footer-tagline">"Autonomous Intelligence Engine Active — Monitoring Global Threat Surfaces in Real Time."</div>
-                <div class="g3ti-footer-copyright">© 2026 Global 3 Technology & Intelligence™. All rights reserved.</div>
+            <div class="g3ti-mega-footer-180-bottom">
+                <div class="g3ti-mega-footer-180-tagline">"Autonomous Intelligence Engine Active — Monitoring Global Threat Surfaces in Real Time."</div>
+                <div class="g3ti-mega-footer-180-copyright">&copy; 2026 Global 3 Technology & Intelligence&trade;. All rights reserved.</div>
             </div>
         `;
         
-        // Create federal proposal footer
+        // Create Federal Proposal Footer (Screenshot 181)
         var federalFooter = document.createElement('div');
+        federalFooter.className = 'federal-footer-181';
         federalFooter.id = 'federal-proposal-footer';
-        federalFooter.className = 'federal-proposal-footer';
         federalFooter.innerHTML = `
-            <div class="federal-proposal-footer-container">
-                <p class="federal-proposal-footer-title">GLOBAL 3 TECHNOLOGY & INTELLIGENCE™</p>
-                <p class="federal-proposal-footer-subtitle">Unsolicited Proposal Grade – Federal & Law Enforcement Engagement</p>
-                <p class="federal-proposal-footer-tagline">Autonomous Protective Intelligence for the AI Threat Era</p>
-                <p class="federal-proposal-footer-veteran">Veteran-Owned Technology & Intelligence Company</p>
-                <div class="federal-proposal-footer-divider"></div>
-                <p class="federal-proposal-footer-compliance-label">Compliance & Readiness:</p>
-                <p class="federal-proposal-footer-compliance-items">CJIS | NIST 800-53 | Zero Trust | AI Governance | Data Protection</p>
+            <div class="federal-footer-181-container">
+                <p class="federal-footer-181-title">GLOBAL 3 TECHNOLOGY & INTELLIGENCE&trade;</p>
+                <p class="federal-footer-181-subtitle">UNSOLICITED PROPOSAL GRADE &ndash; FEDERAL & LAW ENFORCEMENT ENGAGEMENT</p>
+                <p class="federal-footer-181-tagline">Autonomous Protective Intelligence for the AI Threat Era</p>
+                <p class="federal-footer-181-veteran">Veteran-Owned Technology & Intelligence Company</p>
+                <div class="federal-footer-181-divider"></div>
+                <p class="federal-footer-181-compliance-label">Compliance & Readiness:</p>
+                <p class="federal-footer-181-compliance-items">CJIS | NIST 800-53 | Zero Trust | AI Governance | Data Protection</p>
             </div>
         `;
         
-        // Find the main content area and append footers
+        // Find insertion point and append footers
         var main = document.querySelector('main');
         if (main && main.parentNode) {
-            main.parentNode.appendChild(mainFooter);
+            main.parentNode.appendChild(megaFooter);
             main.parentNode.appendChild(federalFooter);
         } else {
-            document.body.appendChild(mainFooter);
+            document.body.appendChild(megaFooter);
             document.body.appendChild(federalFooter);
         }
     }
     
-    // Run after DOM is ready and after a short delay for React hydration
+    // Run after DOM is ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(injectFooter, 500);
+            setTimeout(injectFooter180181, 300);
         });
     } else {
-        setTimeout(injectFooter, 500);
+        setTimeout(injectFooter180181, 300);
     }
     
-    // Also run on window load to ensure it works
+    // Also run on window load
     window.addEventListener('load', function() {
-        setTimeout(injectFooter, 800);
+        setTimeout(injectFooter180181, 600);
     });
 })();
 </script>
