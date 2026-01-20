@@ -37,10 +37,10 @@ JWT_ALGORITHM = "HS256"
 JWT_EXPIRATION_HOURS = 24
 ADMIN_USERNAME = "g3tiadmin"
 ADMIN_PASSWORD = os.getenv("G3TI_ADMIN_PASS", "G3TI-Admin-2026!")
-SMTP_HOST = os.getenv("SMTP_HOST", "")
+SMTP_HOST = os.getenv("SMTP_HOST", "email-smtp.us-east-1.amazonaws.com")
 SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
-SMTP_USER = os.getenv("SMTP_USER", "")
-SMTP_PASS = os.getenv("SMTP_PASS", "")
+SMTP_USER = os.getenv("SMTP_USER", "AKIATD52R6SQ3DV6ENEY")
+SMTP_PASS = os.getenv("SMTP_PASS", "BHUuYfq9TI8ym2d31ip8rZNBtJ8w17697VXeRuDROsrb")
 ADMIN_EMAIL = "info@global3technology.com"
 BACKUP_ADMIN_EMAIL = "security@global3technology.com"
 BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8000")
@@ -265,7 +265,7 @@ async def send_email(to_email: str, subject: str, html_content: str):
     
     try:
         message = MIMEMultipart("alternative")
-        message["From"] = SMTP_USER
+        message["From"] = ADMIN_EMAIL  # Use verified email address for AWS SES
         message["To"] = to_email
         message["Subject"] = subject
         message.attach(MIMEText(html_content, "html"))
