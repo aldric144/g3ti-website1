@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>G3TI | Classified Access Request</title>
+<meta name="description" content="Request classified access to G3TI intelligence resources"/>
+<link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="16x16"/>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #050505;
+  color: white;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  padding-top: 120px;
+}
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+.page-title {
+  text-align: center;
+  margin-bottom: 40px;
+}
+.page-title h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #12F6C8;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 10px;
+}
+.page-title p {
+  color: #9ca3af;
+  font-size: 0.9rem;
+}
+.form-card {
+  background: rgba(18, 246, 200, 0.03);
+  border: 1px solid rgba(18, 246, 200, 0.15);
+  border-radius: 16px;
+  padding: 40px;
+}
+.form-section-title {
+  color: #12F6C8;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(18, 246, 200, 0.2);
+}
+.form-group {
+  margin-bottom: 25px;
+}
+.form-label {
+  display: block;
+  color: #d1d5db;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+.form-label .required {
+  color: #ef4444;
+}
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(5, 5, 5, 0.8);
+  border: 1px solid rgba(18, 246, 200, 0.2);
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  transition: all 0.3s;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  outline: none;
+  border-color: #12F6C8;
+  box-shadow: 0 0 15px rgba(18, 246, 200, 0.2);
+}
+.form-input::placeholder, .form-textarea::placeholder {
+  color: #6b7280;
+}
+.form-select {
+  cursor: pointer;
+}
+.form-select option {
+  background: #0a0a0a;
+  color: white;
+}
+.form-textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+@media (max-width: 600px) {
+  .form-row { grid-template-columns: 1fr; }
+}
+.checkbox-group {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 25px;
+  padding: 20px;
+  background: rgba(245, 158, 11, 0.05);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: 8px;
+}
+.checkbox-group input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  accent-color: #12F6C8;
+}
+.checkbox-label {
+  color: #d1d5db;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+.submit-btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #12F6C8, #0B85E5);
+  color: black;
+  font-weight: bold;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 30px;
+}
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(18, 246, 200, 0.3);
+}
+.submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+.success-message {
+  display: none;
+  text-align: center;
+  padding: 40px;
+}
+.success-message.show {
+  display: block;
+}
+.success-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+}
+.success-title {
+  color: #22c55e;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+.success-text {
+  color: #d1d5db;
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+.reference-id {
+  background: rgba(18, 246, 200, 0.1);
+  border: 1px solid rgba(18, 246, 200, 0.3);
+  border-radius: 8px;
+  padding: 15px;
+  font-family: monospace;
+  color: #12F6C8;
+  font-size: 1.1rem;
+}
+.error-message {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  padding: 15px;
+  color: #ef4444;
+  margin-bottom: 20px;
+  display: none;
+}
+.error-message.show {
+  display: block;
+}
+.security-notice {
+  margin-top: 30px;
+  padding: 20px;
+  background: rgba(245, 158, 11, 0.05);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: 8px;
+}
+.security-notice-title {
+  color: #f59e0b;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+.security-notice-text {
+  color: #9ca3af;
+  font-size: 0.8rem;
+  line-height: 1.7;
+}
+</style>
+</head>
+<body>
+
+<!-- CLASSIFIED ACCESS WARNING BANNER -->
+<div id="classified-warning-banner" style="background:linear-gradient(135deg,rgba(220,38,38,0.95),rgba(185,28,28,0.95));border-bottom:3px solid #f59e0b;padding:15px 20px;position:fixed;top:60px;left:0;right:0;z-index:9998;text-align:center;animation:warningPulse 3s ease-in-out infinite;">
+<style>
+@keyframes warningPulse{0%,100%{box-shadow:0 0 0 0 rgba(220,38,38,0);}50%{box-shadow:0 0 20px rgba(220,38,38,0.5);}}
+</style>
+<div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:15px;flex-wrap:wrap;">
+<span style="font-size:1.5rem;">&#9888;&#65039;</span>
+<div style="text-align:left;">
+<div style="color:#fff;font-weight:bold;font-size:0.9rem;letter-spacing:2px;text-transform:uppercase;">CLASSIFIED ACCESS — AUTHORIZATION REQUIRED</div>
+<div style="color:#fecaca;font-size:0.75rem;margin-top:3px;line-height:1.4;">This page contains protected intelligence intended only for verified Government, Law Enforcement, and cleared Enterprise personnel. All access attempts are monitored and logged. Unauthorized use is prohibited.</div>
+</div>
+</div>
+</div>
+<!-- END CLASSIFIED ACCESS WARNING BANNER -->
+
+<div class="container">
+  <div class="page-title">
+    <h1>Classified Access Request</h1>
+    <p>Submit your credentials for security vetting and access approval</p>
+  </div>
+  
+  <div class="form-card">
+    <div id="request-form-container">
+      <div id="error-message" class="error-message"></div>
+      
+      <form id="classified-request-form">
+        <div class="form-section-title">Personal Information</div>
+        
+        <div class="form-group">
+          <label class="form-label">Full Name <span class="required">*</span></label>
+          <input type="text" id="full_name" name="full_name" class="form-input" placeholder="Enter your full legal name" required/>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Agency / Organization <span class="required">*</span></label>
+            <input type="text" id="agency" name="agency" class="form-input" placeholder="e.g., FBI, DHS, Local PD" required/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Official Government Email <span class="required">*</span></label>
+            <input type="email" id="email" name="email" class="form-input" placeholder="your.name@agency.gov" required/>
+          </div>
+        </div>
+        
+        <div class="form-section-title">Clearance Information</div>
+        
+        <div class="form-group">
+          <label class="form-label">Clearance Level <span class="required">*</span></label>
+          <select id="clearance_level" name="clearance_level" class="form-select" required>
+            <option value="">Select your clearance level</option>
+            <option value="ts-sci">TS/SCI (Top Secret / Sensitive Compartmented Information)</option>
+            <option value="top-secret">Top Secret</option>
+            <option value="secret">Secret</option>
+            <option value="confidential">Confidential</option>
+            <option value="not-sure">Not Sure / Pending</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Purpose of Request <span class="required">*</span></label>
+          <textarea id="purpose" name="purpose" class="form-textarea" placeholder="Describe why you need access to classified G3TI intelligence resources..." required></textarea>
+        </div>
+        
+        <div class="form-section-title">Supervisor Information</div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Supervisor Name <span class="required">*</span></label>
+            <input type="text" id="supervisor_name" name="supervisor_name" class="form-input" placeholder="Supervisor's full name" required/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Supervisor Email <span class="required">*</span></label>
+            <input type="email" id="supervisor_email" name="supervisor_email" class="form-input" placeholder="supervisor@agency.gov" required/>
+          </div>
+        </div>
+        
+        <div class="checkbox-group">
+          <input type="checkbox" id="certification" name="certification" required/>
+          <label for="certification" class="checkbox-label">
+            I certify that all information provided is accurate and complete. I understand that providing false information may result in denial of access and potential legal consequences under 18 U.S.C. Section 1001.
+          </label>
+        </div>
+        
+        <button type="submit" id="submit-btn" class="submit-btn">Submit Access Request</button>
+      </form>
+      
+      <div class="security-notice">
+        <div class="security-notice-title">Security Notice</div>
+        <p class="security-notice-text">
+          All access requests are logged with IP address, timestamp, and user agent information. 
+          Your request will be reviewed by G3TI Security Division within 24-48 hours. 
+          You will receive email notification of your approval status.
+        </p>
+      </div>
+    </div>
+    
+    <div id="success-message" class="success-message">
+      <div class="success-icon">&#9989;</div>
+      <h2 class="success-title">Request Submitted Successfully</h2>
+      <p class="success-text">
+        Your classified access request has been received by G3TI Security Division.<br/>
+        Review time: 24-48 hours. You will receive email notification of your approval status.
+      </p>
+      <div class="reference-id">
+        Reference ID: <span id="reference-id-value">-</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const BACKEND_URL = 'https://app-rkwofgbb.fly.dev';
+
+document.getElementById('classified-request-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  const submitBtn = document.getElementById('submit-btn');
+  const errorMsg = document.getElementById('error-message');
+  
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'SUBMITTING...';
+  errorMsg.classList.remove('show');
+  
+  const formData = {
+    full_name: document.getElementById('full_name').value,
+    email: document.getElementById('email').value,
+    agency: document.getElementById('agency').value,
+    clearance_level: document.getElementById('clearance_level').value,
+    purpose: document.getElementById('purpose').value,
+    supervisor_name: document.getElementById('supervisor_name').value,
+    supervisor_email: document.getElementById('supervisor_email').value
+  };
+  
+  try {
+    const response = await fetch(BACKEND_URL + '/api/classified/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    });
+    
+    const result = await response.json();
+    
+    if (response.ok) {
+      document.getElementById('request-form-container').style.display = 'none';
+      document.getElementById('success-message').classList.add('show');
+      document.getElementById('reference-id-value').textContent = result.reference_id || 'Pending';
+    } else {
+      errorMsg.textContent = result.detail || 'An error occurred. Please try again.';
+      errorMsg.classList.add('show');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'SUBMIT ACCESS REQUEST';
+    }
+  } catch (error) {
+    console.error('Submit error:', error);
+    errorMsg.textContent = 'Connection error. Please try again.';
+    errorMsg.classList.add('show');
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'SUBMIT ACCESS REQUEST';
+  }
+});
+</script>
+
+<script id="g3ti-navbar-injector-v5">
+(function() {
+  function injectNavbar() {
+    var existingNav = document.getElementById('g3ti-navbar-v5');
+    if (existingNav) existingNav.remove();
+    
+    var navbarHTML = '<header id="g3ti-navbar-v5" style="position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(5,5,5,0.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(18,246,200,0.1);"><style>.g3ti-dropdown{position:relative;display:inline-block;}.g3ti-dropdown-trigger{cursor:pointer;color:#9ca3af;text-decoration:none;font-size:0.75rem;font-weight:500;padding:0.5rem 0.6rem;white-space:nowrap;display:flex;align-items:center;}.g3ti-dropdown-trigger:hover{color:#12F6C8;}.g3ti-dropdown-trigger::after{content:"\\25BC";font-size:0.5rem;margin-left:0.25rem;}.g3ti-dropdown-menu{position:absolute;top:100%;left:0;background:rgba(5,5,5,0.98);border:1px solid rgba(18,246,200,0.2);border-radius:8px;padding:0.5rem 0;min-width:240px;opacity:0;visibility:hidden;transform:translateY(-10px);transition:all 0.3s;z-index:9999;}.g3ti-dropdown:hover .g3ti-dropdown-menu,.g3ti-dropdown.active .g3ti-dropdown-menu{opacity:1;visibility:visible;transform:translateY(0);}.g3ti-dropdown-menu a{display:block;padding:0.75rem 1rem;color:#9ca3af;text-decoration:none;font-size:0.75rem;transition:all 0.3s;}.g3ti-dropdown-menu a:hover{color:#12F6C8;background:rgba(18,246,200,0.05);}</style><nav style="max-width:1400px;margin:0 auto;padding:0.75rem 1.5rem;display:flex;align-items:center;justify-content:space-between;"><a href="/" style="display:flex;align-items:center;gap:0.75rem;text-decoration:none;"><div style="width:36px;height:36px;background:linear-gradient(135deg,#12F6C8,#0B85E5);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:bold;color:black;font-size:0.875rem;">G3</div><div><div style="color:#12F6C8;font-weight:bold;font-size:1rem;">G3TI</div><div style="color:#6b7280;font-size:0.65rem;">D.I.E. SYSTEM</div></div></a><div style="display:flex;gap:0;align-items:center;flex-wrap:nowrap;overflow:visible;"><a href="/" style="color:#9ca3af;text-decoration:none;font-size:0.75rem;font-weight:500;padding:0.5rem 0.6rem;white-space:nowrap;">Home</a><div class="g3ti-dropdown"><span class="g3ti-dropdown-trigger">Solutions</span><div class="g3ti-dropdown-menu"><a href="/solutions/overview.html">Solutions Overview</a><a href="/government.html">Government</a><a href="/law-enforcement.html">Law Enforcement</a><a href="/enterprise.html">Enterprise</a></div></div><a href="/products.html" style="color:#9ca3af;text-decoration:none;font-size:0.75rem;font-weight:500;padding:0.5rem 0.6rem;white-space:nowrap;">Products</a><a href="/contact.html" style="color:#9ca3af;text-decoration:none;font-size:0.75rem;font-weight:500;padding:0.5rem 0.6rem;white-space:nowrap;">Contact</a></div></nav></header>';
+    document.body.insertAdjacentHTML('afterbegin', navbarHTML);
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() { setTimeout(injectNavbar, 100); });
+  } else {
+    setTimeout(injectNavbar, 100);
+  }
+})();
+</script>
+
+</body>
+</html>
