@@ -100,6 +100,23 @@ class ApprovalAction(BaseModel):
 class DomainWhitelistAdd(BaseModel):
     domain: str
 
+# Classified Access Request Models
+class ClassifiedAccessRequest(BaseModel):
+    full_name: str
+    email: str
+    agency: str
+    clearance_level: str
+    purpose: str
+    supervisor_name: str
+    supervisor_email: str
+
+class ClassifiedRequestStatusUpdate(BaseModel):
+    status: str  # pending, approved, denied, info_requested
+    reviewer_notes: Optional[str] = None
+
+class ClassifiedRequestNotesUpdate(BaseModel):
+    reviewer_notes: str
+
 # Database initialization
 async def init_db():
     async with aiosqlite.connect(DB_PATH) as db:
@@ -166,6 +183,29 @@ async def init_db():
                 domain TEXT UNIQUE NOT NULL,
                 added_by TEXT,
                 added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        # Classified Access Requests table for security vetting workflow
+        await db.execute("""
+            CREATE TABLE IF NOT EXISTS classified_access_requests (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                reference_id TEXT UNIQUE NOT NULL,
+                full_name TEXT NOT NULL,
+                email TEXT NOT NULL,
+                agency TEXT NOT NULL,
+                clearance_level TEXT NOT NULL,
+                purpose TEXT NOT NULL,
+                supervisor_name TEXT NOT NULL,
+                supervisor_email TEXT NOT NULL,
+                status TEXT DEFAULT 'pending',
+                reviewer_notes TEXT,
+                risk_score INTEGER DEFAULT 50,
+                ip_address TEXT,
+                user_agent TEXT,
+                geolocation TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                reviewed_at TIMESTAMP,
+                reviewed_by TEXT
             )
         """)
         for domain in GOV_DOMAINS:
@@ -1051,3 +1091,442 @@ async def submit_transmission(data: TransmissionRequest, background_tasks: Backg
         "reference_id": reference_id,
         "message": "TRANSMISSION SECURED — Your encrypted message has been delivered to G3TI Headquarters."
     }
+
+# ============================================================================
+# CLASSIFIED ACCESS REQUEST SYSTEM
+# Security Vetting Workflow with Admin Dashboard
+# ============================================================================
+
+def calculate_classified_risk_score(email: str, clearance_level: str, agency: str) -> int:
+    """Calculate risk score for classified access requests"""
+    score = 50  # Base score
+    
+    # Email domain analysis
+    domain = email.split("@")[-1].lower() if "@" in email else ""
+    
+    # Government domains get lower risk
+    for gov_domain in GOV_DOMAINS:
+        if domain.endswith(gov_domain.lstrip(".")):
+            score -= 30
+            break
+    
+    # Free email providers get higher risk
+    if domain in FREE_EMAIL_PROVIDERS:
+        score += 25
+    
+    # High-risk domains
+    for risk_domain in HIGH_RISK_DOMAINS:
+        if domain.endswith(risk_domain.lstrip(".")):
+            score += 40
+            break
+    
+    # Clearance level adjustments
+    clearance_scores = {
+        "ts-sci": -10,
+        "top-secret": -5,
+        "secret": 0,
+        "confidential": 5,
+        "not-sure": 20
+    }
+    score += clearance_scores.get(clearance_level, 10)
+    
+    # Clamp score between 0 and 100
+    return max(0, min(100, score))
+
+async def send_classified_request_notification(request_data: dict, reference_id: str):
+    """Send notification email to admin about new classified access request"""
+    risk_color = "#22c55e" if request_data['risk_score'] < 40 else "#eab308" if request_data['risk_score'] < 70 else "#ef4444"
+    
+    html_content = f"""
+    <html>
+    <body style="font-family: 'Courier New', monospace; background: #050505; color: #D1D5DB; padding: 20px;">
+        <div style="max-width: 700px; margin: 0 auto; background: #0A0A0C; border: 2px solid #dc2626; border-radius: 12px; padding: 30px;">
+            <h1 style="color: #dc2626; text-align: center;">CLASSIFIED ACCESS REQUEST</h1>
+            <h2 style="color: #f59e0b; text-align: center;">Security Review Required</h2>
+            
+            <div style="background: #111; border: 1px solid #dc2626; border-radius: 8px; padding: 15px; margin: 20px 0;">
+                <p style="color: #dc2626; margin: 0; font-size: 14px;">Reference ID: <strong>{reference_id}</strong></p>
+                <p style="color: #9CA3AF; margin: 5px 0 0 0; font-size: 12px;">Submitted: {request_data['created_at']}</p>
+            </div>
+            
+            <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                <tr><td style="padding: 10px; border-bottom: 1px solid #333; color: #9CA3AF; width: 160px;">Full Name:</td><td style="padding: 10px; border-bottom: 1px solid #333; color: #fff;">{sanitize_input(request_data['full_name'])}</td></tr>
+                <tr><td style="padding: 10px; border-bottom: 1px solid #333; color: #9CA3AF;">Email:</td><td style="padding: 10px; border-bottom: 1px solid #333; color: #12F6C8;">{sanitize_input(request_data['email'])}</td></tr>
+                <tr><td style="padding: 10px; border-bottom: 1px solid #333; color: #9CA3AF;">Agency:</td><td style="padding: 10px; border-bottom: 1px solid #333; color: #fff;">{sanitize_input(request_data['agency'])}</td></tr>
+                <tr><td style="padding: 10px; border-bottom: 1px solid #333; color: #9CA3AF;">Clearance Level:</td><td style="padding: 10px; border-bottom: 1px solid #333; color: #f59e0b; font-weight: bold;">{sanitize_input(request_data['clearance_level']).upper()}</td></tr>
+                <tr><td style="padding: 10px; border-bottom: 1px solid #333; color: #9CA3AF;">Risk Score:</td><td style="padding: 10px; border-bottom: 1px solid #333;"><span style="background: {risk_color}; color: #000; padding: 4px 12px; border-radius: 4px; font-weight: bold;">{request_data['risk_score']}/100</span></td></tr>
+                <tr><td style="padding: 10px; border-bottom: 1px solid #333; color: #9CA3AF;">Supervisor:</td><td style="padding: 10px; border-bottom: 1px solid #333; color: #fff;">{sanitize_input(request_data['supervisor_name'])} ({sanitize_input(request_data['supervisor_email'])})</td></tr>
+                <tr><td style="padding: 10px; border-bottom: 1px solid #333; color: #9CA3AF;">IP Address:</td><td style="padding: 10px; border-bottom: 1px solid #333; color: #666;">{request_data.get('ip_address', 'Unknown')}</td></tr>
+            </table>
+            
+            <div style="background: #111; border: 1px solid #333; border-radius: 8px; padding: 20px; margin-top: 20px;">
+                <h3 style="color: #12F6C8; margin-top: 0;">Purpose of Request:</h3>
+                <p style="color: #fff; white-space: pre-wrap; line-height: 1.6;">{sanitize_input(request_data['purpose'])}</p>
+            </div>
+            
+            <p style="color: #666; font-size: 12px; margin-top: 20px; text-align: center; border-top: 1px solid #333; padding-top: 15px;">
+                Review this request at: /admin/access-logs.html
+            </p>
+        </div>
+    </body>
+    </html>
+    """
+    await send_email(ADMIN_EMAIL, f"CLASSIFIED ACCESS REQUEST - {reference_id} - {request_data['clearance_level'].upper()}", html_content)
+    await send_email(BACKUP_ADMIN_EMAIL, f"CLASSIFIED ACCESS REQUEST - {reference_id} - {request_data['clearance_level'].upper()}", html_content)
+
+@app.post("/api/classified/submit")
+async def submit_classified_request(data: ClassifiedAccessRequest, background_tasks: BackgroundTasks, request: Request):
+    """Submit a new classified access request"""
+    ip_address = request.client.host if request.client else "unknown"
+    user_agent = request.headers.get("user-agent", "unknown")
+    
+    # Rate limiting
+    if not await check_rate_limit(ip_address):
+        raise HTTPException(status_code=429, detail="Rate limit exceeded. Please wait before submitting again.")
+    
+    # Validate required fields
+    if not data.full_name or not data.email or not data.agency:
+        raise HTTPException(status_code=400, detail="Required fields missing")
+    
+    if len(data.email) > 254 or "@" not in data.email:
+        raise HTTPException(status_code=400, detail="Invalid email format")
+    
+    # Generate reference ID
+    reference_id = f"G3TI-CLS-{datetime.utcnow().strftime('%Y%m%d')}-{secrets.token_hex(3).upper()}"
+    
+    # Calculate risk score
+    risk_score = calculate_classified_risk_score(data.email, data.clearance_level, data.agency)
+    
+    # Get geolocation
+    geolocation = await get_geolocation(ip_address)
+    geo_str = f"{geolocation['city']}, {geolocation['region']}, {geolocation['country']}"
+    
+    # Store in database
+    async with aiosqlite.connect(DB_PATH) as db:
+        await db.execute("""
+            INSERT INTO classified_access_requests 
+            (reference_id, full_name, email, agency, clearance_level, purpose, 
+             supervisor_name, supervisor_email, risk_score, ip_address, user_agent, geolocation)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (reference_id, sanitize_input(data.full_name), data.email, sanitize_input(data.agency),
+              data.clearance_level, sanitize_input(data.purpose), sanitize_input(data.supervisor_name),
+              data.supervisor_email, risk_score, ip_address, user_agent, geo_str))
+        await db.commit()
+    
+    # Log the action
+    await log_action(
+        action="CLASSIFIED_REQUEST_SUBMITTED",
+        user_email=data.email,
+        ip_address=ip_address,
+        details=f"reference_id={reference_id},clearance={data.clearance_level},agency={data.agency}",
+        risk_score=risk_score
+    )
+    
+    # Send notification to admin
+    request_data = {
+        "full_name": data.full_name,
+        "email": data.email,
+        "agency": data.agency,
+        "clearance_level": data.clearance_level,
+        "purpose": data.purpose,
+        "supervisor_name": data.supervisor_name,
+        "supervisor_email": data.supervisor_email,
+        "risk_score": risk_score,
+        "ip_address": ip_address,
+        "created_at": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
+    }
+    background_tasks.add_task(send_classified_request_notification, request_data, reference_id)
+    
+    return {
+        "success": True,
+        "reference_id": reference_id,
+        "message": "Your classified access request has been received by G3TI Security Division."
+    }
+
+# Access Logs API Endpoints
+@app.get("/api/access-logs")
+async def get_access_logs(
+    status: Optional[str] = None,
+    clearance: Optional[str] = None,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Get all classified access requests (admin only)"""
+    if not credentials or not verify_admin(credentials.credentials):
+        raise HTTPException(status_code=401, detail="Admin authentication required")
+    
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        
+        query = "SELECT * FROM classified_access_requests"
+        conditions = []
+        params = []
+        
+        if status:
+            conditions.append("status = ?")
+            params.append(status)
+        if clearance:
+            conditions.append("clearance_level = ?")
+            params.append(clearance)
+        
+        if conditions:
+            query += " WHERE " + " AND ".join(conditions)
+        query += " ORDER BY created_at DESC"
+        
+        cursor = await db.execute(query, params)
+        rows = await cursor.fetchall()
+        return [dict(row) for row in rows]
+
+@app.get("/api/admin/classified-requests")
+async def get_classified_requests(
+    status: Optional[str] = None,
+    clearance: Optional[str] = None,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Get all classified access requests (admin only) - alias endpoint"""
+    return await get_access_logs(status, clearance, credentials)
+
+@app.get("/api/admin/classified-requests/stats")
+async def get_classified_requests_stats(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    """Get dashboard statistics for classified requests"""
+    if not credentials or not verify_admin(credentials.credentials):
+        raise HTTPException(status_code=401, detail="Admin authentication required")
+    
+    async with aiosqlite.connect(DB_PATH) as db:
+        # Total count
+        cursor = await db.execute("SELECT COUNT(*) FROM classified_access_requests")
+        total = (await cursor.fetchone())[0]
+        
+        # By status
+        cursor = await db.execute("SELECT status, COUNT(*) FROM classified_access_requests GROUP BY status")
+        status_counts = {row[0]: row[1] for row in await cursor.fetchall()}
+        
+        # By clearance level
+        cursor = await db.execute("SELECT clearance_level, COUNT(*) FROM classified_access_requests GROUP BY clearance_level")
+        clearance_counts = {row[0]: row[1] for row in await cursor.fetchall()}
+        
+        # Average risk score
+        cursor = await db.execute("SELECT AVG(risk_score) FROM classified_access_requests")
+        avg_risk = (await cursor.fetchone())[0] or 0
+        
+        # High risk count (score >= 70)
+        cursor = await db.execute("SELECT COUNT(*) FROM classified_access_requests WHERE risk_score >= 70")
+        high_risk = (await cursor.fetchone())[0]
+        
+        # Recent 7 days
+        cursor = await db.execute("SELECT COUNT(*) FROM classified_access_requests WHERE created_at >= datetime('now', '-7 days')")
+        recent_7_days = (await cursor.fetchone())[0]
+        
+        return {
+            "total": total,
+            "by_status": status_counts,
+            "by_clearance": clearance_counts,
+            "average_risk_score": round(avg_risk, 1),
+            "high_risk_count": high_risk,
+            "recent_7_days": recent_7_days
+        }
+
+@app.get("/api/admin/classified-requests/{request_id}")
+async def get_classified_request_detail(request_id: int, credentials: HTTPAuthorizationCredentials = Depends(security)):
+    """Get details of a single classified request"""
+    if not credentials or not verify_admin(credentials.credentials):
+        raise HTTPException(status_code=401, detail="Admin authentication required")
+    
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        cursor = await db.execute("SELECT * FROM classified_access_requests WHERE id = ?", (request_id,))
+        row = await cursor.fetchone()
+        if not row:
+            raise HTTPException(status_code=404, detail="Request not found")
+        return dict(row)
+
+@app.post("/api/access/approve")
+async def approve_classified_request(
+    request_id: int,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Approve a classified access request"""
+    if not credentials or not verify_admin(credentials.credentials):
+        raise HTTPException(status_code=401, detail="Admin authentication required")
+    
+    async with aiosqlite.connect(DB_PATH) as db:
+        cursor = await db.execute("SELECT * FROM classified_access_requests WHERE id = ?", (request_id,))
+        if not await cursor.fetchone():
+            raise HTTPException(status_code=404, detail="Request not found")
+        
+        await db.execute("""
+            UPDATE classified_access_requests 
+            SET status = 'approved', reviewed_at = ?, reviewed_by = ?
+            WHERE id = ?
+        """, (datetime.utcnow().isoformat(), "admin", request_id))
+        await db.commit()
+        
+        await log_action(action="CLASSIFIED_REQUEST_APPROVED", admin_user="admin", details=f"request_id={request_id}")
+        
+        return {"success": True, "message": "Request approved"}
+
+@app.post("/api/access/deny")
+async def deny_classified_request(
+    request_id: int,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Deny a classified access request"""
+    if not credentials or not verify_admin(credentials.credentials):
+        raise HTTPException(status_code=401, detail="Admin authentication required")
+    
+    async with aiosqlite.connect(DB_PATH) as db:
+        cursor = await db.execute("SELECT * FROM classified_access_requests WHERE id = ?", (request_id,))
+        if not await cursor.fetchone():
+            raise HTTPException(status_code=404, detail="Request not found")
+        
+        await db.execute("""
+            UPDATE classified_access_requests 
+            SET status = 'denied', reviewed_at = ?, reviewed_by = ?
+            WHERE id = ?
+        """, (datetime.utcnow().isoformat(), "admin", request_id))
+        await db.commit()
+        
+        await log_action(action="CLASSIFIED_REQUEST_DENIED", admin_user="admin", details=f"request_id={request_id}")
+        
+        return {"success": True, "message": "Request denied"}
+
+@app.put("/api/admin/classified-requests/{request_id}/status")
+async def update_classified_request_status(
+    request_id: int,
+    update: ClassifiedRequestStatusUpdate,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Update status of a classified request (approve/deny/request info)"""
+    if not credentials or not verify_admin(credentials.credentials):
+        raise HTTPException(status_code=401, detail="Admin authentication required")
+    
+    valid_statuses = ["pending", "approved", "denied", "info_requested"]
+    if update.status not in valid_statuses:
+        raise HTTPException(status_code=400, detail=f"Invalid status. Must be one of: {valid_statuses}")
+    
+    async with aiosqlite.connect(DB_PATH) as db:
+        cursor = await db.execute("SELECT * FROM classified_access_requests WHERE id = ?", (request_id,))
+        if not await cursor.fetchone():
+            raise HTTPException(status_code=404, detail="Request not found")
+        
+        await db.execute("""
+            UPDATE classified_access_requests 
+            SET status = ?, reviewer_notes = COALESCE(?, reviewer_notes), reviewed_at = ?, reviewed_by = ?
+            WHERE id = ?
+        """, (update.status, update.reviewer_notes, datetime.utcnow().isoformat(), "admin", request_id))
+        await db.commit()
+        
+        await log_action(
+            action=f"CLASSIFIED_REQUEST_{update.status.upper()}",
+            admin_user="admin",
+            details=f"request_id={request_id},notes={update.reviewer_notes or 'None'}"
+        )
+        
+        return {"success": True, "message": f"Request status updated to {update.status}"}
+
+@app.put("/api/admin/classified-requests/{request_id}/notes")
+async def update_classified_request_notes(
+    request_id: int,
+    update: ClassifiedRequestNotesUpdate,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Add or update reviewer notes for a classified request"""
+    if not credentials or not verify_admin(credentials.credentials):
+        raise HTTPException(status_code=401, detail="Admin authentication required")
+    
+    async with aiosqlite.connect(DB_PATH) as db:
+        cursor = await db.execute("SELECT id FROM classified_access_requests WHERE id = ?", (request_id,))
+        if not await cursor.fetchone():
+            raise HTTPException(status_code=404, detail="Request not found")
+        
+        await db.execute("""
+            UPDATE classified_access_requests 
+            SET reviewer_notes = ?, reviewed_at = ?, reviewed_by = ?
+            WHERE id = ?
+        """, (update.reviewer_notes, datetime.utcnow().isoformat(), "admin", request_id))
+        await db.commit()
+        
+        return {"success": True, "message": "Notes updated successfully"}
+
+@app.get("/api/admin/classified-requests/export/csv")
+async def export_classified_requests_csv(
+    status: Optional[str] = None,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Export classified requests as CSV"""
+    if not credentials or not verify_admin(credentials.credentials):
+        raise HTTPException(status_code=401, detail="Admin authentication required")
+    
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        
+        query = "SELECT * FROM classified_access_requests"
+        params = []
+        if status:
+            query += " WHERE status = ?"
+            params.append(status)
+        query += " ORDER BY created_at DESC"
+        
+        cursor = await db.execute(query, params)
+        rows = await cursor.fetchall()
+        
+        headers = ["ID", "Reference ID", "Full Name", "Email", "Agency", "Clearance Level", 
+                   "Purpose", "Supervisor Name", "Supervisor Email", "Status", "Risk Score",
+                   "Reviewer Notes", "IP Address", "Created At", "Reviewed At", "Reviewed By"]
+        
+        csv_lines = [",".join(headers)]
+        for row in rows:
+            row_dict = dict(row)
+            values = [
+                str(row_dict.get('id', '')),
+                str(row_dict.get('reference_id', '')),
+                f'"{sanitize_input(row_dict.get("full_name", ""))}"',
+                str(row_dict.get('email', '')),
+                f'"{sanitize_input(row_dict.get("agency", ""))}"',
+                str(row_dict.get('clearance_level', '')),
+                f'"{sanitize_input(row_dict.get("purpose", ""))[:100]}..."',
+                f'"{sanitize_input(row_dict.get("supervisor_name", ""))}"',
+                str(row_dict.get('supervisor_email', '')),
+                str(row_dict.get('status', '')),
+                str(row_dict.get('risk_score', '')),
+                f'"{sanitize_input(row_dict.get("reviewer_notes", "") or "")}"',
+                str(row_dict.get('ip_address', '')),
+                str(row_dict.get('created_at', '')),
+                str(row_dict.get('reviewed_at', '') or ''),
+                str(row_dict.get('reviewed_by', '') or '')
+            ]
+            csv_lines.append(",".join(values))
+        
+        csv_content = "\n".join(csv_lines)
+        
+        return JSONResponse(
+            content={"csv": csv_content, "filename": f"classified_requests_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.csv"},
+            headers={"Content-Type": "application/json"}
+        )
+
+@app.get("/api/admin/classified-requests/export/json")
+async def export_classified_requests_json(
+    status: Optional[str] = None,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Export classified requests as JSON (for PDF generation on frontend)"""
+    if not credentials or not verify_admin(credentials.credentials):
+        raise HTTPException(status_code=401, detail="Admin authentication required")
+    
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        
+        query = "SELECT * FROM classified_access_requests"
+        params = []
+        if status:
+            query += " WHERE status = ?"
+            params.append(status)
+        query += " ORDER BY created_at DESC"
+        
+        cursor = await db.execute(query, params)
+        rows = await cursor.fetchall()
+        
+        return {
+            "requests": [dict(row) for row in rows],
+            "exported_at": datetime.utcnow().isoformat(),
+            "total_count": len(rows)
+        }

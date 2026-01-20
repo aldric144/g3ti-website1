@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>G3TI Admin - Classified Access Logs</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #050505;
+      color: #D1D5DB;
+      min-height: 100vh;
+    }
+    .login-container, .dashboard-container {
+      display: none;
+    }
+    .login-container.active, .dashboard-container.active {
+      display: block;
+    }
+    .login-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    .login-box {
+      background: #0A0A0C;
+      border: 2px solid #dc2626;
+      border-radius: 12px;
+      padding: 3rem;
+      max-width: 400px;
+      width: 100%;
+    }
+    .login-box h1 {
+      color: #dc2626;
+      text-align: center;
+      margin-bottom: 0.5rem;
+      font-size: 1.5rem;
+    }
+    .login-box .subtitle {
+      color: #f59e0b;
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 0.875rem;
+    }
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    .form-group label {
+      display: block;
+      color: #9CA3AF;
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 1rem;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 8px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 1rem;
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: #dc2626;
+    }
+    .btn {
+      display: inline-block;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #dc2626, #f59e0b);
+      color: #fff;
+      width: 100%;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(220, 38, 38, 0.3);
+    }
+    .btn-approve {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #fff;
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+    }
+    .btn-deny {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: #fff;
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+    }
+    .btn-info {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #000;
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+    }
+    .btn-view {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: #fff;
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+    }
+    .btn-export {
+      background: linear-gradient(135deg, #0B85E5, #12F6C8);
+      color: #050505;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.875rem;
+    }
+    .error-msg {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid #EF4444;
+      color: #EF4444;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .error-msg.show {
+      display: block;
+    }
+    /* Dashboard */
+    .dashboard-container {
+      padding: 2rem;
+    }
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #dc2626;
+    }
+    .dashboard-header h1 {
+      color: #dc2626;
+      font-size: 1.5rem;
+    }
+    .dashboard-header h1 span {
+      color: #f59e0b;
+      font-size: 0.875rem;
+      display: block;
+      margin-top: 0.25rem;
+    }
+    .header-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    .logout-btn {
+      background: transparent;
+      border: 1px solid #EF4444;
+      color: #EF4444;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: #0A0A0C;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .stat-card.pending { border-color: #eab308; }
+    .stat-card.approved { border-color: #22c55e; }
+    .stat-card.denied { border-color: #ef4444; }
+    .stat-card.info_requested { border-color: #f59e0b; }
+    .stat-card.total { border-color: #12F6C8; }
+    .stat-card.risk { border-color: #dc2626; }
+    .stat-value {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .stat-card.pending .stat-value { color: #eab308; }
+    .stat-card.approved .stat-value { color: #22c55e; }
+    .stat-card.denied .stat-value { color: #ef4444; }
+    .stat-card.info_requested .stat-value { color: #f59e0b; }
+    .stat-card.total .stat-value { color: #12F6C8; }
+    .stat-card.risk .stat-value { color: #dc2626; }
+    .stat-label {
+      color: #9CA3AF;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .filters {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .filters input, .filters select {
+      padding: 0.75rem 1rem;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 6px;
+      color: #fff;
+      font-family: inherit;
+    }
+    .filters input:focus, .filters select:focus {
+      outline: none;
+      border-color: #dc2626;
+    }
+    .export-buttons {
+      margin-left: auto;
+      display: flex;
+      gap: 0.5rem;
+    }
+    .requests-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #0A0A0C;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .requests-table th, .requests-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #222;
+    }
+    .requests-table th {
+      background: #111;
+      color: #dc2626;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .requests-table tr:hover {
+      background: rgba(220, 38, 38, 0.05);
+    }
+    .risk-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .risk-low { background: #22c55e; color: #000; }
+    .risk-medium { background: #eab308; color: #000; }
+    .risk-high { background: #ef4444; color: #fff; }
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .status-pending { background: rgba(234, 179, 8, 0.2); color: #eab308; border: 1px solid #eab308; }
+    .status-approved { background: rgba(34, 197, 94, 0.2); color: #22c55e; border: 1px solid #22c55e; }
+    .status-denied { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid #ef4444; }
+    .status-info_requested { background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid #f59e0b; }
+    .clearance-badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+    }
+    .clearance-ts-sci { background: rgba(220, 38, 38, 0.3); color: #dc2626; border: 1px solid #dc2626; }
+    .clearance-top-secret { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid #ef4444; }
+    .clearance-secret { background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid #f59e0b; }
+    .clearance-confidential { background: rgba(59, 130, 246, 0.2); color: #3b82f6; border: 1px solid #3b82f6; }
+    .clearance-not-sure { background: rgba(156, 163, 175, 0.2); color: #9CA3AF; border: 1px solid #9CA3AF; }
+    .actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: #6B7280;
+    }
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 2rem;
+    }
+    .modal-overlay.show {
+      display: flex;
+    }
+    .modal {
+      background: #0A0A0C;
+      border: 2px solid #dc2626;
+      border-radius: 12px;
+      max-width: 800px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid #333;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(135deg, rgba(220, 38, 38, 0.1), rgba(245, 158, 11, 0.1));
+    }
+    .modal-header h2 {
+      color: #dc2626;
+    }
+    .modal-header .ref-id {
+      color: #f59e0b;
+      font-size: 0.875rem;
+    }
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: #9CA3AF;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    .modal-body {
+      padding: 1.5rem;
+    }
+    .detail-section {
+      margin-bottom: 1.5rem;
+    }
+    .detail-section h3 {
+      color: #12F6C8;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #333;
+    }
+    .detail-row {
+      display: flex;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #222;
+    }
+    .detail-label {
+      width: 180px;
+      color: #9CA3AF;
+      font-size: 0.875rem;
+    }
+    .detail-value {
+      flex: 1;
+      color: #fff;
+    }
+    .purpose-text {
+      background: #111;
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px solid #333;
+      white-space: pre-wrap;
+      line-height: 1.6;
+    }
+    .notes-section {
+      margin-top: 1.5rem;
+    }
+    .notes-section textarea {
+      width: 100%;
+      padding: 1rem;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 8px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.875rem;
+      min-height: 100px;
+      resize: vertical;
+    }
+    .notes-section textarea:focus {
+      outline: none;
+      border-color: #dc2626;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #333;
+      flex-wrap: wrap;
+    }
+    .loading {
+      text-align: center;
+      padding: 2rem;
+      color: #dc2626;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .spinner {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      border: 2px solid #333;
+      border-top-color: #dc2626;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    .warning-banner {
+      background: linear-gradient(135deg, rgba(220, 38, 38, 0.2), rgba(245, 158, 11, 0.2));
+      border: 1px solid #dc2626;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .warning-banner .icon {
+      font-size: 1.5rem;
+    }
+    .warning-banner .text {
+      color: #f59e0b;
+      font-size: 0.875rem;
+    }
+    .warning-banner .text strong {
+      color: #dc2626;
+    }
+  </style>
+</head>
+<body>
+  <div id="login-container" class="login-container active">
+    <div class="login-box">
+      <h1>CLASSIFIED ACCESS LOGS</h1>
+      <div class="subtitle">G3TI Security Division - Admin Portal</div>
+      <div id="login-error" class="error-msg"></div>
+      <form id="login-form">
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="username" required autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="password" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn btn-primary">Authenticate</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="dashboard-container" class="dashboard-container">
+    <div class="dashboard-header">
+      <h1>CLASSIFIED ACCESS LOGS<span>Security Vetting Dashboard</span></h1>
+      <div class="header-actions">
+        <a href="/admin/approvals.html" style="color: #12F6C8; text-decoration: none; font-size: 0.875rem;">User Approvals</a>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </div>
+    </div>
+
+    <div class="warning-banner">
+      <span class="icon">&#9888;&#65039;</span>
+      <div class="text">
+        <strong>CLASSIFIED SECURITY SYSTEM</strong> - All actions are logged and monitored. 
+        Review requests carefully before approving access to sensitive intelligence pages.
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card pending">
+        <div class="stat-value" id="stat-pending">0</div>
+        <div class="stat-label">Pending Review</div>
+      </div>
+      <div class="stat-card approved">
+        <div class="stat-value" id="stat-approved">0</div>
+        <div class="stat-label">Approved</div>
+      </div>
+      <div class="stat-card denied">
+        <div class="stat-value" id="stat-denied">0</div>
+        <div class="stat-label">Denied</div>
+      </div>
+      <div class="stat-card info_requested">
+        <div class="stat-value" id="stat-info">0</div>
+        <div class="stat-label">Info Requested</div>
+      </div>
+      <div class="stat-card total">
+        <div class="stat-value" id="stat-total">0</div>
+        <div class="stat-label">Total Requests</div>
+      </div>
+      <div class="stat-card risk">
+        <div class="stat-value" id="stat-risk">0</div>
+        <div class="stat-label">High Risk</div>
+      </div>
+    </div>
+
+    <div class="filters">
+      <input type="text" id="search" placeholder="Search by name, email, or agency..." oninput="filterRequests()">
+      <select id="status-filter" onchange="filterRequests()">
+        <option value="">All Statuses</option>
+        <option value="pending">Pending</option>
+        <option value="approved">Approved</option>
+        <option value="denied">Denied</option>
+        <option value="info_requested">Info Requested</option>
+      </select>
+      <select id="clearance-filter" onchange="filterRequests()">
+        <option value="">All Clearance Levels</option>
+        <option value="ts-sci">TS/SCI</option>
+        <option value="top-secret">Top Secret</option>
+        <option value="secret">Secret</option>
+        <option value="confidential">Confidential</option>
+        <option value="not-sure">Not Sure</option>
+      </select>
+      <select id="risk-filter" onchange="filterRequests()">
+        <option value="">All Risk Levels</option>
+        <option value="low">Low (0-39)</option>
+        <option value="medium">Medium (40-69)</option>
+        <option value="high">High (70+)</option>
+      </select>
+      <div class="export-buttons">
+        <button class="btn btn-export" onclick="exportCSV()">Export CSV</button>
+        <button class="btn btn-export" onclick="exportPDF()">Export PDF</button>
+      </div>
+    </div>
+
+    <div id="content-area">
+      <div class="loading"><div class="spinner"></div> Loading classified access requests...</div>
+    </div>
+  </div>
+
+  <!-- Request Detail Modal -->
+  <div id="request-modal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <h2>Classified Access Request</h2>
+          <div class="ref-id" id="modal-ref-id"></div>
+        </div>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-content">
+        <!-- Content loaded dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = 'https://app-rkwofgbb.fly.dev';
+    let adminToken = localStorage.getItem('g3ti_admin_token');
+    let allRequests = [];
+    let currentRequestId = null;
+
+    // Check if already logged in
+    if (adminToken) {
+      showDashboard();
+    }
+
+    // Login form handler
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const errorEl = document.getElementById('login-error');
+
+      try {
+        const response = await fetch(`${API_URL}/api/admin/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          adminToken = data.token;
+          localStorage.setItem('g3ti_admin_token', adminToken);
+          showDashboard();
+        } else {
+          errorEl.textContent = data.detail || 'Invalid credentials';
+          errorEl.classList.add('show');
+        }
+      } catch (err) {
+        errorEl.textContent = 'Connection error. Please try again.';
+        errorEl.classList.add('show');
+      }
+    });
+
+    function showDashboard() {
+      document.getElementById('login-container').classList.remove('active');
+      document.getElementById('dashboard-container').classList.add('active');
+      loadStats();
+      loadRequests();
+    }
+
+    function logout() {
+      localStorage.removeItem('g3ti_admin_token');
+      adminToken = null;
+      document.getElementById('dashboard-container').classList.remove('active');
+      document.getElementById('login-container').classList.add('active');
+    }
+
+    async function loadStats() {
+      try {
+        const response = await fetch(`${API_URL}/api/admin/classified-requests/stats`, {
+          headers: { 'Authorization': `Bearer ${adminToken}` }
+        });
+        
+        if (response.status === 401) {
+          logout();
+          return;
+        }
+        
+        const data = await response.json();
+        
+        document.getElementById('stat-pending').textContent = data.by_status?.pending || 0;
+        document.getElementById('stat-approved').textContent = data.by_status?.approved || 0;
+        document.getElementById('stat-denied').textContent = data.by_status?.denied || 0;
+        document.getElementById('stat-info').textContent = data.by_status?.info_requested || 0;
+        document.getElementById('stat-total').textContent = data.total || 0;
+        document.getElementById('stat-risk').textContent = data.high_risk_count || 0;
+      } catch (err) {
+        console.error('Failed to load stats:', err);
+      }
+    }
+
+    async function loadRequests() {
+      const contentArea = document.getElementById('content-area');
+      contentArea.innerHTML = '<div class="loading"><div class="spinner"></div> Loading classified access requests...</div>';
+
+      try {
+        const response = await fetch(`${API_URL}/api/access-logs`, {
+          headers: { 'Authorization': `Bearer ${adminToken}` }
+        });
+        
+        if (response.status === 401) {
+          logout();
+          return;
+        }
+        
+        allRequests = await response.json();
+        renderRequests(allRequests);
+      } catch (err) {
+        contentArea.innerHTML = '<div class="empty-state">Failed to load requests. Please try again.</div>';
+      }
+    }
+
+    function filterRequests() {
+      const search = document.getElementById('search').value.toLowerCase();
+      const status = document.getElementById('status-filter').value;
+      const clearance = document.getElementById('clearance-filter').value;
+      const risk = document.getElementById('risk-filter').value;
+
+      let filtered = allRequests.filter(req => {
+        const matchesSearch = !search || 
+          req.full_name?.toLowerCase().includes(search) ||
+          req.email?.toLowerCase().includes(search) ||
+          req.agency?.toLowerCase().includes(search) ||
+          req.reference_id?.toLowerCase().includes(search);
+        
+        const matchesStatus = !status || req.status === status;
+        const matchesClearance = !clearance || req.clearance_level === clearance;
+        
+        let matchesRisk = true;
+        if (risk === 'low') matchesRisk = req.risk_score < 40;
+        else if (risk === 'medium') matchesRisk = req.risk_score >= 40 && req.risk_score < 70;
+        else if (risk === 'high') matchesRisk = req.risk_score >= 70;
+
+        return matchesSearch && matchesStatus && matchesClearance && matchesRisk;
+      });
+
+      renderRequests(filtered);
+    }
+
+    function renderRequests(requests) {
+      const contentArea = document.getElementById('content-area');
+
+      if (requests.length === 0) {
+        contentArea.innerHTML = '<div class="empty-state">No classified access requests found.</div>';
+        return;
+      }
+
+      let html = `
+        <table class="requests-table">
+          <thead>
+            <tr>
+              <th>Reference ID</th>
+              <th>Name</th>
+              <th>Agency</th>
+              <th>Clearance</th>
+              <th>Risk</th>
+              <th>Status</th>
+              <th>Submitted</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      requests.forEach(req => {
+        const riskClass = req.risk_score < 40 ? 'risk-low' : req.risk_score < 70 ? 'risk-medium' : 'risk-high';
+        const statusClass = `status-${req.status}`;
+        const clearanceClass = `clearance-${req.clearance_level}`;
+        const date = new Date(req.created_at).toLocaleDateString();
+
+        html += `
+          <tr>
+            <td style="color: #f59e0b; font-size: 0.8rem;">${req.reference_id || 'N/A'}</td>
+            <td>
+              <div style="color: #fff;">${escapeHtml(req.full_name)}</div>
+              <div style="color: #6B7280; font-size: 0.75rem;">${escapeHtml(req.email)}</div>
+            </td>
+            <td style="color: #9CA3AF;">${escapeHtml(req.agency)}</td>
+            <td><span class="clearance-badge ${clearanceClass}">${req.clearance_level?.replace('-', '/').toUpperCase() || 'N/A'}</span></td>
+            <td><span class="risk-badge ${riskClass}">${req.risk_score}</span></td>
+            <td><span class="status-badge ${statusClass}">${req.status?.replace('_', ' ') || 'pending'}</span></td>
+            <td style="color: #6B7280; font-size: 0.8rem;">${date}</td>
+            <td>
+              <div class="actions">
+                <button class="btn btn-view" onclick="viewRequest(${req.id})">View</button>
+                ${req.status === 'pending' ? `
+                  <button class="btn btn-approve" onclick="updateStatus(${req.id}, 'approved')">Approve</button>
+                  <button class="btn btn-deny" onclick="updateStatus(${req.id}, 'denied')">Deny</button>
+                ` : ''}
+              </div>
+            </td>
+          </tr>
+        `;
+      });
+
+      html += '</tbody></table>';
+      contentArea.innerHTML = html;
+    }
+
+    async function viewRequest(id) {
+      currentRequestId = id;
+      const modal = document.getElementById('request-modal');
+      const modalContent = document.getElementById('modal-content');
+      
+      modalContent.innerHTML = '<div class="loading"><div class="spinner"></div> Loading request details...</div>';
+      modal.classList.add('show');
+
+      try {
+        const response = await fetch(`${API_URL}/api/admin/classified-requests/${id}`, {
+          headers: { 'Authorization': `Bearer ${adminToken}` }
+        });
+        
+        if (!response.ok) throw new Error('Failed to load request');
+        
+        const req = await response.json();
+        document.getElementById('modal-ref-id').textContent = req.reference_id || 'N/A';
+
+        const riskClass = req.risk_score < 40 ? 'risk-low' : req.risk_score < 70 ? 'risk-medium' : 'risk-high';
+        const statusClass = `status-${req.status}`;
+        const clearanceClass = `clearance-${req.clearance_level}`;
+
+        modalContent.innerHTML = `
+          <div class="detail-section">
+            <h3>Requestor Information</h3>
+            <div class="detail-row">
+              <div class="detail-label">Full Name</div>
+              <div class="detail-value">${escapeHtml(req.full_name)}</div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-label">Email</div>
+              <div class="detail-value" style="color: #12F6C8;">${escapeHtml(req.email)}</div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-label">Agency/Organization</div>
+              <div class="detail-value">${escapeHtml(req.agency)}</div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-label">Clearance Level</div>
+              <div class="detail-value"><span class="clearance-badge ${clearanceClass}">${req.clearance_level?.replace('-', '/').toUpperCase() || 'N/A'}</span></div>
+            </div>
+          </div>
+
+          <div class="detail-section">
+            <h3>Supervisor Information</h3>
+            <div class="detail-row">
+              <div class="detail-label">Supervisor Name</div>
+              <div class="detail-value">${escapeHtml(req.supervisor_name || 'Not provided')}</div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-label">Supervisor Email</div>
+              <div class="detail-value">${escapeHtml(req.supervisor_email || 'Not provided')}</div>
+            </div>
+          </div>
+
+          <div class="detail-section">
+            <h3>Purpose of Request</h3>
+            <div class="purpose-text">${escapeHtml(req.purpose || 'Not provided')}</div>
+          </div>
+
+          <div class="detail-section">
+            <h3>Security Assessment</h3>
+            <div class="detail-row">
+              <div class="detail-label">Risk Score</div>
+              <div class="detail-value"><span class="risk-badge ${riskClass}">${req.risk_score}/100</span></div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-label">Current Status</div>
+              <div class="detail-value"><span class="status-badge ${statusClass}">${req.status?.replace('_', ' ') || 'pending'}</span></div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-label">IP Address</div>
+              <div class="detail-value" style="color: #6B7280;">${req.ip_address || 'Unknown'}</div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-label">Geolocation</div>
+              <div class="detail-value" style="color: #6B7280;">${req.geolocation || 'Unknown'}</div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-label">Submitted</div>
+              <div class="detail-value">${new Date(req.created_at).toLocaleString()}</div>
+            </div>
+            ${req.reviewed_at ? `
+              <div class="detail-row">
+                <div class="detail-label">Reviewed</div>
+                <div class="detail-value">${new Date(req.reviewed_at).toLocaleString()} by ${req.reviewed_by || 'Admin'}</div>
+              </div>
+            ` : ''}
+          </div>
+
+          <div class="notes-section">
+            <h3 style="color: #12F6C8; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem;">Reviewer Notes</h3>
+            <textarea id="reviewer-notes" placeholder="Add notes about this request...">${escapeHtml(req.reviewer_notes || '')}</textarea>
+            <button class="btn btn-view" style="margin-top: 0.5rem;" onclick="saveNotes(${req.id})">Save Notes</button>
+          </div>
+
+          <div class="modal-actions">
+            <button class="btn btn-approve" onclick="updateStatus(${req.id}, 'approved')">Approve Access</button>
+            <button class="btn btn-deny" onclick="updateStatus(${req.id}, 'denied')">Deny Access</button>
+            <button class="btn btn-info" onclick="updateStatus(${req.id}, 'info_requested')">Request More Info</button>
+          </div>
+        `;
+      } catch (err) {
+        modalContent.innerHTML = '<div class="empty-state">Failed to load request details.</div>';
+      }
+    }
+
+    async function updateStatus(id, status) {
+      const notes = document.getElementById('reviewer-notes')?.value || null;
+      
+      try {
+        const response = await fetch(`${API_URL}/api/admin/classified-requests/${id}/status`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${adminToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ status, reviewer_notes: notes })
+        });
+
+        if (response.ok) {
+          closeModal();
+          loadStats();
+          loadRequests();
+        } else {
+          alert('Failed to update status. Please try again.');
+        }
+      } catch (err) {
+        alert('Connection error. Please try again.');
+      }
+    }
+
+    async function saveNotes(id) {
+      const notes = document.getElementById('reviewer-notes')?.value || '';
+      
+      try {
+        const response = await fetch(`${API_URL}/api/admin/classified-requests/${id}/notes`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${adminToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ reviewer_notes: notes })
+        });
+
+        if (response.ok) {
+          alert('Notes saved successfully.');
+        } else {
+          alert('Failed to save notes. Please try again.');
+        }
+      } catch (err) {
+        alert('Connection error. Please try again.');
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('request-modal').classList.remove('show');
+      currentRequestId = null;
+    }
+
+    async function exportCSV() {
+      try {
+        const status = document.getElementById('status-filter').value || null;
+        let url = `${API_URL}/api/admin/classified-requests/export/csv`;
+        if (status) url += `?status=${status}`;
+        
+        const response = await fetch(url, {
+          headers: { 'Authorization': `Bearer ${adminToken}` }
+        });
+        
+        if (!response.ok) throw new Error('Export failed');
+        
+        const data = await response.json();
+        
+        // Create and download CSV file
+        const blob = new Blob([data.csv], { type: 'text/csv' });
+        const url2 = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url2;
+        a.download = data.filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url2);
+      } catch (err) {
+        alert('Failed to export CSV. Please try again.');
+      }
+    }
+
+    async function exportPDF() {
+      try {
+        const status = document.getElementById('status-filter').value || null;
+        let url = `${API_URL}/api/admin/classified-requests/export/json`;
+        if (status) url += `?status=${status}`;
+        
+        const response = await fetch(url, {
+          headers: { 'Authorization': `Bearer ${adminToken}` }
+        });
+        
+        if (!response.ok) throw new Error('Export failed');
+        
+        const data = await response.json();
+        
+        // Generate PDF-like HTML report and open in new window
+        const reportHtml = generatePDFReport(data);
+        const newWindow = window.open('', '_blank');
+        newWindow.document.write(reportHtml);
+        newWindow.document.close();
+      } catch (err) {
+        alert('Failed to generate PDF report. Please try again.');
+      }
+    }
+
+    function generatePDFReport(data) {
+      const date = new Date().toLocaleString();
+      let rows = '';
+      
+      data.requests.forEach(req => {
+        rows += `
+          <tr>
+            <td>${req.reference_id || 'N/A'}</td>
+            <td>${escapeHtml(req.full_name)}</td>
+            <td>${escapeHtml(req.email)}</td>
+            <td>${escapeHtml(req.agency)}</td>
+            <td>${req.clearance_level?.toUpperCase() || 'N/A'}</td>
+            <td>${req.risk_score}</td>
+            <td>${req.status?.toUpperCase() || 'PENDING'}</td>
+            <td>${new Date(req.created_at).toLocaleDateString()}</td>
+          </tr>
+        `;
+      });
+
+      return `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>G3TI Classified Access Report</title>
+          <style>
+            body { font-family: Arial, sans-serif; padding: 40px; background: #fff; color: #000; }
+            h1 { color: #dc2626; border-bottom: 2px solid #dc2626; padding-bottom: 10px; }
+            .meta { color: #666; margin-bottom: 20px; }
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            th, td { border: 1px solid #ddd; padding: 8px; text-align: left; font-size: 12px; }
+            th { background: #dc2626; color: #fff; }
+            tr:nth-child(even) { background: #f9f9f9; }
+            .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; color: #666; font-size: 11px; }
+            @media print { body { padding: 20px; } }
+          </style>
+        </head>
+        <body>
+          <h1>G3TI CLASSIFIED ACCESS REPORT</h1>
+          <div class="meta">
+            <p><strong>Generated:</strong> ${date}</p>
+            <p><strong>Total Records:</strong> ${data.total_count}</p>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Reference ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Agency</th>
+                <th>Clearance</th>
+                <th>Risk</th>
+                <th>Status</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rows}
+            </tbody>
+          </table>
+          <div class="footer">
+            <p>CLASSIFIED - G3TI Security Division</p>
+            <p>This report contains sensitive information. Handle according to security protocols.</p>
+          </div>
+          <script>window.print();</script>
+        </body>
+        </html>
+      `;
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Close modal on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // Close modal on overlay click
+    document.getElementById('request-modal').addEventListener('click', (e) => {
+      if (e.target.classList.contains('modal-overlay')) closeModal();
+    });
+  </script>
+</body>
+</html>
