@@ -960,6 +960,119 @@
       
       return imageMap.default;
     }
+    
+    // ============================================================================
+    // DYNAMIC ARTICLE LOADING FROM BACKEND API
+    // Fetches published articles and displays them newest to oldest
+    // ============================================================================
+    const BACKEND_URL = 'https://app-rkwofgbb.fly.dev';
+    let backendArticles = [];
+    
+    // Category to image mapping (fallback)
+    const categoryImageMap = {
+      'Government': 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=800&h=450&fit=crop',
+      'Enterprise': 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=450&fit=crop',
+      'AI Security': 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&h=450&fit=crop',
+      'National Threats': 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&h=450&fit=crop',
+      'Technology': 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=450&fit=crop'
+    };
+    
+    async function loadBackendArticles() {
+      try {
+        const response = await fetch(`${BACKEND_URL}/api/articles?status=published&limit=20`);
+        if (!response.ok) {
+          console.log('Backend articles not available, using static content');
+          return;
+        }
+        
+        const data = await response.json();
+        backendArticles = data.articles || [];
+        
+        if (backendArticles.length > 0) {
+          renderBackendArticles();
+        }
+      } catch (error) {
+        console.log('Could not load backend articles:', error.message);
+        // Keep static content as fallback
+      }
+    }
+    
+    function renderBackendArticles() {
+      const articlesGrid = document.getElementById('articlesGrid');
+      const featuredArticle = document.querySelector('.featured-article');
+      
+      if (backendArticles.length === 0) return;
+      
+      // Sort by publish_date (newest first)
+      backendArticles.sort((a, b) => new Date(b.publish_date) - new Date(a.publish_date));
+      
+      // Update featured article with the newest one
+      const featured = backendArticles[0];
+      if (featuredArticle && featured) {
+        const featuredImage = featured.featured_image || categoryImageMap[featured.category] || categoryImageMap['Technology'];
+        featuredArticle.dataset.category = featured.category;
+        featuredArticle.innerHTML = `
+          <div class="featured-image">
+            <img src="${featuredImage}" alt="${escapeHtml(featured.category)}">
+          </div>
+          <div class="featured-content">
+            <div class="article-category">${escapeHtml(featured.category).toUpperCase()}</div>
+            <h3>${escapeHtml(featured.title)}</h3>
+            ${featured.subtitle ? `<div class="subtitle">${escapeHtml(featured.subtitle)}</div>` : ''}
+            <div class="article-meta">${formatDate(featured.publish_date)} | G3TI Threat Intelligence</div>
+            <p class="excerpt">${escapeHtml(featured.excerpt || featured.content.substring(0, 200) + '...')}</p>
+            <a href="/news-intelligence/article/${featured.slug}.html" class="read-btn">Read Full Article</a>
+          </div>
+        `;
+      }
+      
+      // Render remaining articles in the grid
+      const remainingArticles = backendArticles.slice(1);
+      if (articlesGrid && remainingArticles.length > 0) {
+        // Keep static articles and prepend backend articles
+        const staticArticles = articlesGrid.innerHTML;
+        
+        let articlesHtml = '';
+        remainingArticles.forEach(article => {
+          const articleImage = article.featured_image || categoryImageMap[article.category] || categoryImageMap['Technology'];
+          articlesHtml += `
+            <article class="article-card" data-category="${escapeHtml(article.category)}">
+              <div class="card-image">
+                <img src="${articleImage}" alt="${escapeHtml(article.category)}">
+              </div>
+              <div class="card-content">
+                <div class="article-category">${escapeHtml(article.category).toUpperCase()}</div>
+                <h3>${escapeHtml(article.title)}</h3>
+                <div class="article-meta">${formatDate(article.publish_date)}</div>
+                <p class="excerpt">${escapeHtml(article.excerpt || article.content.substring(0, 150) + '...')}</p>
+                <div class="card-footer">
+                  <a href="/news-intelligence/article/${article.slug}.html" class="card-read-btn">[ READ ARTICLE ]</a>
+                </div>
+              </div>
+            </article>
+          `;
+        });
+        
+        // Prepend backend articles to static ones
+        articlesGrid.innerHTML = articlesHtml + staticArticles;
+      }
+    }
+    
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+    
+    function formatDate(dateStr) {
+      if (!dateStr) return 'N/A';
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    }
+    
+    // Load backend articles on page load
+    document.addEventListener('DOMContentLoaded', loadBackendArticles);
   </script>
 
 <script id="g3ti-navbar-v4-injector">

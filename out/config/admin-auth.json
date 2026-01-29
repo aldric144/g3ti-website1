@@ -1,0 +1,19 @@
+{
+  "description": "G3TI Admin Authentication Configuration",
+  "note": "This file is for reference only. Actual authentication is handled by the backend API.",
+  "admin_emails": [
+    "aldric@global3technology.com",
+    "info@global3technology.com"
+  ],
+  "auth_endpoint": "https://app-rkwofgbb.fly.dev/api/admin/login",
+  "verify_endpoint": "https://app-rkwofgbb.fly.dev/api/admin/verify",
+  "token_storage_key": "g3ti_admin_token",
+  "redirect_on_unauthorized": "/restricted-access.html",
+  "protected_pages": [
+    "/news-intelligence/new.html",
+    "/admin/articles.html",
+    "/admin/access-logs.html"
+  ],
+  "session_timeout_minutes": 60,
+  "require_https": true
+}
