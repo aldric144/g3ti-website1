@@ -5,6 +5,82 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Create New Article | G3TI News &amp; Intelligence</title>
   <meta name="description" content="G3TI Content Management - Create new intelligence articles"/>
+  <script>
+    // ADMIN ACCESS CONTROL - Server-side validation
+    const BACKEND_URL = 'https://app-rkwofgbb.fly.dev';
+    
+    async function checkAdminAccess() {
+      const adminToken = localStorage.getItem('g3ti_admin_token');
+      
+      if (!adminToken) {
+        // No token - redirect to restricted access
+        window.location.href = '/restricted-access.html?reason=no_auth&redirect=/news-intelligence/new.html';
+        return false;
+      }
+      
+      try {
+        // Validate token with backend
+        const response = await fetch(`${BACKEND_URL}/api/admin/verify`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${adminToken}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (!response.ok) {
+          // Invalid token - clear and redirect
+          localStorage.removeItem('g3ti_admin_token');
+          window.location.href = '/restricted-access.html?reason=invalid_token&redirect=/news-intelligence/new.html';
+          return false;
+        }
+        
+        // Token valid - show page content
+        document.getElementById('admin-content').style.display = 'block';
+        document.getElementById('loading-screen').style.display = 'none';
+        return true;
+      } catch (error) {
+        console.error('Auth check failed:', error);
+        // Network error - show login form instead of redirecting
+        document.getElementById('admin-login-form').style.display = 'block';
+        document.getElementById('loading-screen').style.display = 'none';
+        return false;
+      }
+    }
+    
+    async function adminLogin(event) {
+      event.preventDefault();
+      const username = document.getElementById('admin-username').value;
+      const password = document.getElementById('admin-password').value;
+      const errorEl = document.getElementById('login-error');
+      
+      try {
+        const response = await fetch(`${BACKEND_URL}/api/admin/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.token) {
+          localStorage.setItem('g3ti_admin_token', data.token);
+          document.getElementById('admin-login-form').style.display = 'none';
+          document.getElementById('admin-content').style.display = 'block';
+          errorEl.style.display = 'none';
+        } else {
+          errorEl.textContent = data.detail || 'Invalid credentials';
+          errorEl.style.display = 'block';
+        }
+      } catch (error) {
+        errorEl.textContent = 'Connection error. Please try again.';
+        errorEl.style.display = 'block';
+      }
+    }
+    
+    // Check access on page load
+    document.addEventListener('DOMContentLoaded', checkAdminAccess);
+  </script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
@@ -373,9 +449,111 @@
       main { padding: 1rem; }
       .button-group { flex-direction: column; }
     }
+    
+    /* Loading and Login Screens */
+    #loading-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 60vh;
+      color: #12F6C8;
+    }
+    #loading-screen .spinner {
+      width: 50px;
+      height: 50px;
+      border: 3px solid #333;
+      border-top-color: #12F6C8;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    
+    #admin-login-form {
+      display: none;
+      max-width: 400px;
+      margin: 4rem auto;
+      padding: 2rem;
+      background: #0A0A0C;
+      border: 2px solid #dc2626;
+      border-radius: 12px;
+    }
+    #admin-login-form h2 {
+      color: #dc2626;
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+    #admin-login-form .subtitle {
+      color: #f59e0b;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+    }
+    #admin-login-form .form-group input {
+      width: 100%;
+      padding: 1rem;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+    #admin-login-form .form-group input:focus {
+      outline: none;
+      border-color: #dc2626;
+    }
+    #admin-login-form button {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(135deg, #dc2626, #f59e0b);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      text-transform: uppercase;
+    }
+    #login-error {
+      display: none;
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid #EF4444;
+      color: #EF4444;
+      padding: 0.75rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      font-size: 0.875rem;
+    }
+    
+    #admin-content { display: none; }
   </style>
 </head>
 <body>
+  <!-- Loading Screen -->
+  <div id="loading-screen">
+    <div class="spinner"></div>
+    <p style="margin-top: 1rem;">Verifying admin access...</p>
+  </div>
+  
+  <!-- Admin Login Form (shown if token validation fails) -->
+  <div id="admin-login-form">
+    <h2>ADMIN ACCESS REQUIRED</h2>
+    <div class="subtitle">G3TI News & Intelligence CMS</div>
+    <div id="login-error"></div>
+    <form onsubmit="adminLogin(event)">
+      <div class="form-group">
+        <input type="text" id="admin-username" placeholder="Username" required>
+      </div>
+      <div class="form-group">
+        <input type="password" id="admin-password" placeholder="Password" required>
+      </div>
+      <button type="submit">Authenticate</button>
+    </form>
+  </div>
+  
+  <!-- Main Admin Content (hidden until authenticated) -->
+  <div id="admin-content">
   <nav>
     <a href="/" class="logo">
       <div class="logo-box">G3</div>
@@ -482,24 +660,14 @@
       <div class="preview-content" id="previewContent"></div>
     </div>
     
-    <div class="auto-publish-section">
-      <h2>Automated Publishing API</h2>
-      <p>For automated article generation and publishing, use the following API endpoint:</p>
-      <div class="api-endpoint">
-        POST /api/articles/auto-publish<br>
-        Content-Type: application/json<br><br>
-        {<br>
-        &nbsp;&nbsp;"title": "Article Title",<br>
-        &nbsp;&nbsp;"topic": "Topic for AI generation",<br>
-        &nbsp;&nbsp;"category": "Government|Enterprise|AI Security|National Threats|Technology",<br>
-        &nbsp;&nbsp;"autoGenerate": true<br>
-        }
-      </div>
-      <p style="margin-top: 1rem; font-size: 0.875rem; color: #6B7280;">
-        Note: AI content generation will be enabled in a future update. The API architecture is ready for integration.
-      </p>
+    <!-- Admin Dashboard Link -->
+    <div style="margin-top: 2rem; padding: 1rem; background: rgba(18, 246, 200, 0.05); border: 1px solid rgba(18, 246, 200, 0.2); border-radius: 8px; text-align: center;">
+      <a href="/admin/articles.html" style="color: #12F6C8; text-decoration: none; font-family: monospace;">
+        View Article Management Dashboard &rarr;
+      </a>
     </div>
   </main>
+  </div> <!-- Close admin-content -->
   
   
 
@@ -574,15 +742,11 @@
       document.getElementById('previewSection').style.display = 'block';
     }
     
-    function saveDraft() {
+    async function saveDraft() {
       const formData = new FormData(document.getElementById('articleForm'));
       const article = Object.fromEntries(formData);
-      article.status = 'draft';
-      article.slug = generateSlug(article.title);
       
-      localStorage.setItem('draft_' + article.slug, JSON.stringify(article));
-      
-      showStatus('Draft saved successfully! Slug: ' + article.slug, 'success');
+      await submitArticle(article, 'draft');
     }
     
     function showStatus(message, type) {
@@ -591,38 +755,68 @@
       statusEl.className = 'status-message ' + type;
     }
     
-        document.getElementById('articleForm').addEventListener('submit', function(e) {
-          e.preventDefault();
+    async function submitArticle(article, status) {
+      const adminToken = localStorage.getItem('g3ti_admin_token');
+      if (!adminToken) {
+        showStatus('Authentication required. Please log in again.', 'error');
+        return;
+      }
       
-          const formData = new FormData(this);
-          const article = Object.fromEntries(formData);
-          article.status = 'published';
-          article.slug = generateSlug(article.title);
-          article.tags = tags;
-          article.publishDate = article.publishDate || new Date().toISOString().split('T')[0];
+      // Prepare article data for backend
+      const articleData = {
+        title: article.title,
+        subtitle: article.subtitle || null,
+        category: article.category,
+        content: article.content,
+        excerpt: document.getElementById('autoExcerpt').checked ? null : (article.excerpt || null),
+        tags: tags,
+        featured_image: article.featuredImage || null,
+        publish_date: article.publishDate || new Date().toISOString().split('T')[0],
+        status: status
+      };
       
-          // Auto-assign royalty-free image based on category if no custom image provided
-          if (!article.featuredImage || article.featuredImage.trim() === '') {
-            article.featuredImage = getImageForCategory(article.category);
-          }
-      
-          if (document.getElementById('autoExcerpt').checked) {
-            article.excerpt = article.content.substring(0, 200) + '...';
-          }
-      
-          console.log('Article to publish:', article);
-      
-          const articlesData = JSON.parse(localStorage.getItem('g3ti_articles') || '{"articles":[]}');
-          article.id = String(articlesData.articles.length + 1);
-          articlesData.articles.unshift(article);
-          localStorage.setItem('g3ti_articles', JSON.stringify(articlesData));
-      
-          showStatus('Article published successfully! View at: /news-intelligence/' + article.slug + '.html (Image: ' + article.featuredImage + ')', 'success');
-      
-          setTimeout(() => {
-            alert('Note: In a full implementation, this would create the article page at /news-intelligence/' + article.slug + '.html and update the articles.json file. The featured image has been auto-assigned based on category: ' + article.category);
-          }, 500);
+      try {
+        showStatus('Submitting article...', 'success');
+        
+        const response = await fetch(`${BACKEND_URL}/api/admin/articles`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${adminToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(articleData)
         });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.success) {
+          showStatus(`Article ${status === 'published' ? 'published' : 'saved as draft'} successfully! Slug: ${data.slug}`, 'success');
+          
+          // Clear form after successful submission
+          if (status === 'published') {
+            setTimeout(() => {
+              if (confirm('Article published! Would you like to view the article management dashboard?')) {
+                window.location.href = '/admin/articles.html';
+              }
+            }, 1000);
+          }
+        } else {
+          showStatus(data.detail || 'Failed to save article. Please try again.', 'error');
+        }
+      } catch (error) {
+        console.error('Submit error:', error);
+        showStatus('Connection error. Please check your network and try again.', 'error');
+      }
+    }
+    
+    document.getElementById('articleForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const article = Object.fromEntries(formData);
+      
+      await submitArticle(article, 'published');
+    });
     
     document.getElementById('publishDate').valueAsDate = new Date();
   </script>

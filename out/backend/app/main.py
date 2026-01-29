@@ -117,6 +117,29 @@ class ClassifiedRequestStatusUpdate(BaseModel):
 class ClassifiedRequestNotesUpdate(BaseModel):
     reviewer_notes: str
 
+# Article Models for News & Intelligence CMS
+class ArticleCreate(BaseModel):
+    title: str
+    subtitle: Optional[str] = None
+    category: str
+    content: str
+    excerpt: Optional[str] = None
+    tags: Optional[List[str]] = []
+    featured_image: Optional[str] = None
+    publish_date: Optional[str] = None
+    status: str = "draft"
+
+class ArticleUpdate(BaseModel):
+    title: Optional[str] = None
+    subtitle: Optional[str] = None
+    category: Optional[str] = None
+    content: Optional[str] = None
+    excerpt: Optional[str] = None
+    tags: Optional[List[str]] = None
+    featured_image: Optional[str] = None
+    publish_date: Optional[str] = None
+    status: Optional[str] = None
+
 # Database initialization
 async def init_db():
     async with aiosqlite.connect(DB_PATH) as db:
@@ -206,6 +229,27 @@ async def init_db():
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 reviewed_at TIMESTAMP,
                 reviewed_by TEXT
+            )
+        """)
+        # Articles table for News & Intelligence CMS
+        await db.execute("""
+            CREATE TABLE IF NOT EXISTS articles (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                slug TEXT UNIQUE NOT NULL,
+                title TEXT NOT NULL,
+                subtitle TEXT,
+                category TEXT NOT NULL,
+                content TEXT NOT NULL,
+                excerpt TEXT,
+                tags TEXT,
+                featured_image TEXT,
+                author TEXT DEFAULT 'G3TI Threat Intelligence',
+                publish_date TEXT,
+                status TEXT DEFAULT 'draft',
+                created_by TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP,
+                updated_by TEXT
             )
         """)
         for domain in GOV_DOMAINS:
@@ -1530,3 +1574,494 @@ async def export_classified_requests_json(
             "exported_at": datetime.utcnow().isoformat(),
             "total_count": len(rows)
         }
+
+# ============================================================================
+# NEWS & INTELLIGENCE CMS - ARTICLE MANAGEMENT
+# Admin-only article creation, editing, and publishing
+# ============================================================================
+
+# Category to image mapping for auto-assignment
+CATEGORY_IMAGE_MAP = {
+    "Government": "https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=1200&h=675&fit=crop",
+    "Enterprise": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=675&fit=crop",
+    "AI Security": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1200&h=675&fit=crop",
+    "National Threats": "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200&h=675&fit=crop",
+    "Technology": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&h=675&fit=crop"
+}
+
+def generate_slug(title: str) -> str:
+    """Generate URL-friendly slug from title"""
+    import re
+    slug = title.lower()
+    slug = re.sub(r'[^a-z0-9]+', '-', slug)
+    slug = re.sub(r'^-|-$', '', slug)
+    return slug
+
+async def backup_articles_to_json():
+    """Backup all articles to /data/articles.json"""
+    try:
+        async with aiosqlite.connect(DB_PATH) as db:
+            db.row_factory = aiosqlite.Row
+            cursor = await db.execute("SELECT * FROM articles WHERE status = 'published' ORDER BY publish_date DESC")
+            rows = await cursor.fetchall()
+            
+            articles = []
+            for row in rows:
+                row_dict = dict(row)
+                tags = row_dict.get('tags', '')
+                if tags:
+                    row_dict['tags'] = tags.split(',') if isinstance(tags, str) else tags
+                else:
+                    row_dict['tags'] = []
+                articles.append(row_dict)
+            
+            backup_data = {
+                "articles": articles,
+                "categories": list(CATEGORY_IMAGE_MAP.keys()),
+                "categoryImageMap": CATEGORY_IMAGE_MAP,
+                "lastUpdated": datetime.utcnow().isoformat()
+            }
+            
+            # Write to backup file
+            backup_path = "/tmp/articles_backup.json"
+            with open(backup_path, 'w') as f:
+                json.dump(backup_data, f, indent=2)
+            
+            return True
+    except Exception as e:
+        print(f"Backup error: {e}")
+        return False
+
+@app.get("/api/articles")
+async def get_articles(
+    category: Optional[str] = None,
+    status: Optional[str] = None,
+    search: Optional[str] = None,
+    limit: int = 50
+):
+    """Get all articles (public endpoint for published, admin for all)"""
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        
+        query = "SELECT * FROM articles WHERE 1=1"
+        params = []
+        
+        # Default to published only for public access
+        if status:
+            query += " AND status = ?"
+            params.append(status)
+        else:
+            query += " AND status = 'published'"
+        
+        if category:
+            query += " AND category = ?"
+            params.append(category)
+        
+        if search:
+            query += " AND (title LIKE ? OR content LIKE ?)"
+            params.extend([f"%{search}%", f"%{search}%"])
+        
+        query += " ORDER BY publish_date DESC, created_at DESC LIMIT ?"
+        params.append(limit)
+        
+        cursor = await db.execute(query, params)
+        rows = await cursor.fetchall()
+        
+        articles = []
+        for row in rows:
+            row_dict = dict(row)
+            tags = row_dict.get('tags', '')
+            if tags:
+                row_dict['tags'] = tags.split(',') if isinstance(tags, str) else tags
+            else:
+                row_dict['tags'] = []
+            articles.append(row_dict)
+        
+        return {"articles": articles, "total": len(articles)}
+
+@app.get("/api/articles/{article_id}")
+async def get_article(article_id: int):
+    """Get single article by ID"""
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        cursor = await db.execute("SELECT * FROM articles WHERE id = ?", (article_id,))
+        row = await cursor.fetchone()
+        
+        if not row:
+            raise HTTPException(status_code=404, detail="Article not found")
+        
+        row_dict = dict(row)
+        tags = row_dict.get('tags', '')
+        if tags:
+            row_dict['tags'] = tags.split(',') if isinstance(tags, str) else tags
+        else:
+            row_dict['tags'] = []
+        
+        return row_dict
+
+@app.get("/api/articles/slug/{slug}")
+async def get_article_by_slug(slug: str):
+    """Get single article by slug"""
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        cursor = await db.execute("SELECT * FROM articles WHERE slug = ? AND status = 'published'", (slug,))
+        row = await cursor.fetchone()
+        
+        if not row:
+            raise HTTPException(status_code=404, detail="Article not found")
+        
+        row_dict = dict(row)
+        tags = row_dict.get('tags', '')
+        if tags:
+            row_dict['tags'] = tags.split(',') if isinstance(tags, str) else tags
+        else:
+            row_dict['tags'] = []
+        
+        return row_dict
+
+@app.post("/api/admin/articles")
+async def create_article(
+    article: ArticleCreate,
+    request: Request,
+    background_tasks: BackgroundTasks,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Create new article (admin only)"""
+    if not credentials or not verify_admin(credentials.credentials):
+        raise HTTPException(status_code=401, detail="Admin authentication required")
+    
+    ip_address = request.client.host if request.client else "unknown"
+    
+    # Sanitize inputs
+    title = sanitize_input(article.title)
+    subtitle = sanitize_input(article.subtitle) if article.subtitle else None
+    content = sanitize_input(article.content)
+    category = sanitize_input(article.category)
+    
+    # Generate slug
+    slug = generate_slug(title)
+    
+    # Auto-generate excerpt if not provided
+    excerpt = article.excerpt
+    if not excerpt:
+        excerpt = content[:200] + "..." if len(content) > 200 else content
+    excerpt = sanitize_input(excerpt)
+    
+    # Auto-assign image if not provided
+    featured_image = article.featured_image
+    if not featured_image:
+        featured_image = CATEGORY_IMAGE_MAP.get(category, CATEGORY_IMAGE_MAP["Technology"])
+    
+    # Process tags
+    tags_str = ",".join(article.tags) if article.tags else ""
+    
+    # Set publish date
+    publish_date = article.publish_date or datetime.utcnow().strftime("%Y-%m-%d")
+    
+    async with aiosqlite.connect(DB_PATH) as db:
+        # Check for duplicate slug
+        cursor = await db.execute("SELECT id FROM articles WHERE slug = ?", (slug,))
+        if await cursor.fetchone():
+            # Append timestamp to make unique
+            slug = f"{slug}-{int(datetime.utcnow().timestamp())}"
+        
+        await db.execute("""
+            INSERT INTO articles (slug, title, subtitle, category, content, excerpt, tags, featured_image, publish_date, status, created_by, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (slug, title, subtitle, category, content, excerpt, tags_str, featured_image, publish_date, article.status, "admin", datetime.utcnow().isoformat()))
+        await db.commit()
+        
+        cursor = await db.execute("SELECT last_insert_rowid()")
+        article_id = (await cursor.fetchone())[0]
+        
+        # Log action
+        await log_action(
+            action="ARTICLE_CREATED",
+            admin_user="admin",
+            ip_address=ip_address,
+            details=f"article_id={article_id},title={title},status={article.status}"
+        )
+        
+        # Backup to JSON if published
+        if article.status == "published":
+            background_tasks.add_task(backup_articles_to_json)
+        
+        return {
+            "success": True,
+            "article_id": article_id,
+            "slug": slug,
+            "message": f"Article {'published' if article.status == 'published' else 'saved as draft'} successfully"
+        }
+
+@app.put("/api/admin/articles/{article_id}")
+async def update_article(
+    article_id: int,
+    article: ArticleUpdate,
+    request: Request,
+    background_tasks: BackgroundTasks,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Update existing article (admin only)"""
+    if not credentials or not verify_admin(credentials.credentials):
+        raise HTTPException(status_code=401, detail="Admin authentication required")
+    
+    ip_address = request.client.host if request.client else "unknown"
+    
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        cursor = await db.execute("SELECT * FROM articles WHERE id = ?", (article_id,))
+        existing = await cursor.fetchone()
+        
+        if not existing:
+            raise HTTPException(status_code=404, detail="Article not found")
+        
+        existing_dict = dict(existing)
+        
+        # Build update query dynamically
+        updates = []
+        params = []
+        
+        if article.title is not None:
+            updates.append("title = ?")
+            params.append(sanitize_input(article.title))
+            # Update slug if title changed
+            updates.append("slug = ?")
+            params.append(generate_slug(article.title))
+        
+        if article.subtitle is not None:
+            updates.append("subtitle = ?")
+            params.append(sanitize_input(article.subtitle))
+        
+        if article.category is not None:
+            updates.append("category = ?")
+            params.append(sanitize_input(article.category))
+        
+        if article.content is not None:
+            updates.append("content = ?")
+            params.append(sanitize_input(article.content))
+            # Update excerpt if content changed and no custom excerpt
+            if article.excerpt is None:
+                updates.append("excerpt = ?")
+                params.append(sanitize_input(article.content[:200] + "..."))
+        
+        if article.excerpt is not None:
+            updates.append("excerpt = ?")
+            params.append(sanitize_input(article.excerpt))
+        
+        if article.tags is not None:
+            updates.append("tags = ?")
+            params.append(",".join(article.tags))
+        
+        if article.featured_image is not None:
+            updates.append("featured_image = ?")
+            params.append(article.featured_image)
+        
+        if article.publish_date is not None:
+            updates.append("publish_date = ?")
+            params.append(article.publish_date)
+        
+        if article.status is not None:
+            updates.append("status = ?")
+            params.append(article.status)
+        
+        updates.append("updated_at = ?")
+        params.append(datetime.utcnow().isoformat())
+        updates.append("updated_by = ?")
+        params.append("admin")
+        
+        params.append(article_id)
+        
+        query = f"UPDATE articles SET {', '.join(updates)} WHERE id = ?"
+        await db.execute(query, params)
+        await db.commit()
+        
+        # Log action
+        await log_action(
+            action="ARTICLE_UPDATED",
+            admin_user="admin",
+            ip_address=ip_address,
+            details=f"article_id={article_id},fields_updated={len(updates)-2}"
+        )
+        
+        # Backup to JSON
+        background_tasks.add_task(backup_articles_to_json)
+        
+        return {"success": True, "message": "Article updated successfully"}
+
+@app.delete("/api/admin/articles/{article_id}")
+async def delete_article(
+    article_id: int,
+    request: Request,
+    background_tasks: BackgroundTasks,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Delete article (admin only)"""
+    if not credentials or not verify_admin(credentials.credentials):
+        raise HTTPException(status_code=401, detail="Admin authentication required")
+    
+    ip_address = request.client.host if request.client else "unknown"
+    
+    async with aiosqlite.connect(DB_PATH) as db:
+        cursor = await db.execute("SELECT title FROM articles WHERE id = ?", (article_id,))
+        row = await cursor.fetchone()
+        
+        if not row:
+            raise HTTPException(status_code=404, detail="Article not found")
+        
+        title = row[0]
+        
+        await db.execute("DELETE FROM articles WHERE id = ?", (article_id,))
+        await db.commit()
+        
+        # Log action
+        await log_action(
+            action="ARTICLE_DELETED",
+            admin_user="admin",
+            ip_address=ip_address,
+            details=f"article_id={article_id},title={title}"
+        )
+        
+        # Backup to JSON
+        background_tasks.add_task(backup_articles_to_json)
+        
+        return {"success": True, "message": "Article deleted successfully"}
+
+@app.get("/api/admin/articles")
+async def get_all_articles_admin(
+    category: Optional[str] = None,
+    status: Optional[str] = None,
+    search: Optional[str] = None,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Get all articles including drafts (admin only)"""
+    if not credentials or not verify_admin(credentials.credentials):
+        raise HTTPException(status_code=401, detail="Admin authentication required")
+    
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        
+        query = "SELECT * FROM articles WHERE 1=1"
+        params = []
+        
+        if status:
+            query += " AND status = ?"
+            params.append(status)
+        
+        if category:
+            query += " AND category = ?"
+            params.append(category)
+        
+        if search:
+            query += " AND (title LIKE ? OR content LIKE ?)"
+            params.extend([f"%{search}%", f"%{search}%"])
+        
+        query += " ORDER BY created_at DESC"
+        
+        cursor = await db.execute(query, params)
+        rows = await cursor.fetchall()
+        
+        articles = []
+        for row in rows:
+            row_dict = dict(row)
+            tags = row_dict.get('tags', '')
+            if tags:
+                row_dict['tags'] = tags.split(',') if isinstance(tags, str) else tags
+            else:
+                row_dict['tags'] = []
+            articles.append(row_dict)
+        
+        return {"articles": articles, "total": len(articles)}
+
+@app.get("/api/admin/articles/stats")
+async def get_articles_stats(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    """Get article statistics (admin only)"""
+    if not credentials or not verify_admin(credentials.credentials):
+        raise HTTPException(status_code=401, detail="Admin authentication required")
+    
+    async with aiosqlite.connect(DB_PATH) as db:
+        # Total articles
+        cursor = await db.execute("SELECT COUNT(*) FROM articles")
+        total = (await cursor.fetchone())[0]
+        
+        # Published
+        cursor = await db.execute("SELECT COUNT(*) FROM articles WHERE status = 'published'")
+        published = (await cursor.fetchone())[0]
+        
+        # Drafts
+        cursor = await db.execute("SELECT COUNT(*) FROM articles WHERE status = 'draft'")
+        drafts = (await cursor.fetchone())[0]
+        
+        # By category
+        cursor = await db.execute("SELECT category, COUNT(*) FROM articles GROUP BY category")
+        by_category = {row[0]: row[1] for row in await cursor.fetchall()}
+        
+        return {
+            "total": total,
+            "published": published,
+            "drafts": drafts,
+            "by_category": by_category
+        }
+
+@app.post("/api/admin/articles/sync-json")
+async def sync_articles_from_json(
+    background_tasks: BackgroundTasks,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Sync articles from existing JSON file to database (admin only)"""
+    if not credentials or not verify_admin(credentials.credentials):
+        raise HTTPException(status_code=401, detail="Admin authentication required")
+    
+    try:
+        # Read existing articles.json
+        json_path = "/home/ubuntu/repos/g3ti-website1/out/data/articles.json"
+        if not os.path.exists(json_path):
+            raise HTTPException(status_code=404, detail="articles.json not found")
+        
+        with open(json_path, 'r') as f:
+            data = json.load(f)
+        
+        articles = data.get('articles', [])
+        synced = 0
+        
+        async with aiosqlite.connect(DB_PATH) as db:
+            for article in articles:
+                slug = article.get('slug', generate_slug(article.get('title', '')))
+                
+                # Check if already exists
+                cursor = await db.execute("SELECT id FROM articles WHERE slug = ?", (slug,))
+                if await cursor.fetchone():
+                    continue
+                
+                tags_str = ",".join(article.get('tags', [])) if isinstance(article.get('tags'), list) else article.get('tags', '')
+                
+                await db.execute("""
+                    INSERT INTO articles (slug, title, subtitle, category, content, excerpt, tags, featured_image, publish_date, status, created_by, created_at)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """, (
+                    slug,
+                    article.get('title', ''),
+                    article.get('subtitle'),
+                    article.get('category', 'Technology'),
+                    article.get('content', ''),
+                    article.get('excerpt', ''),
+                    tags_str,
+                    article.get('featuredImage') or article.get('featured_image'),
+                    article.get('publishDate') or article.get('publish_date'),
+                    article.get('status', 'published'),
+                    'system_sync',
+                    datetime.utcnow().isoformat()
+                ))
+                synced += 1
+            
+            await db.commit()
+        
+        return {"success": True, "synced": synced, "message": f"Synced {synced} articles from JSON"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Sync failed: {str(e)}")
+
+@app.get("/api/admin/verify")
+async def verify_admin_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    """Verify if the provided token is valid admin token"""
+    if not credentials or not verify_admin(credentials.credentials):
+        raise HTTPException(status_code=401, detail="Invalid or expired admin token")
+    return {"valid": True, "message": "Admin token is valid"}
