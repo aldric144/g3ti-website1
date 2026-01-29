@@ -2065,3 +2065,168 @@ async def verify_admin_token(credentials: HTTPAuthorizationCredentials = Depends
     if not credentials or not verify_admin(credentials.credentials):
         raise HTTPException(status_code=401, detail="Invalid or expired admin token")
     return {"valid": True, "message": "Admin token is valid"}
+
+# ============================================================================
+# TRUSTED PERSONNEL ACCESS KEY SYSTEM
+# Secure key-based access for verified personnel without full login
+# ============================================================================
+
+# Access Keys Configuration (loaded from config or environment)
+ACCESS_KEYS = {
+    "G3TI-TRUSTED-ACCESS-ALDRIC": {
+        "owner": "Dr. Aldric Marshall",
+        "permissions": ["all"],
+        "expires": None,  # Never expires
+        "created_at": "2026-01-16T00:00:00Z"
+    }
+}
+
+# Access Key Session Settings
+ACCESS_KEY_SESSION_HOURS = 24
+ACCESS_KEY_MAX_FAILED_ATTEMPTS = 5
+ACCESS_KEY_LOCKOUT_MINUTES = 30
+
+# Track failed attempts (in-memory, resets on restart)
+access_key_failed_attempts = {}
+
+class AccessKeyValidate(BaseModel):
+    key: str
+    target_page: Optional[str] = None
+
+class AccessKeySession(BaseModel):
+    session_token: str
+
+@app.post("/api/access-key/validate")
+async def validate_access_key(data: AccessKeyValidate, request: Request):
+    """Validate a trusted personnel access key and create session"""
+    ip_address = request.client.host if request.client else "unknown"
+    user_agent = request.headers.get("user-agent", "unknown")
+    key = data.key.strip()
+    target_page = data.target_page or "/"
+    
+    # Check for lockout
+    if ip_address in access_key_failed_attempts:
+        attempts, lockout_until = access_key_failed_attempts[ip_address]
+        if lockout_until and datetime.utcnow() < lockout_until:
+            remaining = (lockout_until - datetime.utcnow()).seconds // 60
+            await log_action(
+                action="ACCESS_KEY_LOCKOUT",
+                ip_address=ip_address,
+                details=f"IP locked out, {remaining} minutes remaining"
+            )
+            raise HTTPException(
+                status_code=429, 
+                detail=f"Too many failed attempts. Try again in {remaining} minutes."
+            )
+    
+    # Validate key
+    if key in ACCESS_KEYS:
+        key_data = ACCESS_KEYS[key]
+        
+        # Check expiration
+        if key_data.get("expires"):
+            try:
+                expires_at = datetime.fromisoformat(key_data["expires"].replace("Z", "+00:00"))
+                if datetime.utcnow() > expires_at.replace(tzinfo=None):
+                    await log_action(
+                        action="ACCESS_KEY_EXPIRED",
+                        ip_address=ip_address,
+                        details=f"key_owner={key_data['owner']},target={target_page}"
+                    )
+                    raise HTTPException(status_code=401, detail="Access key has expired.")
+            except ValueError:
+                pass  # Invalid date format, treat as never expires
+        
+        # Create session token
+        session_token = create_jwt_token({
+            "type": "access_key",
+            "owner": key_data["owner"],
+            "permissions": key_data["permissions"],
+            "ip": ip_address
+        }, timedelta(hours=ACCESS_KEY_SESSION_HOURS))
+        
+        # Clear failed attempts
+        if ip_address in access_key_failed_attempts:
+            del access_key_failed_attempts[ip_address]
+        
+        # Log successful access
+        await log_action(
+            action="ACCESS_KEY_SUCCESS",
+            ip_address=ip_address,
+            details=f"key_owner={key_data['owner']},target={target_page},user_agent={user_agent[:100]}"
+        )
+        
+        return {
+            "valid": True,
+            "owner": key_data["owner"],
+            "permissions": key_data["permissions"],
+            "session_token": session_token,
+            "expires_in_hours": ACCESS_KEY_SESSION_HOURS,
+            "message": f"Trusted Access Granted - Welcome, {key_data['owner']}."
+        }
+    else:
+        # Track failed attempt
+        if ip_address not in access_key_failed_attempts:
+            access_key_failed_attempts[ip_address] = [0, None]
+        
+        access_key_failed_attempts[ip_address][0] += 1
+        attempts = access_key_failed_attempts[ip_address][0]
+        
+        # Check if should lockout
+        if attempts >= ACCESS_KEY_MAX_FAILED_ATTEMPTS:
+            lockout_until = datetime.utcnow() + timedelta(minutes=ACCESS_KEY_LOCKOUT_MINUTES)
+            access_key_failed_attempts[ip_address][1] = lockout_until
+            
+            await log_action(
+                action="ACCESS_KEY_LOCKOUT_TRIGGERED",
+                ip_address=ip_address,
+                details=f"attempts={attempts},lockout_minutes={ACCESS_KEY_LOCKOUT_MINUTES}"
+            )
+        
+        # Log failed attempt
+        await log_action(
+            action="ACCESS_KEY_FAILED",
+            ip_address=ip_address,
+            details=f"invalid_key_attempt,target={target_page},attempts={attempts}"
+        )
+        
+        raise HTTPException(status_code=401, detail="Invalid or expired access key.")
+
+@app.post("/api/access-key/verify")
+async def verify_access_key_session(data: AccessKeySession, request: Request):
+    """Verify an existing access key session token"""
+    ip_address = request.client.host if request.client else "unknown"
+    
+    payload = verify_jwt_token(data.session_token)
+    
+    if not payload or payload.get("type") != "access_key":
+        raise HTTPException(status_code=401, detail="Invalid or expired session")
+    
+    return {
+        "valid": True,
+        "owner": payload.get("owner"),
+        "permissions": payload.get("permissions", []),
+        "message": "Session is valid"
+    }
+
+@app.get("/api/access-key/audit-logs")
+async def get_access_key_audit_logs(
+    limit: int = 100,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Get audit logs for access key usage (admin only)"""
+    if not credentials or not verify_admin(credentials.credentials):
+        raise HTTPException(status_code=401, detail="Admin authentication required")
+    
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        cursor = await db.execute("""
+            SELECT * FROM audit_logs 
+            WHERE action LIKE 'ACCESS_KEY_%'
+            ORDER BY created_at DESC 
+            LIMIT ?
+        """, (limit,))
+        rows = await cursor.fetchall()
+        
+        logs = [dict(row) for row in rows]
+        return {"logs": logs, "total": len(logs)}

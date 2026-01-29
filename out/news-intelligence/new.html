@@ -14,7 +14,7 @@
       
       if (!adminToken) {
         // No token - redirect to restricted access
-        window.location.href = '/restricted-access.html?reason=no_auth&redirect=/news-intelligence/new.html';
+        window.location.href = 'https://global3technology.com/restricted-access.html?reason=no_auth&redirect=/news-intelligence/new.html';
         return false;
       }
       
@@ -31,7 +31,7 @@
         if (!response.ok) {
           // Invalid token - clear and redirect
           localStorage.removeItem('g3ti_admin_token');
-          window.location.href = '/restricted-access.html?reason=invalid_token&redirect=/news-intelligence/new.html';
+          window.location.href = 'https://global3technology.com/restricted-access.html?reason=invalid_token&redirect=/news-intelligence/new.html';
           return false;
         }
         

@@ -1,0 +1,16 @@
+{
+  "keys": [
+    {
+      "key": "G3TI-TRUSTED-ACCESS-ALDRIC",
+      "owner": "Dr. Aldric Marshall",
+      "permissions": ["all"],
+      "expires": "never",
+      "created_at": "2026-01-16T00:00:00Z"
+    }
+  ],
+  "settings": {
+    "session_duration_hours": 24,
+    "max_failed_attempts": 5,
+    "lockout_duration_minutes": 30
+  }
+}
