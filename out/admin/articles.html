@@ -6,7 +6,25 @@
 (function() {
   var API_URL = 'https://app-rkwofgbb.fly.dev';
   var token = localStorage.getItem('g3ti_token');
+  var accessKeyToken = localStorage.getItem('g3ti_access_key_token');
   var isAdminOverride = localStorage.getItem('g3ti_admin_override') === 'true';
+  
+  // Check for Access Key token first (Trusted Personnel Access)
+  if (accessKeyToken) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', API_URL + '/api/access-key/verify', false);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    try {
+      xhr.send(JSON.stringify({ session_token: accessKeyToken }));
+      var data = JSON.parse(xhr.responseText);
+      if (data.valid) {
+        window.g3tiAccessKeyOwner = data.owner;
+        return;
+      } else {
+        localStorage.removeItem('g3ti_access_key_token');
+      }
+    } catch(e) {}
+  }
   
   if (!token) {
     window.location.href = 'https://global3technology.com/restricted-access.html?reason=no_auth&redirect=/admin/articles.html';

@@ -11,6 +11,27 @@
     
     async function checkAdminAccess() {
       const adminToken = localStorage.getItem('g3ti_admin_token');
+      const accessKeyToken = localStorage.getItem('g3ti_access_key_token');
+      
+      // Check for Access Key token first (Trusted Personnel Access)
+      if (accessKeyToken) {
+        try {
+          const response = await fetch(`${BACKEND_URL}/api/access-key/verify`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ session_token: accessKeyToken })
+          });
+          const data = await response.json();
+          if (data.valid) {
+            window.g3tiAccessKeyOwner = data.owner;
+            document.getElementById('admin-content').style.display = 'block';
+            document.getElementById('loading-screen').style.display = 'none';
+            return true;
+          } else {
+            localStorage.removeItem('g3ti_access_key_token');
+          }
+        } catch (e) {}
+      }
       
       if (!adminToken) {
         // No token - redirect to restricted access

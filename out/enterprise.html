@@ -6,7 +6,25 @@
 (function() {
   var API_URL = 'https://app-rkwofgbb.fly.dev';
   var token = localStorage.getItem('g3ti_token');
+  var accessKeyToken = localStorage.getItem('g3ti_access_key_token');
   var isAdminOverride = localStorage.getItem('g3ti_admin_override') === 'true';
+  
+  // Check for Access Key token first (Trusted Personnel Access)
+  if (accessKeyToken) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', API_URL + '/api/access-key/verify', false);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    try {
+      xhr.send(JSON.stringify({ session_token: accessKeyToken }));
+      var data = JSON.parse(xhr.responseText);
+      if (data.valid) {
+        window.g3tiAccessKeyOwner = data.owner;
+        return;
+      } else {
+        localStorage.removeItem('g3ti_access_key_token');
+      }
+    } catch(e) {}
+  }
   
   if (!token) {
     document.write('<div id="restriction-overlay" style="position:fixed;inset:0;background:#050505;z-index:99999;display:flex;align-items:center;justify-content:center;"><div style="background:#0A0A0C;border:2px solid #EF4444;border-radius:12px;padding:3rem;max-width:600px;text-align:center;margin:1rem;"><div style="font-size:3rem;margin-bottom:1rem;">&#9888;&#65039;</div><h1 style="color:#EF4444;font-size:1.5rem;font-family:monospace;margin-bottom:1rem;">RESTRICTED ACCESS</h1><p style="color:#D1D5DB;line-height:1.8;margin-bottom:2rem;">This page contains enterprise intelligence. Authentication required.</p><a href="https://global3technology.com/restricted-access.html?reason=no_auth&redirect=/enterprise.html" style="display:inline-block;background:linear-gradient(135deg,#0B85E5,#12F6C8);color:#050505;text-decoration:none;padding:1rem 2rem;border-radius:8px;font-weight:700;font-family:monospace;text-transform:uppercase;letter-spacing:0.05em;">Login / Request Access</a></div></div>');
