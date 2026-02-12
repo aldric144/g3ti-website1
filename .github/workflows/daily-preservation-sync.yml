@@ -1,0 +1,79 @@
+name: G3TI Daily Preservation Sync
+
+on:
+  schedule:
+    # Run at 3:00 AM EST (8:00 AM UTC) every day
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+    # Allow manual trigger
+
+jobs:
+  daily-backup:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: full-system-backup-jan2026
+          fetch-depth: 0
+
+      - name: Create backup directories
+        run: |
+          mkdir -p backups/logs
+
+      - name: Create compressed snapshot
+        run: |
+          DATE=$(date +%F)
+          zip -r backups/g3ti_full_backup_${DATE}.zip . \
+            -x ".git/*" \
+            -x "backups/*.zip" \
+            -x "node_modules/*" \
+            -x "__pycache__/*" \
+            -x "*.pyc" \
+            -x ".env"
+          echo "Created backup: g3ti_full_backup_${DATE}.zip"
+
+      - name: Log the operation
+        run: |
+          DATE=$(date +%F)
+          TIMESTAMP=$(date)
+          echo "=== G3TI Daily Preservation Sync ===" > backups/logs/backup_log_${DATE}.txt
+          echo "Timestamp: ${TIMESTAMP}" >> backups/logs/backup_log_${DATE}.txt
+          echo "Backup file: g3ti_full_backup_${DATE}.zip" >> backups/logs/backup_log_${DATE}.txt
+          ls -lh backups/g3ti_full_backup_${DATE}.zip >> backups/logs/backup_log_${DATE}.txt
+          echo "Status: SUCCESS" >> backups/logs/backup_log_${DATE}.txt
+
+      - name: Retain only 7 daily backups
+        run: |
+          cd backups
+          ls -t g3ti_full_backup_*.zip 2>/dev/null | tail -n +8 | xargs -r rm -f
+          echo "Retained backups:"
+          ls -la g3ti_full_backup_*.zip 2>/dev/null || echo "No backups found"
+
+      - name: Commit and push to full-system-backup-jan2026
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Automated daily backup [$(date +%F)]"
+          branch: full-system-backup-jan2026
+          file_pattern: 'backups/*'
+
+      - name: Push to daily-backups branch
+        run: |
+          git fetch origin daily-backups || true
+          git push origin full-system-backup-jan2026:daily-backups --force
+
+      - name: Verify GitHub sync
+        run: |
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" https://github.com/aldric144/g3ti-website1)
+          if [ "$RESPONSE" = "200" ]; then
+            echo "GitHub response code: $RESPONSE - SUCCESS"
+          else
+            echo "GitHub response code: $RESPONSE - WARNING"
+          fi
+
+      - name: Completion message
+        run: |
+          echo "G3TI Daily Preservation Sync executed successfully [$(date)]."
