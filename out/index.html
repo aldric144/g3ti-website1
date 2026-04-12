@@ -715,4 +715,230 @@ body > div:first-of-type > nav { display: none !important; }
     });
 })();
 </script>
+<script id="g3ti-homepage-reposition">
+// G3TI Homepage Federal Repositioning - Content Injection
+// Follows same pattern as navbar/footer injectors
+(function() {
+  function repositionHomepage() {
+    var main = document.querySelector('main');
+    if (!main) return;
+    var sections = main.querySelectorAll('section');
+    if (sections.length < 6) return;
+
+    // === 1. HERO SECTION (sections[0]) ===
+    var hero = sections[0];
+    var heroBadge = hero.querySelector('.tracking-wider');
+    if (heroBadge && heroBadge.textContent.indexOf('DIGITAL INTELLIGENCE') !== -1) {
+      heroBadge.textContent = 'DEPLOYABLE AI INTELLIGENCE PLATFORMS';
+    }
+    var heroH1 = hero.querySelector('h1');
+    if (heroH1) {
+      heroH1.innerHTML = '<span class="text-white">Deployable AI-Powered</span><br/><span class="text-[#12F6C8] glow-text">Protective Intelligence Platforms</span>';
+    }
+    var heroTexts = hero.querySelectorAll('p');
+    heroTexts.forEach(function(p) {
+      if (p.textContent.indexOf('Autonomous Protective Intelligence') !== -1) {
+        p.textContent = 'Mission-ready intelligence systems designed for federal agencies, prime contractors, and law enforcement environments operating in the AI threat era.';
+      }
+      if (p.textContent.indexOf('make technology intelligent') !== -1 || p.textContent.indexOf('don\u2019t make') !== -1 || p.textContent.indexOf("don't make") !== -1) {
+        p.innerHTML = 'APEX\u2122 delivers real-time threat detection, behavioral intelligence analysis, and predictive risk modeling across secure and hybrid infrastructures.';
+      }
+    });
+    var heroLinks = hero.querySelectorAll('a');
+    heroLinks.forEach(function(a) {
+      if (a.textContent.indexOf('View Threat Architecture') !== -1) {
+        a.textContent = 'Explore APEX\u2122';
+        a.href = '/products/apex.html';
+      }
+    });
+
+    // === 2. INSERT APEX SECTION AFTER HERO ===
+    if (document.getElementById('g3ti-apex-section')) return; // Already applied
+    var apexSection = document.createElement('section');
+    apexSection.id = 'g3ti-apex-section';
+    apexSection.className = 'py-24 px-4 bg-gradient-to-b from-[#050505] to-[#0D0D0F]';
+    apexSection.innerHTML = '<div class="max-w-5xl mx-auto">' +
+      '<div class="text-center mb-12">' +
+        '<div class="inline-block px-4 py-2 rounded-full bg-[#12F6C8]/10 border border-[#12F6C8]/30 mb-6"><span class="text-[#12F6C8] text-sm tracking-wider">FLAGSHIP PLATFORM</span></div>' +
+        '<h2 class="text-3xl md:text-4xl font-bold text-white mb-6">APEX\u2122 \u2014 <span class="text-[#12F6C8]">The Protective Intelligence Spearhead</span></h2>' +
+        '<p class="text-gray-300 text-lg mb-8 leading-relaxed max-w-3xl mx-auto">APEX\u2122 is a modular, AI-powered protective intelligence platform engineered for operational deployment within federal and law enforcement ecosystems. Built for real-time visibility, predictive modeling, and scalable integration, APEX\u2122 strengthens mission readiness against emerging AI-driven threat vectors.</p>' +
+      '</div>' +
+      '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">' +
+        '<div class="flex items-start gap-3 p-4 rounded-lg bg-[#0D0D0F]/80 border border-[#12F6C8]/10"><div class="w-2 h-2 rounded-full bg-[#12F6C8] mt-2 flex-shrink-0"></div><span class="text-gray-300">Real-time behavioral threat detection</span></div>' +
+        '<div class="flex items-start gap-3 p-4 rounded-lg bg-[#0D0D0F]/80 border border-[#12F6C8]/10"><div class="w-2 h-2 rounded-full bg-[#12F6C8] mt-2 flex-shrink-0"></div><span class="text-gray-300">AI-driven deception and anomaly analysis</span></div>' +
+        '<div class="flex items-start gap-3 p-4 rounded-lg bg-[#0D0D0F]/80 border border-[#12F6C8]/10"><div class="w-2 h-2 rounded-full bg-[#12F6C8] mt-2 flex-shrink-0"></div><span class="text-gray-300">Cross-platform OSINT and data fusion pipelines</span></div>' +
+        '<div class="flex items-start gap-3 p-4 rounded-lg bg-[#0D0D0F]/80 border border-[#12F6C8]/10"><div class="w-2 h-2 rounded-full bg-[#12F6C8] mt-2 flex-shrink-0"></div><span class="text-gray-300">Secure API integration into existing federal systems</span></div>' +
+        '<div class="flex items-start gap-3 p-4 rounded-lg bg-[#0D0D0F]/80 border border-[#12F6C8]/10 md:col-span-2 lg:col-span-1"><div class="w-2 h-2 rounded-full bg-[#12F6C8] mt-2 flex-shrink-0"></div><span class="text-gray-300">Deployment-ready architecture for subcontract integration</span></div>' +
+      '</div>' +
+      '<div class="text-center"><a class="px-8 py-4 bg-gradient-to-r from-[#12F6C8] to-[#0B85E5] text-black font-semibold rounded-lg hover:shadow-lg hover:shadow-[#12F6C8]/30 transition-all duration-300 transform hover:scale-105 inline-block" href="/products/apex.html">View Platform Overview</a></div>' +
+    '</div>';
+    hero.parentNode.insertBefore(apexSection, hero.nextSibling);
+
+    // === 3. INSERT "WHO WE SERVE" SECTION (after stats section) ===
+    var statsSection = sections[1]; // "THE NEW CLASS OF INTELLIGENCE"
+    var whoWeServe = document.createElement('section');
+    whoWeServe.className = 'py-24 px-4 bg-[#050505]';
+    whoWeServe.innerHTML = '<div class="max-w-7xl mx-auto">' +
+      '<div class="text-center mb-16">' +
+        '<div class="inline-block px-4 py-2 rounded-full bg-[#12F6C8]/10 border border-[#12F6C8]/30 mb-6"><span class="text-[#12F6C8] text-sm tracking-wider">OPERATIONAL DEPLOYMENT</span></div>' +
+        '<h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Built for <span class="text-[#12F6C8]">Operational Environments</span></h2>' +
+      '</div>' +
+      '<div class="grid grid-cols-1 md:grid-cols-2 gap-8">' +
+        '<div class="p-8 bg-[#0D0D0F]/80 rounded-xl border border-[#12F6C8]/10 hover:border-[#12F6C8]/30 transition-all duration-300">' +
+          '<div class="mb-4"><div class="w-12 h-12 rounded-lg bg-[#12F6C8]/10 flex items-center justify-center"><svg class="w-6 h-6 text-[#12F6C8]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path d="M3 21h18M3 10h18M3 7l9-4 9 4M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"></path></svg></div></div>' +
+          '<h3 class="text-[#12F6C8] font-semibold text-xl mb-3">Federal Agencies</h3>' +
+          '<p class="text-gray-400 leading-relaxed">Supporting mission-critical intelligence, investigative operations, and national security programs through deployable AI-enhanced threat modeling.</p>' +
+        '</div>' +
+        '<div class="p-8 bg-[#0D0D0F]/80 rounded-xl border border-[#12F6C8]/10 hover:border-[#12F6C8]/30 transition-all duration-300">' +
+          '<div class="mb-4"><div class="w-12 h-12 rounded-lg bg-[#12F6C8]/10 flex items-center justify-center"><svg class="w-6 h-6 text-[#12F6C8]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg></div></div>' +
+          '<h3 class="text-[#12F6C8] font-semibold text-xl mb-3">Prime Contractors</h3>' +
+          '<p class="text-gray-400 leading-relaxed">Platform-ready integration capability that strengthens competitive positioning and expands contract delivery scope.</p>' +
+        '</div>' +
+        '<div class="p-8 bg-[#0D0D0F]/80 rounded-xl border border-[#12F6C8]/10 hover:border-[#12F6C8]/30 transition-all duration-300">' +
+          '<div class="mb-4"><div class="w-12 h-12 rounded-lg bg-[#12F6C8]/10 flex items-center justify-center"><svg class="w-6 h-6 text-[#12F6C8]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg></div></div>' +
+          '<h3 class="text-[#12F6C8] font-semibold text-xl mb-3">Law Enforcement Command</h3>' +
+          '<p class="text-gray-400 leading-relaxed">Real-time intelligence visibility across digital fraud, trafficking networks, identity threats, and emerging AI-enabled criminal vectors.</p>' +
+        '</div>' +
+        '<div class="p-8 bg-[#0D0D0F]/80 rounded-xl border border-[#12F6C8]/10 hover:border-[#12F6C8]/30 transition-all duration-300">' +
+          '<div class="mb-4"><div class="w-12 h-12 rounded-lg bg-[#12F6C8]/10 flex items-center justify-center"><svg class="w-6 h-6 text-[#12F6C8]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div></div>' +
+          '<h3 class="text-[#12F6C8] font-semibold text-xl mb-3">Homeland Security &amp; Public Safety Programs</h3>' +
+          '<p class="text-gray-400 leading-relaxed">Predictive intelligence ecosystems designed to enhance protective operations and coordinated response strategies.</p>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+    statsSection.parentNode.insertBefore(whoWeServe, statsSection.nextSibling);
+
+    // === 4. MODIFY THREAT SECTION HEADING ===
+    var threatSection = sections[2]; // "ACTIVE THREAT BRIEFING"
+    var threatH2 = threatSection.querySelector('h2');
+    if (threatH2) {
+      threatH2.innerHTML = 'Emerging AI-Driven <span class="text-[#12F6C8]">Threat Vectors</span>';
+      // Add intro line after h2
+      var introP = document.createElement('p');
+      introP.className = 'text-gray-300 text-lg max-w-3xl mx-auto mb-4';
+      introP.textContent = 'APEX\u2122 is engineered to detect, model, and neutralize:';
+      threatH2.parentNode.insertBefore(introP, threatH2.nextSibling);
+    }
+
+    // === 5. UPDATE G3TI DIFFERENCE SECTION ===
+    var diffSection = sections[3]; // "THE G3TI DIFFERENCE"
+    var diffTexts = diffSection.querySelectorAll('p');
+    diffTexts.forEach(function(p) {
+      if (p.textContent.indexOf('We build patentable') !== -1) {
+        p.textContent = 'G3TI develops patentable protective-intelligence ecosystems while maintaining integration flexibility required for federal and enterprise deployment.';
+      }
+    });
+    var diffBullets = diffSection.querySelectorAll('.space-y-4 span, div.space-y-4 span');
+    var newBulletTexts = [
+      'AI/ML Predictive Intelligence Modeling',
+      'Behavioral Deception Analysis Frameworks',
+      'Digital Forensics and Threat Attribution',
+      'OSINT Threat Pipelines',
+      'Identity-Integrity Modeling',
+      'Government-Grade Security Architecture'
+    ];
+    diffBullets.forEach(function(span, i) {
+      if (i < newBulletTexts.length) {
+        span.textContent = newBulletTexts[i];
+      }
+    });
+
+    // === 6. INSERT CONTRACT-READY ARCHITECTURE SECTION ===
+    var commandSection = sections[4]; // "CLASSIFIED // FOR AUTHORIZED PERSONNEL"
+    var contractSection = document.createElement('section');
+    contractSection.className = 'py-24 px-4 bg-[#0D0D0F]';
+    contractSection.innerHTML = '<div class="max-w-5xl mx-auto">' +
+      '<div class="text-center mb-12">' +
+        '<div class="inline-block px-4 py-2 rounded-full bg-[#12F6C8]/10 border border-[#12F6C8]/30 mb-6"><span class="text-[#12F6C8] text-sm tracking-wider">DEPLOYMENT CAPABILITY</span></div>' +
+        '<h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Contract-Ready <span class="text-[#12F6C8]">Deployment</span></h2>' +
+        '<p class="text-gray-300 text-lg mb-10 max-w-3xl mx-auto">G3TI platforms are structured for:</p>' +
+      '</div>' +
+      '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">' +
+        '<div class="flex items-start gap-3 p-5 rounded-lg bg-[#050505] border border-[#12F6C8]/10"><div class="w-2 h-2 rounded-full bg-[#12F6C8] mt-2 flex-shrink-0"></div><span class="text-gray-300">Subcontract integration under prime contracts</span></div>' +
+        '<div class="flex items-start gap-3 p-5 rounded-lg bg-[#050505] border border-[#12F6C8]/10"><div class="w-2 h-2 rounded-full bg-[#12F6C8] mt-2 flex-shrink-0"></div><span class="text-gray-300">Modular phased deployment</span></div>' +
+        '<div class="flex items-start gap-3 p-5 rounded-lg bg-[#050505] border border-[#12F6C8]/10"><div class="w-2 h-2 rounded-full bg-[#12F6C8] mt-2 flex-shrink-0"></div><span class="text-gray-300">Secure classified and unclassified environments</span></div>' +
+        '<div class="flex items-start gap-3 p-5 rounded-lg bg-[#050505] border border-[#12F6C8]/10"><div class="w-2 h-2 rounded-full bg-[#12F6C8] mt-2 flex-shrink-0"></div><span class="text-gray-300">Compliance-aligned infrastructure</span></div>' +
+        '<div class="flex items-start gap-3 p-5 rounded-lg bg-[#050505] border border-[#12F6C8]/10 md:col-span-2 lg:col-span-1"><div class="w-2 h-2 rounded-full bg-[#12F6C8] mt-2 flex-shrink-0"></div><span class="text-gray-300">Hybrid and cloud-based implementation</span></div>' +
+      '</div>' +
+      '<div class="text-center"><p class="text-[#12F6C8]/80 italic text-sm">This is operational deployment capability \u2014 not research positioning.</p></div>' +
+    '</div>';
+    // Insert after command room section, before final CTA
+    var ctaSection = sections[5];
+    ctaSection.parentNode.insertBefore(contractSection, ctaSection);
+
+    // === 7. REPLACE FINAL CTA SECTION ===
+    var ctaH2 = ctaSection.querySelector('h2');
+    if (ctaH2) {
+      ctaH2.textContent = 'Protect What Others Are Not Prepared For.';
+    }
+    var ctaP = ctaSection.querySelector('p');
+    if (ctaP) {
+      ctaP.innerHTML = 'Schedule a secure intelligence briefing to explore how APEX\u2122 integrates into your operational environment.';
+    }
+    var ctaLinks = ctaSection.querySelectorAll('a');
+    ctaLinks.forEach(function(a) {
+      if (a.textContent.indexOf('Get Started') !== -1) {
+        a.textContent = 'Request Secure Briefing';
+        a.href = '/contact.html';
+      }
+      if (a.textContent.indexOf('Learn More') !== -1) {
+        a.textContent = 'Contact G3TI';
+        a.href = '/contact.html';
+      }
+    });
+
+    // Update meta description
+    var metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute('content', 'G3TI - Deployable AI-Powered Protective Intelligence Platforms. Mission-ready intelligence systems for federal agencies, prime contractors, and law enforcement.');
+    }
+  }
+
+  // Run after React hydration completes - poll until hero has original text
+  // then modify. Use MutationObserver as backup to re-apply if React overwrites.
+  var applied = false;
+  function tryReposition() {
+    var main = document.querySelector('main');
+    if (!main) return false;
+    var sections = main.querySelectorAll('section');
+    if (sections.length < 6) return false;
+    var h1 = sections[0].querySelector('h1');
+    if (!h1) return false;
+    if (h1.textContent.indexOf('GLOBAL 3') !== -1 || !applied) {
+      repositionHomepage();
+      applied = true;
+      return true;
+    }
+    return applied;
+  }
+
+  // Poll every 300ms for up to 15 seconds
+  var attempts = 0;
+  var pollInterval = setInterval(function() {
+    attempts++;
+    tryReposition();
+    if (attempts > 50) clearInterval(pollInterval);
+  }, 300);
+
+  // Also use MutationObserver to re-apply if React overwrites
+  var observer = new MutationObserver(function(mutations) {
+    var main = document.querySelector('main');
+    if (!main) return;
+    var h1 = main.querySelector('h1');
+    if (h1 && h1.textContent.indexOf('GLOBAL 3') !== -1) {
+      repositionHomepage();
+    }
+  });
+
+  function startObserver() {
+    var main = document.querySelector('main');
+    if (main) {
+      observer.observe(main, { childList: true, subtree: true, characterData: true });
+    } else {
+      setTimeout(startObserver, 500);
+    }
+  }
+  startObserver();
+})();
+</script>
 </body></html>
