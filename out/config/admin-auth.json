@@ -5,8 +5,8 @@
     "aldric@global3technology.com",
     "info@global3technology.com"
   ],
-  "auth_endpoint": "https://app-rkwofgbb.fly.dev/api/admin/login",
-  "verify_endpoint": "https://app-rkwofgbb.fly.dev/api/admin/verify",
+  "auth_endpoint": "https://g3ti-access-control.fly.dev/api/admin/login",
+  "verify_endpoint": "https://g3ti-access-control.fly.dev/api/admin/verify",
   "token_storage_key": "g3ti_admin_token",
   "redirect_on_unauthorized": "/restricted-access.html",
   "protected_pages": [
